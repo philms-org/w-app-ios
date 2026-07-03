@@ -628,9 +628,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CB558133281B171800E49052 /* Wing Me */ = {
+		CB558133281B171800E49052 /* The W App */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CB55814B281B171900E49052 /* Build configuration list for PBXNativeTarget "Wing Me" */;
+			buildConfigurationList = CB55814B281B171900E49052 /* Build configuration list for PBXNativeTarget "The W App" */;
 			buildPhases = (
 				C3C48EB90B7F279EBD1E2372 /* [CP] Check Pods Manifest.lock */,
 				CB558130281B171800E49052 /* Sources */,
@@ -643,7 +643,7 @@
 			);
 			dependencies = (
 			);
-			name = "Wing Me";
+			name = "The W App";
 			productName = "Wing Me";
 			productReference = CB558134281B171800E49052 /* Wing Me.app */;
 			productType = "com.apple.product-type.application";
@@ -676,7 +676,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CB558133281B171800E49052 /* Wing Me */,
+				CB558133281B171800E49052 /* The W App */,
 			);
 		};
 /* End PBXProject section */
@@ -1045,8 +1045,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.0.5;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vastlb.Wing-Me";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.thewapp.wap;
+				PRODUCT_NAME = "The W App";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1082,8 +1082,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.0.5;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vastlb.Wing-Me";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.thewapp.wap;
+				PRODUCT_NAME = "The W App";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1102,7 +1102,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CB55814B281B171900E49052 /* Build configuration list for PBXNativeTarget "Wing Me" */ = {
+		CB55814B281B171900E49052 /* Build configuration list for PBXNativeTarget "The W App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CB55814C281B171900E49052 /* Debug */,
