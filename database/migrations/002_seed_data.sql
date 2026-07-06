@@ -2,10 +2,10 @@
 -- Migration 002: feature_unlocks and global profile_field_definitions
 
 insert into feature_unlocks (feature_name, points_required, description) values
-  ('contact_slot_3_4', 100,  'Unlock 3rd and 4th contact method slots'),
-  ('map_view',         250,  'Unlock map view'),
-  ('contact_slot_5_6', 500,  'Unlock 5th and 6th contact method slots'),
-  ('anonymous_peek',   1000, 'Peek anonymously without appearing on live feed'),
+  ('contact_slot_3_4', 100,  '3rd and 4th contact method slots'),
+  ('map_view',         250,  'Access to the map view'),
+  ('contact_slot_5_6', 500,  '5th and 6th contact method slots'),
+  ('anonymous_peek',   1000, 'Browse without appearing on live feed'),
   ('extended_history', 2000, 'Extended history and custom field access')
 on conflict (feature_name) do nothing;
 

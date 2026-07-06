@@ -48,11 +48,12 @@ alter table profile_field_definitions enable row level security;
 
 -- 4. profile_field_values
 create table profile_field_values (
+  id uuid primary key default uuid_generate_v4(),
   user_id uuid references profiles(id) on delete cascade,
   field_definition_id uuid references profile_field_definitions(id) on delete cascade,
   value text,
   is_visible boolean default true,
-  primary key (user_id, field_definition_id)
+  unique (user_id, field_definition_id)
 );
 
 alter table profile_field_values enable row level security;
@@ -84,11 +85,12 @@ alter table location_checkins enable row level security;
 
 -- 7. friendships
 create table friendships (
+  id uuid primary key default uuid_generate_v4(),
   user_id uuid references profiles(id) on delete cascade,
   friend_id uuid references profiles(id) on delete cascade,
   connected_at timestamptz default now(),
   source text check (source in ('qr_scan', 'peek_invite', 'message')),
-  primary key (user_id, friend_id)
+  unique (user_id, friend_id)
 );
 
 alter table friendships enable row level security;
