@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		02612ECD19DDE92BEC342668 /* Pods_Wing_Me.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA2D57BDB7954F09BD755E2 /* Pods_Wing_Me.framework */; };
 		6FEF1C8B4A028EE0108A1C63 /* WAPSupabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6910AB8B22298C3110519B /* WAPSupabase.swift */; };
-		8AD97E962F0B06921EAE11A9 /* KeychainHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D3D47231D7E637722BCF49 /* KeychainHelperTests.swift */; };
 		CB044600283D3A4400ED2C37 /* FcbRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0445FF283D3A4400ED2C37 /* FcbRegisterVC.swift */; };
 		CB044602283D3AE800ED2C37 /* FcbRegisterPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB044601283D3AE800ED2C37 /* FcbRegisterPicker.swift */; };
 		CB063BE0286F212100F61029 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB063BDF286F212100F61029 /* HomeVC.swift */; };
@@ -903,7 +902,6 @@
 				CB044600283D3A4400ED2C37 /* FcbRegisterVC.swift in Sources */,
 				6FEF1C8B4A028EE0108A1C63 /* WAPSupabase.swift in Sources */,
 				DA73C504F59E3CC5CB439E99 /* KeychainHelper.swift in Sources */,
-				8AD97E962F0B06921EAE11A9 /* KeychainHelperTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
