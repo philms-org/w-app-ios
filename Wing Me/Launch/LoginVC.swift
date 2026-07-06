@@ -1,5 +1,6 @@
 
 import UIKit
+import CryptoKit
 import FBSDKLoginKit
 import AuthenticationServices
 
@@ -141,16 +142,26 @@ class LoginVC: UIViewController, UITextFieldDelegate, ASAuthorizationControllerD
 
     @IBAction func appleLogin(_ sender: UIButton) {
         if #available(iOS 13.0, *) {
-            currentNonce = UUID().uuidString
+            let rawNonce = UUID().uuidString
+            currentNonce = rawNonce
             let appleIDProvider = ASAuthorizationAppleIDProvider()
             let request = appleIDProvider.createRequest()
             request.requestedScopes = [.fullName, .email]
+            // Apple requires the nonce on the request to be SHA-256 hashed
+            request.nonce = sha256(rawNonce)
 
             let authorizationController = ASAuthorizationController(authorizationRequests: [request])
             authorizationController.delegate = self
             authorizationController.presentationContextProvider = self
             authorizationController.performRequests()
         }
+    }
+
+    @available(iOS 13.0, *)
+    private func sha256(_ input: String) -> String {
+        let inputData = Data(input.utf8)
+        let hashed = CryptoKit.SHA256.hash(data: inputData)
+        return hashed.compactMap { String(format: "%02x", $0) }.joined()
     }
 
     func selectCode(customCell: CustomCell) {
