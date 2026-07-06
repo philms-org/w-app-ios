@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		02612ECD19DDE92BEC342668 /* Pods_Wing_Me.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA2D57BDB7954F09BD755E2 /* Pods_Wing_Me.framework */; };
 		6FEF1C8B4A028EE0108A1C63 /* WAPSupabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6910AB8B22298C3110519B /* WAPSupabase.swift */; };
+		8AD97E962F0B06921EAE11A9 /* KeychainHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D3D47231D7E637722BCF49 /* KeychainHelperTests.swift */; };
 		CB044600283D3A4400ED2C37 /* FcbRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0445FF283D3A4400ED2C37 /* FcbRegisterVC.swift */; };
 		CB044602283D3AE800ED2C37 /* FcbRegisterPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB044601283D3AE800ED2C37 /* FcbRegisterPicker.swift */; };
 		CB063BE0286F212100F61029 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB063BDF286F212100F61029 /* HomeVC.swift */; };
@@ -123,10 +124,12 @@
 		CBFD8867281CCBDE0050A2AA /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBFD8866281CCBDE0050A2AA /* LoginVC.swift */; };
 		CBFD8869281CCCBE0050A2AA /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBFD8868281CCCBE0050A2AA /* RegisterVC.swift */; };
 		CBFDAB92286F538B0092EE21 /* VastVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBFDAB91286F538B0092EE21 /* VastVC.swift */; };
+		DA73C504F59E3CC5CB439E99 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43027E9F1830D67F90A46640 /* KeychainHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2AA2D57BDB7954F09BD755E2 /* Pods_Wing_Me.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wing_Me.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43027E9F1830D67F90A46640 /* KeychainHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		7779BED81522DE2EFBA8A0D5 /* Pods-Wing Me.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wing Me.debug.xcconfig"; path = "Target Support Files/Pods-Wing Me/Pods-Wing Me.debug.xcconfig"; sourceTree = "<group>"; };
 		CB0445FF283D3A4400ED2C37 /* FcbRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FcbRegisterVC.swift; sourceTree = "<group>"; };
 		CB044601283D3AE800ED2C37 /* FcbRegisterPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FcbRegisterPicker.swift; sourceTree = "<group>"; };
@@ -247,6 +250,7 @@
 		CBFDAB91286F538B0092EE21 /* VastVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VastVC.swift; sourceTree = "<group>"; };
 		DB2165C222A1CEDC4EF0D26A /* Pods-Wing Me.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wing Me.release.xcconfig"; path = "Target Support Files/Pods-Wing Me/Pods-Wing Me.release.xcconfig"; sourceTree = "<group>"; };
 		DE6910AB8B22298C3110519B /* WAPSupabase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPSupabase.swift; sourceTree = "<group>"; };
+		F7D3D47231D7E637722BCF49 /* KeychainHelperTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = KeychainHelperTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,6 +265,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A213432786BA896F19EF37F /* The W AppTests */ = {
+			isa = PBXGroup;
+			children = (
+				F7D3D47231D7E637722BCF49 /* KeychainHelperTests.swift */,
+			);
+			name = "The W AppTests";
+			path = "The W AppTests";
+			sourceTree = "<group>";
+		};
 		BBC93BCBCF551C51127F102B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -376,6 +389,7 @@
 				CB558135281B171800E49052 /* Products */,
 				BBC93BCBCF551C51127F102B /* Pods */,
 				F78B3C6A862B703ED074EEBB /* Frameworks */,
+				6A213432786BA896F19EF37F /* The W AppTests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -459,6 +473,7 @@
 				CB26FAF8281B217C0077D0EA /* Strings.swift */,
 				CB26FAFC281B24B90077D0EA /* Colors.swift */,
 				DE6910AB8B22298C3110519B /* WAPSupabase.swift */,
+				43027E9F1830D67F90A46640 /* KeychainHelper.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -887,6 +902,8 @@
 				CBE2F73C2BF0D892007D37F1 /* QRCodeVC.swift in Sources */,
 				CB044600283D3A4400ED2C37 /* FcbRegisterVC.swift in Sources */,
 				6FEF1C8B4A028EE0108A1C63 /* WAPSupabase.swift in Sources */,
+				DA73C504F59E3CC5CB439E99 /* KeychainHelper.swift in Sources */,
+				8AD97E962F0B06921EAE11A9 /* KeychainHelperTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
