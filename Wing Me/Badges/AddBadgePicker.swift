@@ -146,7 +146,7 @@ extension AddBadgeVC: UIDocumentPickerDelegate, UIImagePickerControllerDelegate,
         ]
         
         let boundary = generateBoundaryString()
-        let url = URL(string: Constants.url + "add_badge.php")!
+        let url = URL(string: "add_badge.php")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")

@@ -136,7 +136,7 @@ class AddBannerVC: UIViewController {
         ]
         
         let boundary = generateBoundaryString()
-        let url = URL(string: Constants.url + "add_banner_image.php")!
+        let url = URL(string: "add_banner_image.php")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")

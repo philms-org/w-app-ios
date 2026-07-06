@@ -26,7 +26,7 @@ class ForgotPasswordVC: UIViewController, UITextFieldDelegate {
         verificationView.isHidden = true
         passwordView.isHidden = true
         
-        for (key, value) in Constants.coutriesDictionary {
+        for (key, value) in Constants.countryCodes {
             codesArray.append(CustomCell.init(string1: value, string2: key))
         }
         codesArray = codesArray.sorted {

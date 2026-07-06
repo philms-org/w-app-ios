@@ -23,7 +23,7 @@ class LoginVC: UIViewController, UITextFieldDelegate, ASAuthorizationControllerD
         super.viewDidLoad()
         setKeyboard()
         
-        for (key, value) in Constants.coutriesDictionary {
+        for (key, value) in Constants.countryCodes {
             codesArray.append(CustomCell.init(string1: value, string2: key))
         }
         codesArray = codesArray.sorted {

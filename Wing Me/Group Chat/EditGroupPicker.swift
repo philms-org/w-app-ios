@@ -128,7 +128,7 @@ extension EditGroupVC: UIImagePickerControllerDelegate, UINavigationControllerDe
         ]
         
         let boundary = generateBoundaryString()
-        let url = URL(string: Constants.url + "edit_group.php")!
+        let url = URL(string: "edit_group.php")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")

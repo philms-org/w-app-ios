@@ -145,7 +145,7 @@ extension RegisterVC: UIImagePickerControllerDelegate, UINavigationControllerDel
         ]
         
         let boundary = generateBoundaryString()
-        let url = URL(string: Constants.url + "sign_up.php")!
+        let url = URL(string: "sign_up.php")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")

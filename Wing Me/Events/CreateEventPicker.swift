@@ -144,9 +144,9 @@ extension CreateEventVC: UIImagePickerControllerDelegate, UINavigationController
         
         var url: URL {
             if isMaster {
-                return URL(string: Constants.url + "master_create_event.php")!
+                return URL(string: "master_create_event.php")!
             } else {
-                return URL(string: Constants.url + "create_event.php")!
+                return URL(string: "create_event.php")!
             }
         }
         var request = URLRequest(url: url)

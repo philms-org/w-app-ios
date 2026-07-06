@@ -136,7 +136,7 @@ extension EditProfileVC: UIImagePickerControllerDelegate, UINavigationController
         ]
         
         let boundary = generateBoundaryString()
-        let url = URL(string: Constants.url + "edit_profile.php")!
+        let url = URL(string: "edit_profile.php")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")

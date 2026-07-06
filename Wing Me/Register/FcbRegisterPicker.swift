@@ -145,7 +145,7 @@ extension FcbRegisterVC: UIImagePickerControllerDelegate, UINavigationController
         ]
         
         let boundary = generateBoundaryString()
-        let url = URL(string: Constants.url + "sign_up_facebook.php")!
+        let url = URL(string: "sign_up_facebook.php")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
