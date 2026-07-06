@@ -28,8 +28,6 @@ class MyProfileVC: UIViewController {
     @IBOutlet weak var genderLabel: UILabel!
     @IBOutlet weak var heightLabel: UILabel!
     @IBOutlet weak var relationshipLabel: UILabel!
-    @IBOutlet weak var lookingForView: UIView!
-    @IBOutlet weak var lookingForLabel: UILabel!
     @IBOutlet weak var drinkLabel: UILabel!
     @IBOutlet weak var fridayActivityLabel: UILabel!
     @IBOutlet weak var professionLabel: UILabel!
@@ -283,15 +281,7 @@ class MyProfileVC: UIViewController {
             delegate.datingID = message.getString(key: "dating_Id")
             delegate.socialisingID = message.getString(key: "socialising_Id")
             delegate.networkingID = message.getString(key: "networking_Id")
-            
-            let lookingFor = Constants.getLookingFor(datingID: delegate.datingID, socialisingID: delegate.socialisingID, networkingID: delegate.networkingID)
-            
-            if lookingFor.isEmpty {
-                lookingForView.isHidden = true
-            } else {
-                lookingForView.isHidden = false
-                lookingForLabel.text = lookingFor
-            }
+
             if gender == "F" {
                 editAccountView.backgroundColor = Colors.pink
                 settingsView.backgroundColor = Colors.pink
@@ -340,37 +330,8 @@ class MyProfileVC: UIViewController {
     }
     
     func logout() {
-        let url = URL(string: Constants.url + "logout.php")!
-        let postString = "language=\(Strings.language)" + "&firebase_token=\(appDelegate.firebaseToken)"
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = postString.data(using: .utf8)
-        
-        if let token = UserDefaults.standard.object(forKey: "Token") as? String {
-            request.setValue(token, forHTTPHeaderField: "Authorization")
-        }
-        let task = URLSession.shared.dataTask(with: request) {
-            (data, response, error) in
-            
-            guard let data = data, error == nil else {
-                let delay = DispatchTime.now() + 2
-                DispatchQueue.main.asyncAfter(deadline: delay, execute: {
-                    self.logoutError()
-                })
-                return
-            }
-            if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as AnyObject {
-                DispatchQueue.main.async {
-                    print(jsonObject)
-                    self.logoutSuccess(jsonObject: jsonObject)
-                }
-            } else {
-                let responseString = String(data: data, encoding: .utf8)
-                print(responseString as AnyObject)
-            }
-        }
-        task.resume()
+        // TODO: Task 6 — replace with Supabase sign-out
+        delegate.logout()
     }
     
     func logoutError() {

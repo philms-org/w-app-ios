@@ -15,9 +15,7 @@ class SocialSettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        array = Constants.lookingFor
-        
+
         if let index = Int(datingID) {
             array[0].progress = index
         } else {

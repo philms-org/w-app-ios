@@ -18,7 +18,6 @@ class ThirdSetupVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     var datingID = String()
     var socialisingID = String()
     var networkingID = String()
-    var lookingFor = String()
     var drink = String()
     var activity = String()
     var profession = String()
@@ -26,9 +25,7 @@ class ThirdSetupVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         pageLabel.text = "2 / 4"
-        
-        array = Constants.lookingFor
-        
+
         if let index = Int(datingID) {
             array[0].progress = index
         } else {

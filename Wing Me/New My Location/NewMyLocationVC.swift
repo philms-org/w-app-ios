@@ -560,10 +560,6 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
             for each in message {
                 let image = each.getString(key: "image")
                 let name = each.getString(key: "name")
-                let dating_Id = each.getString(key: "dating_Id")
-                let socialising_Id = each.getString(key: "socialising_Id")
-                let networking_Id = each.getString(key: "networking_Id")
-                let lookingFor = Constants.getLookingFor(datingID: dating_Id, socialisingID: socialising_Id, networkingID: networking_Id)
                 let is_master_account = each.getBool(key: "is_master_account")
                 
                 let imageView = UIImageView()
@@ -576,7 +572,7 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
                 }
                 usersArray.append(CustomCell.init(imageView: imageView,
                                                   string1: each.getString(key: "Id"),
-                                                  string2: name + lookingFor,
+                                                  string2: name,
                                                   string3: each.getString(key: "details"),
                                                   string4: each.getString(key: "gender"),
                                                   string5: each.getString(key: "age"),

@@ -25,9 +25,6 @@ class UserProfileVC: UIViewController {
     @IBOutlet weak var relationshipView: UIView!
     @IBOutlet weak var relationshipLabel: UILabel!
     
-    @IBOutlet weak var lookingForView: UIView!
-    @IBOutlet weak var lookingForLabel: UILabel!
-    
     @IBOutlet weak var drinkView: UIView!
     @IBOutlet weak var drinkLabel: UILabel!
     
@@ -216,19 +213,6 @@ class UserProfileVC: UIViewController {
                 relationshipLabel.text = customCell.string2
             } else {
                 relationshipView.isHidden = true
-            }
-            
-            let dating_Id = message.getString(key: "dating_Id")
-            let socialising_Id = message.getString(key: "socialising_Id")
-            let networking_Id = message.getString(key: "networking_Id")
-            
-            let lookingFor = Constants.getLookingFor(datingID: dating_Id, socialisingID: socialising_Id, networkingID: networking_Id)
-            
-            if lookingFor.isEmpty {
-                lookingForView.isHidden = true
-            } else {
-                lookingForView.isHidden = false
-                lookingForLabel.text = lookingFor
             }
             
             if gender == "F" {

@@ -317,11 +317,7 @@ class ChatVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UITable
                 let name = users.getString(key: "name")
                 let is_master_account = users.getBool(key: "is_master_account")
                 let is_accept_reject = message.getBool(key: "is_accept_reject")
-                let dating_Id = users.getString(key: "dating_Id")
-                let socialising_Id = users.getString(key: "socialising_Id")
-                let networking_Id = users.getString(key: "networking_Id")
-                let lookingFor = Constants.getLookingFor(datingID: dating_Id, socialisingID: socialising_Id, networkingID: networking_Id)
-                
+
                 let nationality = users.getString(key: "nationality")
                 let city = users.getString(key: "city")
                 let age = users.getString(key: "age")
@@ -370,8 +366,8 @@ class ChatVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UITable
                         }
                     }
                 }
-                nameLabel.text = name + lookingFor
-                
+                nameLabel.text = name
+
                 checkmarkImageView.isHidden = !is_master_account
                 
                 if is_accept_reject {
