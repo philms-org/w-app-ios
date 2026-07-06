@@ -5,7 +5,7 @@ extension MainVC {
     
     func logout() {
         appDelegate.inLocation = false
-        Constants.deleteUserData()
+        // TODO: Task 6 — replace with WAPAuth.signOut()
         
         if isLogin {
             dismiss(animated: true)

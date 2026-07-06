@@ -1,6 +1,6 @@
 require 'xcodeproj'
 
-PROJECT_PATH = File.join(__dir__, '..', 'Wing Me.xcodeproj')
+PROJECT_PATH = File.join(__dir__, '..', 'The W App.xcodeproj')
 OLD_NAME = 'Wing Me'
 NEW_NAME = 'The W App'
 NEW_BUNDLE_ID = 'com.thewapp.wap'

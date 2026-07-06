@@ -23,101 +23,44 @@ extension UIImageView {
     
     func imageFromServerURL(urlString: String) {
         if let image = Constants.savedImages[urlString] {
-            decode(codeString: image)
+            self.image = image
         } else {
             downloadImage(imageView: self, urlString: urlString, reload: {
-                
+
             })
         }
     }
-    
+
     func imageFromServerURL(urlString: String, tableView: UITableView) {
         if let image = Constants.savedImages[urlString] {
-            decode(codeString: image)
+            self.image = image
         } else {
             downloadImage(imageView: self, urlString: urlString, reload: {
                 tableView.reloadData()
             })
         }
     }
-    
+
     func imageFromServerURL(urlString: String, tableView: UITableView, tint: UIColor) {
-        guard let url = URL(string: Constants.url + urlString) else {
-            return
-        }
-        URLSession.shared.dataTask(with: url, completionHandler: {
-            (data, response, error) in
-            self.moveQueue()
-            
-            guard let data = data, error == nil, let image =  UIImage(data: data) else {
-                return
-            }
-            DispatchQueue.main.async {
-                let tintedImage = image.withRenderingMode(.alwaysTemplate)
-                self.image = tintedImage
-                self.tintColor = tint
-                self.saveImage(urlString: urlString, image: image)
-                tableView.reloadData()
-            }
-        }).resume()
+        // TODO: Task 6 — replace with Supabase Storage download
     }
-    
+
     func imageFromServerURL(urlString: String, collectionView: UICollectionView) {
         if let image = Constants.savedImages[urlString] {
-            decode(codeString: image)
+            self.image = image
         } else {
             downloadImage(imageView: self, urlString: urlString, reload: {
                 collectionView.reloadData()
             })
         }
     }
-    
+
     func imageFromServerURL(urlString: String, collectionView: UICollectionView, tint: UIColor) {
-        guard let url = URL(string: Constants.url + urlString) else {
-            return
-        }
-        URLSession.shared.dataTask(with: url, completionHandler: {
-            (data, response, error) in
-            self.moveQueue()
-            
-            guard let data = data, error == nil, let image =  UIImage(data: data) else {
-                return
-            }
-            DispatchQueue.main.async {
-                let tintedImage = image.withRenderingMode(.alwaysTemplate)
-                self.image = tintedImage
-                self.tintColor = tint
-                self.saveImage(urlString: urlString, image: image)
-                collectionView.reloadData()
-            }
-        }).resume()
+        // TODO: Task 6 — replace with Supabase Storage download
     }
-    
+
     func downloadImage(imageView: UIImageView, urlString: String, reload: @escaping () -> ()) {
-        if Constants.imagesDownloading < 4 {
-            guard let url = URL(string: Constants.url + urlString) else {
-                return
-            }
-            Constants.imagesDownloading += 1
-            
-            URLSession.shared.dataTask(with: url, completionHandler: {
-                (data, response, error) in
-                self.moveQueue()
-                
-                guard let data = data, error == nil, let image = UIImage(data: data) else {
-                    return
-                }
-                DispatchQueue.main.async {
-                    imageView.image = image
-                    self.saveImage(urlString: urlString, image: image)
-                    reload()
-                }
-            }).resume()
-        } else {
-            Constants.queueArray.append(CustomCell.init(imageView: imageView,
-                                                        string1: urlString,
-                                                        reload: reload))
-        }
+        // TODO: Task 6 — replace with Supabase Storage download
     }
     
     func moveQueue() {
@@ -132,10 +75,9 @@ extension UIImageView {
     
     func saveImage(urlString: String, image: UIImage?) {
         deleteImages()
-        
-        if let image = image, let imageData = image.jpegData(compressionQuality: 1) as NSData? {
-            let codeString = imageData.base64EncodedString(options: .lineLength64Characters)
-            Constants.savedImages[urlString] = codeString
+
+        if let image = image {
+            Constants.savedImages[urlString] = image
         }
     }
     
@@ -239,41 +181,8 @@ extension NSDictionary {
     }
     
     func request(delegate: UIViewController, path: String, stopLoading: @escaping () -> (), requestSuccess: @escaping (_ jsonObject: AnyObject) -> ()) {
-        let url = URL(string: Constants.url + path)!
-        let postString = getPostString(dictionary: self)
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = postString.data(using: .utf8)
-        
-        if let token = UserDefaults.standard.object(forKey: "Token") as? String {
-            request.setValue(token, forHTTPHeaderField: "Authorization")
-        }
-        let task = URLSession.shared.dataTask(with: request) {
-            (data, response, error) in
-            
-            guard let data = data, error == nil else {
-                let delay = DispatchTime.now() + 2
-                DispatchQueue.main.asyncAfter(deadline: delay, execute: {
-                    self.connectionError(delegate: delegate)
-                    stopLoading()
-                })
-                return
-            }
-            if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as AnyObject {
-                DispatchQueue.main.async {
-                    print(url)
-                    print(self)
-                    print(jsonObject)
-                    self.requestSuccess(delegate: delegate, jsonObject: jsonObject, requestSuccess: requestSuccess)
-                    stopLoading()
-                }
-            } else {
-                let responseString = String(data: data, encoding: .utf8)
-                print(responseString as AnyObject)
-            }
-        }
-        task.resume()
+        // TODO: Task 6 — replace with Supabase
+        stopLoading()
     }
     
     func connectionError(delegate: UIViewController) {
@@ -287,8 +196,8 @@ extension NSDictionary {
                 requestSuccess(jsonObject)
             } else if error == "6" {
                 if let dictionary = jsonObject as? NSDictionary {
-                    Constants.deleteUserData()
-                    
+                    // TODO: Task 6 — replace with WAPAuth.signOut()
+
                     let alertClass = AlertClass()
                     alertClass.showErrorAlert(delegate: delegate, message: dictionary.getString(key: "message"), action: {
                         self.openWelcome(delegate: delegate)

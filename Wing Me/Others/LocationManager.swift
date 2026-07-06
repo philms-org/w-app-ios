@@ -23,37 +23,7 @@ extension AppDelegate: CLLocationManagerDelegate {
     }
     
     func getLocations() {
-        let url = URL(string: Constants.url + "get_location_category.php")!
-        let postString = "language=\(Strings.language)"
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = postString.data(using: .utf8)
-        
-        if let token = UserDefaults.standard.object(forKey: "Token") as? String {
-            request.setValue(token, forHTTPHeaderField: "Authorization")
-        }
-        let task = URLSession.shared.dataTask(with: request) {
-            (data, response, error) in
-            
-            guard let data = data, error == nil else {
-                let delay = DispatchTime.now() + 2
-                DispatchQueue.main.asyncAfter(deadline: delay, execute: {
-                    self.locationsError()
-                })
-                return
-            }
-            if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as AnyObject {
-                DispatchQueue.main.async {
-                    print(jsonObject)
-                    self.locationsSuccess(jsonObject: jsonObject)
-                }
-            } else {
-                let responseString = String(data: data, encoding: .utf8)
-                print(responseString as AnyObject)
-            }
-        }
-        task.resume()
+        // TODO: Task 6 — replace with Supabase
     }
     
     func locationsError() {

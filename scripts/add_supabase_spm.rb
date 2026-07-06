@@ -1,6 +1,6 @@
 require 'xcodeproj'
 
-PROJECT_PATH = File.join(__dir__, '..', 'Wing Me.xcodeproj')
+PROJECT_PATH = File.join(__dir__, '..', 'The W App.xcodeproj')
 TARGET_NAME  = 'The W App'
 REPO_URL     = 'https://github.com/supabase/supabase-swift'
 MIN_VERSION  = '2.0.0'

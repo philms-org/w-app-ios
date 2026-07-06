@@ -49,13 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         })
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
-        let decoder = PropertyListDecoder()
-        let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        
-        let url = directory.appendingPathComponent("SavedImages").appendingPathExtension("plist")
-        if let file = try? Data(contentsOf: url), let decodedProduct = try? decoder.decode([String: String].self, from: file) {
-            Constants.savedImages = decodedProduct
-        }
+        // TODO: Task 6 — image cache persistence replaced by Supabase Storage; remove plist load
         application.registerForRemoteNotifications()
         FirebaseApp.configure()
         return true
@@ -222,12 +216,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func saveImages() {
-        let encoder = PropertyListEncoder()
-        let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        
-        let productURL = directory.appendingPathComponent("SavedImages").appendingPathExtension("plist")
-        let encodedProduct = try? encoder.encode(Constants.savedImages)
-        try? encodedProduct?.write(to: productURL, options: .noFileProtection)
+        // TODO: Task 6 — image cache persistence replaced by Supabase Storage; remove plist save
     }
     
     func openChat(delegate: UIViewController, id: String) {
@@ -296,37 +285,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func request() {
-        let url = URL(string: Constants.url + "update_token.php")!
-        let postString = "language=\(Strings.language)" + "&firebase=\(firebaseToken)" + "&uid=\(Constants.getUID())"
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = postString.data(using: .utf8)
-        
-        if let token = UserDefaults.standard.object(forKey: "Token") as? String {
-            request.setValue(token, forHTTPHeaderField: "Authorization")
-        }
-        let task = URLSession.shared.dataTask(with: request) {
-            (data, response, error) in
-            
-            guard let data = data, error == nil else {
-                let delay = DispatchTime.now() + 2
-                DispatchQueue.main.asyncAfter(deadline: delay, execute: {
-                    self.connectionError()
-                })
-                return
-            }
-            if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as AnyObject {
-                DispatchQueue.main.async {
-                    print(jsonObject)
-                    self.requestSuccess(jsonObject: jsonObject)
-                }
-            } else {
-                let responseString = String(data: data, encoding: .utf8)
-                print(responseString as AnyObject)
-            }
-        }
-        task.resume()
+        // TODO: Task 6 — replace with Supabase (update FCM token)
     }
     
     func connectionError() {

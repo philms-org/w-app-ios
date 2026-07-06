@@ -4,7 +4,7 @@ require 'xcodeproj'
 # Test files must not be compiled into the production app binary.
 # They will be wired to a proper test target in a future task.
 
-PROJECT_PATH = File.join(__dir__, '..', 'Wing Me.xcodeproj')
+PROJECT_PATH = File.join(__dir__, '..', 'The W App.xcodeproj')
 TARGET_NAME  = 'The W App'
 TEST_FILES   = %w[KeychainHelperTests.swift WAPSupabaseTests.swift]
 

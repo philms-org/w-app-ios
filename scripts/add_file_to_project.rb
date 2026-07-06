@@ -1,6 +1,6 @@
 require 'xcodeproj'
 
-PROJECT_PATH  = File.join(__dir__, '..', 'Wing Me.xcodeproj')
+PROJECT_PATH  = File.join(__dir__, '..', 'The W App.xcodeproj')
 TARGET_NAME   = 'The W App'
 GROUP_PATH    = 'Wing Me/Classes'
 FILE_PATH     = File.join(__dir__, '..', 'Wing Me', 'Classes', 'WAPSupabase.swift')
