@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		02612ECD19DDE92BEC342668 /* Pods_Wing_Me.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA2D57BDB7954F09BD755E2 /* Pods_Wing_Me.framework */; };
+		6FEF1C8B4A028EE0108A1C63 /* WAPSupabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6910AB8B22298C3110519B /* WAPSupabase.swift */; };
 		CB044600283D3A4400ED2C37 /* FcbRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0445FF283D3A4400ED2C37 /* FcbRegisterVC.swift */; };
 		CB044602283D3AE800ED2C37 /* FcbRegisterPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB044601283D3AE800ED2C37 /* FcbRegisterPicker.swift */; };
 		CB063BE0286F212100F61029 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB063BDF286F212100F61029 /* HomeVC.swift */; };
@@ -245,6 +246,7 @@
 		CBFD8868281CCCBE0050A2AA /* RegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
 		CBFDAB91286F538B0092EE21 /* VastVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VastVC.swift; sourceTree = "<group>"; };
 		DB2165C222A1CEDC4EF0D26A /* Pods-Wing Me.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wing Me.release.xcconfig"; path = "Target Support Files/Pods-Wing Me/Pods-Wing Me.release.xcconfig"; sourceTree = "<group>"; };
+		DE6910AB8B22298C3110519B /* WAPSupabase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPSupabase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -456,6 +458,7 @@
 				CB508FE6283FF16000FD8A63 /* FilterClass.swift */,
 				CB26FAF8281B217C0077D0EA /* Strings.swift */,
 				CB26FAFC281B24B90077D0EA /* Colors.swift */,
+				DE6910AB8B22298C3110519B /* WAPSupabase.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -883,6 +886,7 @@
 				CBC6E6C0281CEE6000EF5760 /* LocationPersonCell.swift in Sources */,
 				CBE2F73C2BF0D892007D37F1 /* QRCodeVC.swift in Sources */,
 				CB044600283D3A4400ED2C37 /* FcbRegisterVC.swift in Sources */,
+				6FEF1C8B4A028EE0108A1C63 /* WAPSupabase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
