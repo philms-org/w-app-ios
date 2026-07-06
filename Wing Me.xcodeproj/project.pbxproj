@@ -644,7 +644,7 @@
 			dependencies = (
 			);
 			name = "The W App";
-			productName = "Wing Me";
+			productName = "The W App";
 			productReference = CB558134281B171800E49052 /* Wing Me.app */;
 			productType = "com.apple.product-type.application";
 		};
