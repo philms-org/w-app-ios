@@ -1,9 +1,8 @@
-
 import UIKit
 
 class Strings {
     static let language = NSLocalizedString("en", comment: "")
-    
+
     static let alertError = NSLocalizedString("Error!", comment: "")
     static let alertWarning = NSLocalizedString("Warning!", comment: "")
     static let alertSuccess = NSLocalizedString("Success!", comment: "")
@@ -15,14 +14,14 @@ class Strings {
     static let alertSetupNow = NSLocalizedString("Setup Now", comment: "")
     static let alertLater = NSLocalizedString("Later", comment: "")
     static let alertNever = NSLocalizedString("Never", comment: "")
-    
+
     static let alertConnection = NSLocalizedString("An error has occurred! Please check your internet connection or try again later", comment: "")
     static let alertEmpty = NSLocalizedString("All fields must be filled to proceed", comment: "")
     static let alertBoth = NSLocalizedString("Both passwords must be similar", comment: "")
     static let alertVerification = NSLocalizedString("The verification code is not correct", comment: "")
     static let alertTerms = NSLocalizedString("You must agree to the Terms & Conditions", comment: "")
-    static let alertWingout = NSLocalizedString("You need to wing out first", comment: "")
-    
+    static let alertCheckIn = NSLocalizedString("You need to check in first", comment: "")
+
     static let alertLogout = NSLocalizedString("Are you sure you want to logout?", comment: "")
     static let alertBlock = NSLocalizedString("Are you sure you want to block this user?", comment: "")
     static let alertReport = NSLocalizedString("Are you sure you want to report this user?", comment: "")
@@ -30,10 +29,9 @@ class Strings {
     static let alertDelete = NSLocalizedString("Are you sure you want to delete this conversation?", comment: "")
     static let alertSetupProfile = NSLocalizedString("Your profile is incomplete, do you want to continue setting up your profile?", comment: "")
     static let alertSaveProfile = NSLocalizedString("Do you want to save your changed info?", comment: "")
-    static let alertGenerate = NSLocalizedString("Are you sure you want to generate these users?", comment: "")
     static let alertDeleteGroup = NSLocalizedString("Are you sure you want to delete this group?", comment: "")
     static let alertLeaveGroup = NSLocalizedString("Are you sure you want to leave this group?", comment: "")
-    
+
     static let alertPasswordChanged = NSLocalizedString("Your password has been changed", comment: "")
     static let alertMessageSent = NSLocalizedString("Your message has been sent", comment: "")
     static let alertInfoEdited = NSLocalizedString("Your info has been edited", comment: "")
@@ -41,18 +39,16 @@ class Strings {
     static let alertPasswordReset = NSLocalizedString("Your password has been reset", comment: "")
     static let alertLocationInfo = NSLocalizedString("Your location info has been edited", comment: "")
     static let alertImageAdded = NSLocalizedString("Your image has been added", comment: "")
-    static let alertGenerated = NSLocalizedString("Your users has been generated", comment: "")
-    static let alertEventCreated = NSLocalizedString("Your event has been created", comment: "")
-    static let alertEventEdited = NSLocalizedString("Your event has been edited", comment: "")
-    static let alertBadgeAdded = NSLocalizedString("Your badge has been added", comment: "")
-    
+    static let alertCheckedIn = NSLocalizedString("You are now checked in", comment: "")
+    static let alertCheckedOut = NSLocalizedString("You have checked out", comment: "")
+
     static let optionTitle = NSLocalizedString("Select an Option", comment: "")
     static let optionDetails = NSLocalizedString("Set picture via:", comment: "")
     static let optionCamera = NSLocalizedString("Camera", comment: "")
     static let optionGallery = NSLocalizedString("Gallery", comment: "")
     static let optionMyFiles = NSLocalizedString("My Files", comment: "")
     static let optionCancel = NSLocalizedString("Cancel", comment: "")
-    
+
     static let logout = NSLocalizedString("Logout", comment: "")
     static let today = NSLocalizedString("Today", comment: "")
     static let yesterday = NSLocalizedString("Yesterday", comment: "")
@@ -65,8 +61,14 @@ class Strings {
     static let unblock = NSLocalizedString("Unblock", comment: "")
     static let delete = NSLocalizedString("Delete", comment: "")
     static let message = NSLocalizedString("Message", comment: "")
-    static let wingOut = NSLocalizedString("Wing out", comment: "")
+    static let checkIn = NSLocalizedString("Check In", comment: "")
+    static let checkOut = NSLocalizedString("Check Out", comment: "")
+    static let whoIsHere = NSLocalizedString("WHO'S HERE", comment: "")
+    static let whenAndWhere = NSLocalizedString("When and Where", comment: "")
     static let maybeLater = NSLocalizedString("Maybe later", comment: "")
     static let discardChanges = NSLocalizedString("Discard Changes", comment: "")
     static let saveChanges = NSLocalizedString("Save Changes", comment: "")
+    static let shareWhatever = NSLocalizedString("Share whatever where ever...", comment: "")
+    static let unlockWhoIsNear = NSLocalizedString("Unlock who's near", comment: "")
+    static let finishSetup = NSLocalizedString("Finish setting up your profile to unlock who's nearby.", comment: "")
 }

@@ -281,8 +281,8 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
     
     @IBAction func wingOut(_ sender: UIButton) {
         let actionSheet = UIAlertController(title: "", message: Strings.optionTitle, preferredStyle: .actionSheet)
-        
-        actionSheet.addAction(UIAlertAction(title: Strings.wingOut, style: .destructive) {
+
+        actionSheet.addAction(UIAlertAction(title: Strings.checkOut, style: .destructive) {
             _ in
             appDelegate.inLocation = false
             self.hideLocation()
