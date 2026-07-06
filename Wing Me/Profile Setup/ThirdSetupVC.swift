@@ -26,6 +26,7 @@ class ThirdSetupVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         super.viewDidLoad()
         pageLabel.text = "2 / 4"
 
+        guard array.count >= 3 else { return }
         if let index = Int(datingID) {
             array[0].progress = index
         } else {

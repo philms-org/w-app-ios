@@ -205,16 +205,8 @@ class UserProfileVC: UIViewController {
             
             let relationship = message.getString(key: "relationship")
             
-            if let customCell = Constants.relashionships.first(where: {
-                customCell in
-                customCell.string1 == relationship
-            }) {
-                relationshipView.isHidden = false
-                relationshipLabel.text = customCell.string2
-            } else {
-                relationshipView.isHidden = true
-            }
-            
+            relationshipView.isHidden = true
+
             if gender == "F" {
                 sendView.backgroundColor = Colors.pink
             } else {

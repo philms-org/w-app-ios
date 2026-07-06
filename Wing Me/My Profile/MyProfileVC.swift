@@ -269,15 +269,8 @@ class MyProfileVC: UIViewController {
             
             relationship = message.getString(key: "relationship")
             
-            if let customCell = Constants.relashionships.first(where: {
-                customCell in
-                customCell.string1 == relationship
-            }) {
-                relationshipLabel.text = customCell.string2
-            } else {
-                relationshipLabel.text = "".fill()
-            }
-            
+            relationshipLabel.text = "".fill()
+
             delegate.datingID = message.getString(key: "dating_Id")
             delegate.socialisingID = message.getString(key: "socialising_Id")
             delegate.networkingID = message.getString(key: "networking_Id")

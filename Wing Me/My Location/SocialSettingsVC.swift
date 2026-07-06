@@ -16,6 +16,7 @@ class SocialSettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        guard array.count >= 3 else { return }
         if let index = Int(datingID) {
             array[0].progress = index
         } else {

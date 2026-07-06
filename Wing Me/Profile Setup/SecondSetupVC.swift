@@ -28,15 +28,7 @@ class SecondSetupVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         super.viewDidLoad()
         pageLabel.text = "1 / 4"
         
-        if let index = Constants.relashionships.firstIndex(where: {
-            customCell in
-            customCell.string1 == relationship
-        }) {
-            lastSelected = index
-        }
-        for (index, each) in Constants.relashionships.enumerated() {
-            array.append(CustomCell.init(string1: each.string1, string2: each.string2, isSelected: index == lastSelected))
-        }
+        // relationship selection removed (dating feature removed)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
