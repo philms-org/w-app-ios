@@ -644,6 +644,9 @@
 			dependencies = (
 			);
 			name = "The W App";
+			packageProductDependencies = (
+				E1C14D94426AB8DEAFF1D52E /* Supabase */,
+			);
 			productName = "The W App";
 			productReference = CB558134281B171800E49052 /* Wing Me.app */;
 			productType = "com.apple.product-type.application";
@@ -671,6 +674,9 @@
 				Base,
 			);
 			mainGroup = CB55812B281B171700E49052;
+			packageReferences = (
+				B702182EE1ED09235443C0E6 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CB558135281B171800E49052 /* Products */;
 			projectDirPath = "";
@@ -1112,6 +1118,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B702182EE1ED09235443C0E6 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E1C14D94426AB8DEAFF1D52E /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B702182EE1ED09235443C0E6 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		CB558140281B171800E49052 /* Wing_Me.xcdatamodeld */ = {
