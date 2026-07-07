@@ -24,6 +24,9 @@ class Strings {
 
     static let alertGenerate = NSLocalizedString("Are you sure you want to generate these users?", comment: "")
     static let alertGenerated = NSLocalizedString("Users generated successfully", comment: "")
+    static let alertBadgeAdded = NSLocalizedString("Badge added successfully", comment: "")
+    static let alertEventCreated = NSLocalizedString("Event created successfully", comment: "")
+    static let alertEventEdited = NSLocalizedString("Event updated successfully", comment: "")
     static let alertLogout = NSLocalizedString("Are you sure you want to logout?", comment: "")
     static let alertBlock = NSLocalizedString("Are you sure you want to block this user?", comment: "")
     static let alertReport = NSLocalizedString("Are you sure you want to report this user?", comment: "")
