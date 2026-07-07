@@ -27,9 +27,9 @@ class MyLocationVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         appDelegate.reloadLocation = {
             self.reload()
         }
-        delegate.wingMe = {
+        delegate.wingIn = {
             customCell in
-            self.wingMe(customCell: customCell)
+            self.wingIn(customCell: customCell)
         }
         delegate.hideLocation = {
             self.hideLocation()
@@ -129,7 +129,7 @@ class MyLocationVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     
-    func wingMe(customCell: CustomCell) {
+    func wingIn(customCell: CustomCell) {
         inLocation = true
         titleLabel.text = "My Location"
         noLocationView.isHidden = true

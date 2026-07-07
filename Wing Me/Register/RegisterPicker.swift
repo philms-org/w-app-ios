@@ -64,11 +64,9 @@ extension RegisterVC: UIImagePickerControllerDelegate, UINavigationControllerDel
     }
     
     func openMain() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let viewController = storyboard.instantiateViewController(withIdentifier: "MainVC") as? MainVC {
-            viewController.modalPresentationStyle = .currentContext
-            present(viewController, animated: true, completion: nil)
-        }
+        let vc = WAPTabBarVC()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true)
     }
 
     func getGender() -> String {

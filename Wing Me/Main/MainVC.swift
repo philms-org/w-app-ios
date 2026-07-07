@@ -9,7 +9,7 @@ class MainVC: UIViewController {
     
     var viewControllers: [UIViewController] = []
     
-    var wingMe: ((_ customCell: CustomCell) -> ())!
+    var wingIn: ((_ customCell: CustomCell) -> ())!
     var hideLocation: (() -> ())!
     var checkLocation: (() -> ())!
     

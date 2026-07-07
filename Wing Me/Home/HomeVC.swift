@@ -152,7 +152,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
 //                    return
 //                }
                 let customCell = CustomCell(string1: "Event_\(item.id)", string2: item.title)
-                self.delegate.wingMe(customCell)
+                self.delegate.wingIn(customCell)
                 self.delegate.selectTab(tag: 3)
             })
             

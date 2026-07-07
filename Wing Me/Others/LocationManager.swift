@@ -164,7 +164,7 @@ extension AppDelegate: CLLocationManagerDelegate {
             
             let notificationCenter = UNUserNotificationCenter.current()
             let content = UNMutableNotificationContent()
-            content.title = "New Wing Me Location"
+            content.title = "New W App Location"
             content.body = "Have you been to \(each.string2!)"
             let request = UNNotificationRequest(identifier: "Identifier", content: content, trigger: nil)
             notificationCenter.add(request, withCompletionHandler: nil)

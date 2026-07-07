@@ -181,11 +181,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         guard let currentVC = getCurrentVC() else {
             return (ApplicationDelegate.shared.application(app, open: url, options: options))
         }
-        if url.absoluteString.contains("openWingMeLocation://id=".lowercased()) {
+        if url.absoluteString.contains("openWAPLocation://id=".lowercased()) {
             if let id = url.absoluteString.split(separator: "=").last {
                 openLocation(delegate: currentVC, id: "\(id)")
             }
-        } else if url.absoluteString.contains("openWingMeBusinessCard://id=".lowercased()) {
+        } else if url.absoluteString.contains("openWAPContact://id=".lowercased()) {
             if let id = url.absoluteString.split(separator: "=").last {
                 openBusinessCard(delegate: currentVC, id: "\(id)")
             }

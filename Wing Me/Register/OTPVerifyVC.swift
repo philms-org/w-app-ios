@@ -142,10 +142,8 @@ class OTPVerifyVC: UIViewController {
     }
 
     private func openMain() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let vc = storyboard.instantiateViewController(withIdentifier: "MainVC") as? MainVC {
-            vc.modalPresentationStyle = .currentContext
-            present(vc, animated: true)
-        }
+        let vc = WAPTabBarVC()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true)
     }
 }

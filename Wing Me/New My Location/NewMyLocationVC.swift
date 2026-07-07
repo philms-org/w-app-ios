@@ -45,9 +45,9 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
         appDelegate.reloadLocation = {
             self.reload()
         }
-        delegate.wingMe = {
+        delegate.wingIn = {
             customCell in
-            self.wingMe(customCell: customCell)
+            self.wingIn(customCell: customCell)
         }
         delegate.hideLocation = {
             self.hideLocation()
@@ -59,7 +59,7 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
         
         if locationID.contains("Event") {
             let customCell = CustomCell(string1: locationID, string2: locationName)
-            wingMe(customCell: customCell)
+            wingIn(customCell: customCell)
         }
     }
     
@@ -376,7 +376,7 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
         }
     }
     
-    func wingMe(customCell: CustomCell) {
+    func wingIn(customCell: CustomCell) {
         appDelegate.inLocation = true
         inLocation = true
         noLocationView.isHidden = true

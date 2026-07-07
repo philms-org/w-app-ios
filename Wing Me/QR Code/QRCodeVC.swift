@@ -13,7 +13,7 @@ class QRCodeVC: UIViewController {
     }
     
     @IBAction func share(_ sender: UIButton) {
-        let url = "openWingMeBusinessCard://id=1"
+        let url = "openWAPContact://id=me"
         let activity = UIActivityViewController(activityItems: [url], applicationActivities: nil)
         activity.popoverPresentationController?.sourceView = sender
         activity.popoverPresentationController?.sourceRect = sender.bounds

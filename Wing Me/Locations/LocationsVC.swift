@@ -565,7 +565,7 @@ class LocationsVC: UIViewController, UITextFieldDelegate, CLLocationManagerDeleg
                 }) {
                     let customCell = CustomCell.init(string1: locationID,
                                                      string2: locationName)
-                    delegate.wingMe(customCell)
+                    delegate.wingIn(customCell)
                 } else {
                     delegate.hideLocation()
                     
@@ -585,7 +585,7 @@ class LocationsVC: UIViewController, UITextFieldDelegate, CLLocationManagerDeleg
         for each in array {
             let notificationCenter = UNUserNotificationCenter.current()
             let content = UNMutableNotificationContent()
-            content.title = "New Wing Me Location"
+            content.title = "New W App Location"
             content.body = "Have you been to \(each.string2!)"
             let request = UNNotificationRequest(identifier: "Identifier", content: content, trigger: nil)
             notificationCenter.add(request, withCompletionHandler: nil)
@@ -596,7 +596,7 @@ class LocationsVC: UIViewController, UITextFieldDelegate, CLLocationManagerDeleg
         let alertTitle = "Greetings \(UserDefaults.getString(key: "FirstName"))"
         
         if array.count > 1 {
-            let alertBody = "You have entered a Wing Me location, may I wing you?"
+            let alertBody = "You're near a W App location. Wing in?"
             let alert = UIAlertController(title: alertTitle, message: alertBody, preferredStyle: .alert)
             
             for each in array {
@@ -605,7 +605,7 @@ class LocationsVC: UIViewController, UITextFieldDelegate, CLLocationManagerDeleg
                 
                 alert.addAction(UIAlertAction(title: "Wing me into \(each.string2!)", style: .default, handler: {
                     _ in
-                    self.delegate.wingMe(each)
+                    self.delegate.wingIn(each)
                     self.delegate.selectTab(tag: 3)
                 }))
             }
@@ -618,13 +618,13 @@ class LocationsVC: UIViewController, UITextFieldDelegate, CLLocationManagerDeleg
             UserDefaults.standard.set(customCell.string1, forKey: "LastLocationAlert")
             UserDefaults.standard.set(customCell.string1, forKey: "LastLocationNotification")
             
-            let alertBody = "You have entered a Wing Me location, may I wing you into \(customCell.string2!)?"
+            let alertBody = "You're near \(customCell.string2!)?"
             let alert = UIAlertController(title: alertTitle, message: alertBody, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: Strings.maybeLater, style: .destructive, handler: nil))
             
-            alert.addAction(UIAlertAction(title: "Wing me", style: .default, handler: {
+            alert.addAction(UIAlertAction(title: "Wing in", style: .default, handler: {
                 _ in
-                self.delegate.wingMe(customCell)
+                self.delegate.wingIn(customCell)
                 self.delegate.selectTab(tag: 3)
             }))
             delegate.present(alert, animated: true, completion: nil)
