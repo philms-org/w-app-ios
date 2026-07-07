@@ -22,6 +22,8 @@ class Strings {
     static let alertTerms = NSLocalizedString("You must agree to the Terms & Conditions", comment: "")
     static let alertCheckIn = NSLocalizedString("You need to check in first", comment: "")
 
+    static let alertGenerate = NSLocalizedString("Are you sure you want to generate these users?", comment: "")
+    static let alertGenerated = NSLocalizedString("Users generated successfully", comment: "")
     static let alertLogout = NSLocalizedString("Are you sure you want to logout?", comment: "")
     static let alertBlock = NSLocalizedString("Are you sure you want to block this user?", comment: "")
     static let alertReport = NSLocalizedString("Are you sure you want to report this user?", comment: "")
