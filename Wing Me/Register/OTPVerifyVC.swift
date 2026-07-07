@@ -1,5 +1,4 @@
 import UIKit
-import Supabase
 
 class OTPVerifyVC: UIViewController {
     var phone = ""
@@ -70,7 +69,7 @@ class OTPVerifyVC: UIViewController {
             let path = "\(uid)/avatar.jpg"
             try await WAPSupabase.shared.client.storage
                 .from("avatars")
-                .upload(path, data: data, options: FileOptions(contentType: "image/jpeg", upsert: true))
+                .upload(path, data: data, options: .init(contentType: "image/jpeg", upsert: true))
             let url = try WAPSupabase.shared.client.storage
                 .from("avatars").getPublicURL(path: path)
             avatarURL = url.absoluteString
