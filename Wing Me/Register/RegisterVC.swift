@@ -1,5 +1,6 @@
 
 import UIKit
+import CryptoKit
 import FBSDKLoginKit
 import AuthenticationServices
 
@@ -20,10 +21,11 @@ class RegisterVC: UIViewController, UITextFieldDelegate, ASAuthorizationControll
     @IBOutlet weak var facebookIndicator: UIActivityIndicatorView!
     
     var codesArray: [CustomCell] = []
-    
+
     var code = "1"
     var lastGender = Int()
     var birthDate = String()
+    private var currentNonce: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,42 +45,28 @@ class RegisterVC: UIViewController, UITextFieldDelegate, ASAuthorizationControll
         return false
     }
     
-    @available(iOS 13.0, *)
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            let appleId = appleIDCredential.user
-            
-            if let dictionary = UserDefaults.standard.object(forKey: appleId) as? NSDictionary {
-                if let name = dictionary["Name"] as? String, let email = dictionary["Email"] as? String {
-                    openRegister(id: appleId, name: name, email: email, imageURL: "")
-                    return
+        guard let cred = authorization.credential as? ASAuthorizationAppleIDCredential,
+              let tokenData = cred.identityToken,
+              let idToken = String(data: tokenData, encoding: .utf8),
+              let nonce = currentNonce else { return }
+        let firstName = cred.fullName?.givenName ?? ""
+        let lastName  = cred.fullName?.familyName ?? ""
+        let name = [firstName, lastName].filter { !$0.isEmpty }.joined(separator: " ")
+        Task {
+            do {
+                try await WAPAuth.signInWithApple(idToken: idToken, nonce: nonce)
+                await MainActor.run {
+                    self.openRegister(id: "", name: name, email: cred.email ?? "", imageURL: "")
+                }
+            } catch {
+                await MainActor.run {
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
                 }
             }
-            guard let fullName = appleIDCredential.fullName else {
-                openRegister(id: appleId, name: "", email: "", imageURL: "")
-                return
-            }
-            guard let firstName = fullName.givenName, let lastName = fullName.familyName else {
-                openRegister(id: appleId, name: "", email: "", imageURL: "")
-                return
-            }
-            guard let email = appleIDCredential.email else {
-                let name = "\(firstName) \(lastName)"
-                openRegister(id: appleId, name: name, email: "", imageURL: "")
-                return
-            }
-            let name = "\(firstName) \(lastName)"
-            let dictionary: NSDictionary = [
-                "Name": name,
-                "Email": email
-            ]
-            
-            UserDefaults.standard.set(dictionary, forKey: appleId)
-            openRegister(id: appleId, name: name, email: email, imageURL: "")
         }
     }
-    
-    @available(iOS 13.0, *)
+
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         print(error.localizedDescription)
     }
@@ -152,28 +140,42 @@ class RegisterVC: UIViewController, UITextFieldDelegate, ASAuthorizationControll
     
     @IBAction func register(_ sender: UIButton) {
         view.endEditing(true)
-        
-        guard !nameTextField.getText().isEmpty && !emailTextField.getText().isEmpty && !phoneTextField.getPhone().isEmpty
-                && !passwordTextField.getText().isEmpty && !confirmTextField.getText().isEmpty && lastGender != 0
-                && !birthDate.isEmpty, let image = imageView.image, let _ = image.pngData() else {
-            
-            let alertClass = AlertClass()
-            alertClass.showWarningAlert(delegate: self, message: Strings.alertEmpty)
-            return
-        }
-        guard passwordTextField.getText() == confirmTextField.getText() else {
-            let alertClass = AlertClass()
-            alertClass.showWarningAlert(delegate: self, message: Strings.alertBoth)
+        guard !nameTextField.getText().isEmpty && !phoneTextField.getPhone().isEmpty
+                && lastGender != 0 && !birthDate.isEmpty,
+              let image = imageView.image, let _ = image.pngData() else {
+            AlertClass().showWarningAlert(delegate: self, message: Strings.alertEmpty)
             return
         }
         guard termsSwitch.isOn else {
-            let alertClass = AlertClass()
-            alertClass.showWarningAlert(delegate: self, message: Strings.alertTerms)
+            AlertClass().showWarningAlert(delegate: self, message: Strings.alertTerms)
             return
         }
         registerButton.isHidden = true
         registerIndicator.startAnimating()
-        sendData()
+        let phone = "+\(code)\(phoneTextField.getPhone())"
+        Task {
+            do {
+                try await WAPAuth.signInWithPhone(phone: phone)
+                await MainActor.run { self.openOTPVerify(phone: phone) }
+            } catch {
+                await MainActor.run {
+                    self.registerButton.isHidden = false
+                    self.registerIndicator.stopAnimating()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
+            }
+        }
+    }
+
+    func openOTPVerify(phone: String) {
+        let vc = OTPVerifyVC()
+        vc.phone = phone
+        vc.name = nameTextField.getText()
+        vc.gender = getGender()
+        vc.birthDate = birthDate
+        vc.avatarImage = imageView.image
+        vc.modalPresentationStyle = .currentContext
+        present(vc, animated: true)
     }
     
     @IBAction func facebookRegister(_ sender: UIButton) {
@@ -183,16 +185,26 @@ class RegisterVC: UIViewController, UITextFieldDelegate, ASAuthorizationControll
     }
     
     @IBAction func appleRegister(_ sender: UIButton) {
-        if #available(iOS 13.0, *) {
-            let appleIDProvider = ASAuthorizationAppleIDProvider()
-            let request = appleIDProvider.createRequest()
-            request.requestedScopes = [.fullName, .email]
-            
-            let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-            authorizationController.delegate = self
-            authorizationController.presentationContextProvider = self
-            authorizationController.performRequests()
-        }
+        let rawNonce = randomNonceString()
+        currentNonce = rawNonce
+        let provider = ASAuthorizationAppleIDProvider()
+        let request = provider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+        request.nonce = sha256(rawNonce)
+        let controller = ASAuthorizationController(authorizationRequests: [request])
+        controller.delegate = self
+        controller.presentationContextProvider = self
+        controller.performRequests()
+    }
+
+    private func randomNonceString(length: Int = 32) -> String {
+        var bytes = [UInt8](repeating: 0, count: length)
+        _ = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
+        return bytes.map { String(format: "%02x", $0) }.joined()
+    }
+
+    private func sha256(_ input: String) -> String {
+        SHA256.hash(data: Data(input.utf8)).compactMap { String(format: "%02x", $0) }.joined()
     }
     
     func selectCode(customCell: CustomCell) {

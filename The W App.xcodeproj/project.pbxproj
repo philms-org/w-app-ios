@@ -10,6 +10,7 @@
 		02612ECD19DDE92BEC342668 /* Pods_Wing_Me.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA2D57BDB7954F09BD755E2 /* Pods_Wing_Me.framework */; };
 		225686879AB5C4D93858B385 /* WAPAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FEE26D61189FF52A2DDE987 /* WAPAuth.swift */; };
 		6FEF1C8B4A028EE0108A1C63 /* WAPSupabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6910AB8B22298C3110519B /* WAPSupabase.swift */; };
+		8E7DB50170C8EBF17E2F3F2A /* OTPVerifyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2416921BF3BC05936D07382 /* OTPVerifyVC.swift */; };
 		CB044600283D3A4400ED2C37 /* FcbRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0445FF283D3A4400ED2C37 /* FcbRegisterVC.swift */; };
 		CB044602283D3AE800ED2C37 /* FcbRegisterPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB044601283D3AE800ED2C37 /* FcbRegisterPicker.swift */; };
 		CB063BE0286F212100F61029 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB063BDF286F212100F61029 /* HomeVC.swift */; };
@@ -132,6 +133,7 @@
 		43027E9F1830D67F90A46640 /* KeychainHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		6FEE26D61189FF52A2DDE987 /* WAPAuth.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPAuth.swift; sourceTree = "<group>"; };
 		7779BED81522DE2EFBA8A0D5 /* Pods-Wing Me.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wing Me.debug.xcconfig"; path = "Target Support Files/Pods-Wing Me/Pods-Wing Me.debug.xcconfig"; sourceTree = "<group>"; };
+		A2416921BF3BC05936D07382 /* OTPVerifyVC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OTPVerifyVC.swift; sourceTree = "<group>"; };
 		AE65EA55DF549EE4620BA406 /* WAPAuthTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPAuthTests.swift; sourceTree = "<group>"; };
 		CB0445FF283D3A4400ED2C37 /* FcbRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FcbRegisterVC.swift; sourceTree = "<group>"; };
 		CB044601283D3AE800ED2C37 /* FcbRegisterPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FcbRegisterPicker.swift; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 				CB4EC3FE283BBEEE009EC5B6 /* RegisterPicker.swift */,
 				CB0445FF283D3A4400ED2C37 /* FcbRegisterVC.swift */,
 				CB044601283D3AE800ED2C37 /* FcbRegisterPicker.swift */,
+				A2416921BF3BC05936D07382 /* OTPVerifyVC.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -688,7 +691,7 @@
 					};
 				};
 			};
-			buildConfigurationList = CB55812F281B171700E49052 /* Build configuration list for PBXProject "Wing Me" */;
+			buildConfigurationList = CB55812F281B171700E49052 /* Build configuration list for PBXProject "The W App" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -908,6 +911,7 @@
 				6FEF1C8B4A028EE0108A1C63 /* WAPSupabase.swift in Sources */,
 				DA73C504F59E3CC5CB439E99 /* KeychainHelper.swift in Sources */,
 				225686879AB5C4D93858B385 /* WAPAuth.swift in Sources */,
+				8E7DB50170C8EBF17E2F3F2A /* OTPVerifyVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1124,7 +1128,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CB55812F281B171700E49052 /* Build configuration list for PBXProject "Wing Me" */ = {
+		CB55812F281B171700E49052 /* Build configuration list for PBXProject "The W App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CB558149281B171900E49052 /* Debug */,
