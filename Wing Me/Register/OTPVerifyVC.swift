@@ -8,38 +8,84 @@ class OTPVerifyVC: UIViewController {
     var avatarImage: UIImage?
 
     private let codeField = UITextField()
-    private let verifyButton = UIButton(type: .system)
+    private let verifyButton = UIButton(type: .custom)
     private let indicator = UIActivityIndicatorView(style: .medium)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = Colors.black
         setupUI()
     }
 
     private func setupUI() {
-        let label = UILabel()
-        label.text = "Enter the code sent to \(phone)"
-        label.textAlignment = .center
-        label.numberOfLines = 0
+        // Subtitle
+        let subtitle = UILabel()
+        subtitle.text = "Enter the 6-digit code\nsent to \(phone)"
+        subtitle.textColor = .white
+        subtitle.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        subtitle.textAlignment = .center
+        subtitle.numberOfLines = 0
+        subtitle.translatesAutoresizingMaskIntoConstraints = false
 
-        codeField.placeholder = "6-digit code"
+        // Code field — dark pill style matching app design
+        codeField.placeholder = "_ _ _ _ _ _"
+        codeField.attributedPlaceholder = NSAttributedString(
+            string: "_ _ _ _ _ _",
+            attributes: [.foregroundColor: UIColor.lightGray]
+        )
         codeField.keyboardType = .numberPad
         codeField.textAlignment = .center
-        codeField.borderStyle = .roundedRect
+        codeField.textColor = .white
+        codeField.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        codeField.backgroundColor = Colors.back_gray
+        codeField.layer.cornerRadius = 10
+        codeField.layer.masksToBounds = true
+        codeField.translatesAutoresizingMaskIntoConstraints = false
 
+        // Verify button — same pill style
         verifyButton.setTitle("Verify", for: .normal)
+        verifyButton.setTitleColor(.white, for: .normal)
+        verifyButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        verifyButton.backgroundColor = Colors.back_gray
+        verifyButton.layer.cornerRadius = 10
+        verifyButton.layer.masksToBounds = true
         verifyButton.addTarget(self, action: #selector(verify), for: .touchUpInside)
+        verifyButton.translatesAutoresizingMaskIntoConstraints = false
 
-        let stack = UIStackView(arrangedSubviews: [label, codeField, verifyButton, indicator])
-        stack.axis = .vertical
-        stack.spacing = 16
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(stack)
+        indicator.color = .white
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+
+        // W watermark logo at bottom
+        let logo = UIImageView(image: UIImage(named: "icon_watermark"))
+        logo.contentMode = .scaleAspectFit
+        logo.translatesAutoresizingMaskIntoConstraints = false
+
+        [subtitle, codeField, verifyButton, indicator, logo].forEach { view.addSubview($0) }
+
         NSLayoutConstraint.activate([
-            stack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32)
+            subtitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            subtitle.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100),
+            subtitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+            subtitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+
+            codeField.topAnchor.constraint(equalTo: subtitle.bottomAnchor, constant: 32),
+            codeField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+            codeField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+            codeField.heightAnchor.constraint(equalToConstant: 56),
+
+            verifyButton.topAnchor.constraint(equalTo: codeField.bottomAnchor, constant: 16),
+            verifyButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+            verifyButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+            verifyButton.heightAnchor.constraint(equalToConstant: 56),
+
+            indicator.topAnchor.constraint(equalTo: verifyButton.bottomAnchor, constant: 16),
+            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            logo.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24),
+            logo.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logo.widthAnchor.constraint(equalToConstant: 48),
+            logo.heightAnchor.constraint(equalToConstant: 32),
         ])
     }
 
