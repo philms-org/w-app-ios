@@ -32,7 +32,7 @@ final class WAPData {
 
     func fetchVenues() async throws -> [WAPVenue] {
         try await client
-            .from("venues")
+            .from("locations")
             .select()
             .order("name")
             .execute()
@@ -41,7 +41,7 @@ final class WAPData {
 
     func fetchVenue(id: String) async throws -> WAPVenue {
         try await client
-            .from("venues")
+            .from("locations")
             .select()
             .eq("id", value: id)
             .single()

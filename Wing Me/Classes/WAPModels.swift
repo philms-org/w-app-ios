@@ -37,22 +37,19 @@ struct WAPVenue: Codable, Identifiable {
     var name: String
     var address: String?
     var city: String?
-    var latitude: Double?
-    var longitude: Double?
-    var radius: Double?
-    var bannerURL: String?
-    var welcomeText: String?
+    var lat: Double?
+    var lng: Double?
+    var geofenceRadiusMeters: Int?
+    var isEvent: Bool?
+    var eventDate: String?
+    var bannerImage: String?
 
     enum CodingKeys: String, CodingKey {
-        case id
-        case name
-        case address
-        case city
-        case latitude
-        case longitude
-        case radius
-        case bannerURL    = "banner_url"
-        case welcomeText  = "welcome_text"
+        case id, name, address, city, lat, lng
+        case geofenceRadiusMeters = "geofence_radius_meters"
+        case isEvent = "is_event"
+        case eventDate = "event_date"
+        case bannerImage = "banner_image"
     }
 }
 
