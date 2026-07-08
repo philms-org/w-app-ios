@@ -14,12 +14,23 @@ final class WPillButton: UIButton {
 
     private func configure() {
         backgroundColor = Colors.back_gray
-        setTitleColor(.white, for: .normal)
-        setTitleColor(UIColor.white.withAlphaComponent(0.5), for: .disabled)
-        titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         layer.cornerRadius = 10
         layer.masksToBounds = true
-        contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+
+        var config = UIButton.Configuration.plain()
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+            return outgoing
+        }
+        configuration = config
+
+        configurationUpdateHandler = { button in
+            button.configuration?.baseForegroundColor = button.state == .disabled
+                ? UIColor.white.withAlphaComponent(0.5)
+                : .white
+        }
     }
 
     // Teal accent variant used for primary CTAs (Save, Verify, etc.)
