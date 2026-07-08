@@ -92,7 +92,7 @@ class EditProfileVC: UIViewController, UITextFieldDelegate {
     
     @IBAction func setupProfile(_ sender: UIButton) {
         let locale = Locale.current
-        let regionCode = locale.regionCode ?? ""
+        let regionCode = locale.region?.identifier ?? ""
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let viewController = storyboard.instantiateViewController(withIdentifier: "SecondSetupVC") as? SecondSetupVC {

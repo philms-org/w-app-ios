@@ -364,7 +364,7 @@ class MyProfileVC: UIViewController {
     
     func openProfileSetup() {
         let locale = Locale.current
-        let regionCode = locale.regionCode ?? ""
+        let regionCode = locale.region?.identifier ?? ""
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let viewController = storyboard.instantiateViewController(withIdentifier: "SecondSetupVC") as? SecondSetupVC {

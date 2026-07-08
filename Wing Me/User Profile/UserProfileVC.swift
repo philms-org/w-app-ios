@@ -203,8 +203,6 @@ class UserProfileVC: UIViewController {
                 heightLabel.text = "\(height)m"
             }
             
-            let relationship = message.getString(key: "relationship")
-            
             relationshipView.isHidden = true
 
             if gender == "F" {

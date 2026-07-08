@@ -120,25 +120,14 @@ class OTPVerifyVC: UIViewController {
                 .from("avatars").getPublicURL(path: path)
             avatarURL = url.absoluteString
         }
-        struct ProfileUpsert: Encodable {
-            let id: String
-            let display_name: String
-            let phone: String
-            let gender: String
-            let date_of_birth: String
-            let avatar_url: String?
-        }
-        try await WAPSupabase.shared.client
-            .from("profiles")
-            .upsert(ProfileUpsert(
-                id: uid,
-                display_name: name,
-                phone: phone,
-                gender: gender,
-                date_of_birth: birthDate,
-                avatar_url: avatarURL
-            ))
-            .execute()
+        try await WAPSupabase.shared.upsertRegistrationProfile(WAPRegistrationProfile(
+            id: uid,
+            display_name: name,
+            phone: phone,
+            gender: gender,
+            date_of_birth: birthDate,
+            avatar_url: avatarURL
+        ))
     }
 
     private func openMain() {

@@ -18,3 +18,25 @@ final class WAPSupabase {
         client = SupabaseClient(supabaseURL: url, supabaseKey: key)
     }
 }
+
+// Registration-time profile upsert (id/display_name/phone/gender/date_of_birth/avatar_url).
+// Lives on WAPSupabase (a plain, non-actor-isolated class) rather than inline in the
+// registration view controllers so the .execute() call doesn't cross a @MainActor
+// isolation boundary with a non-Sendable PostgrestResponse<Void>.
+struct WAPRegistrationProfile: Encodable {
+    let id: String
+    let display_name: String
+    let phone: String?
+    let gender: String
+    let date_of_birth: String
+    let avatar_url: String?
+}
+
+extension WAPSupabase {
+    func upsertRegistrationProfile(_ profile: WAPRegistrationProfile) async throws {
+        try await client
+            .from("profiles")
+            .upsert(profile)
+            .execute()
+    }
+}
