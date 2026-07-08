@@ -134,14 +134,28 @@ final class WAPData {
 
     // MARK: - Rewards
 
-    func fetchRewards(venueId: String, tier: String) async throws -> [WAPReward] {
+    func fetchRewards(locationId: String) async throws -> [WAPReward] {
         try await client
             .from("rewards")
             .select()
-            .eq("venue_id", value: venueId)
-            .eq("tier", value: tier)
+            .eq("location_id", value: locationId)
+            .eq("is_active", value: true)
+            .order("display_order")
             .execute()
             .value
+    }
+
+    func hasFeatureAccess(featureName: String) async throws -> Bool {
+        guard let uid = WAPAuth.currentUserID else { return false }
+        struct AccessRow: Decodable { let user_id: String }
+        let rows: [AccessRow] = try await client
+            .from("user_feature_access")
+            .select("user_id")
+            .eq("user_id", value: uid)
+            .eq("feature_name", value: featureName)
+            .execute()
+            .value
+        return !rows.isEmpty
     }
 
     // MARK: - Attendee History

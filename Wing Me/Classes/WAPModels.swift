@@ -111,20 +111,26 @@ struct WAPContactMethod: Codable, Identifiable {
 
 struct WAPReward: Codable, Identifiable {
     let id: String
-    let venueId: String?
-    var type: String
-    var title: String
-    var description: String?
-    var verificationInstructions: String?
-    var tier: String
+    let locationId: String
+    var name: String
+    var iconType: String?
+    var dealText: String?
+    var instructions: String?
+    var qrPath: String?
+    var isActive: Bool
+    var displayOrder: Int
+    var featureName: String?
 
     enum CodingKeys: String, CodingKey {
         case id
-        case venueId                  = "venue_id"
-        case type
-        case title
-        case description
-        case verificationInstructions = "verification_instructions"
-        case tier
+        case locationId   = "location_id"
+        case name
+        case iconType     = "icon_type"
+        case dealText     = "deal_text"
+        case instructions
+        case qrPath       = "qr_path"
+        case isActive     = "is_active"
+        case displayOrder = "display_order"
+        case featureName  = "feature_name"
     }
 }
