@@ -6,8 +6,9 @@
 
 drop policy if exists "contacts_select" on contact_methods;
 drop policy if exists "contacts_insert" on contact_methods;
-create policy "contacts_select" on contact_methods for select to authenticated using (true);
+create policy "contacts_select" on contact_methods for select to authenticated using (is_enabled = true or user_id = auth.uid());
 create policy "contacts_insert" on contact_methods for insert to authenticated with check (user_id = auth.uid());
+drop policy if exists "contacts_update" on contact_methods;
 create policy "contacts_update" on contact_methods for update to authenticated using (user_id = auth.uid());
 
 drop policy if exists "rewards_select" on rewards;
