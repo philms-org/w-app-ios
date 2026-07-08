@@ -143,4 +143,73 @@ final class WAPData {
             .execute()
             .value
     }
+
+    // MARK: - Attendee History
+
+    func resolveFeatureFlag(featureName: String, userId: String, location: WAPVenue) async throws -> Bool {
+        let overrides: [WAPFeatureFlagOverride] = try await client
+            .from("feature_flag_overrides")
+            .select()
+            .eq("feature_name", value: featureName)
+            .execute()
+            .value
+        let defaults: [WAPFeatureFlagDefault] = try await client
+            .from("feature_flags")
+            .select()
+            .eq("feature_name", value: featureName)
+            .execute()
+            .value
+        return WAPFeatureFlagResolver.resolve(
+            overrides: overrides,
+            defaultEnabled: defaults.first?.defaultEnabled ?? false,
+            locationId: location.id,
+            userId: userId,
+            city: location.city
+        )
+    }
+
+    func fetchAttendeeHistory(locationId: String) async throws -> [WAPProfile] {
+        struct CheckinRow: Decodable { let profiles: WAPProfile }
+        let rows: [CheckinRow] = try await client
+            .from("location_checkins")
+            .select("profiles(*)")
+            .eq("location_id", value: locationId)
+            .execute()
+            .value
+        struct OptOutRow: Decodable { let user_id: String }
+        let optOuts: [OptOutRow] = try await client
+            .from("attendee_history_opt_outs")
+            .select("user_id")
+            .eq("location_id", value: locationId)
+            .execute()
+            .value
+        let optedOutIds = Set(optOuts.map(\.user_id))
+        var seen = Set<String>()
+        var result: [WAPProfile] = []
+        for row in rows {
+            let profile = row.profiles
+            guard !optedOutIds.contains(profile.id), !seen.contains(profile.id) else { continue }
+            seen.insert(profile.id)
+            result.append(profile)
+        }
+        return result
+    }
+
+    func setAttendeeHistoryOptOut(locationId: String, hidden: Bool) async throws {
+        guard let uid = WAPAuth.currentUserID else { return }
+        if hidden {
+            struct OptOut: Encodable { let user_id: String; let location_id: String }
+            try await client
+                .from("attendee_history_opt_outs")
+                .upsert(OptOut(user_id: uid, location_id: locationId))
+                .execute()
+        } else {
+            try await client
+                .from("attendee_history_opt_outs")
+                .delete()
+                .eq("user_id", value: uid)
+                .eq("location_id", value: locationId)
+                .execute()
+        }
+    }
 }
