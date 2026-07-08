@@ -11,6 +11,7 @@
 		225686879AB5C4D93858B385 /* WAPAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FEE26D61189FF52A2DDE987 /* WAPAuth.swift */; };
 		251F7EDDDBAA9F1F5303B20B /* WAPModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 644AFD6638D1F0C5E4D66FF7 /* WAPModels.swift */; };
 		50382402BB2D0665A123E738 /* WPillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9271C19549F90E884736ED /* WPillButton.swift */; };
+		52498B7BD49D7623D015B79B /* WAPFeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C85DC25ADB285B9A6E3246 /* WAPFeatureFlags.swift */; };
 		6FEF1C8B4A028EE0108A1C63 /* WAPSupabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6910AB8B22298C3110519B /* WAPSupabase.swift */; };
 		8E7DB50170C8EBF17E2F3F2A /* OTPVerifyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2416921BF3BC05936D07382 /* OTPVerifyVC.swift */; };
 		95A5D462C75CBD20B2199D1F /* WAPTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935CB7CB760189C3BB308833 /* WAPTabBarVC.swift */; };
@@ -260,6 +261,7 @@
 		CBFD8868281CCCBE0050A2AA /* RegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
 		CBFDAB91286F538B0092EE21 /* VastVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VastVC.swift; sourceTree = "<group>"; };
 		CE9271C19549F90E884736ED /* WPillButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WPillButton.swift; sourceTree = "<group>"; };
+		D1C85DC25ADB285B9A6E3246 /* WAPFeatureFlags.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPFeatureFlags.swift; sourceTree = "<group>"; };
 		DB2165C222A1CEDC4EF0D26A /* Pods-Wing Me.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wing Me.release.xcconfig"; path = "Target Support Files/Pods-Wing Me/Pods-Wing Me.release.xcconfig"; sourceTree = "<group>"; };
 		DE6910AB8B22298C3110519B /* WAPSupabase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPSupabase.swift; sourceTree = "<group>"; };
 		F7D3D47231D7E637722BCF49 /* KeychainHelperTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = KeychainHelperTests.swift; sourceTree = "<group>"; };
@@ -493,6 +495,7 @@
 				644AFD6638D1F0C5E4D66FF7 /* WAPModels.swift */,
 				312584F0B2EE04E4163FDF98 /* WAPData.swift */,
 				CE9271C19549F90E884736ED /* WPillButton.swift */,
+				D1C85DC25ADB285B9A6E3246 /* WAPFeatureFlags.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -928,6 +931,7 @@
 				D958D374A520532063C3DA9A /* WAPData.swift in Sources */,
 				50382402BB2D0665A123E738 /* WPillButton.swift in Sources */,
 				95A5D462C75CBD20B2199D1F /* WAPTabBarVC.swift in Sources */,
+				52498B7BD49D7623D015B79B /* WAPFeatureFlags.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
