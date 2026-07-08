@@ -51,27 +51,27 @@ final class WAPData {
 
     // MARK: - Feed
 
-    func fetchFeed(venueId: String) async throws -> [WAPFeedItem] {
+    func fetchFeed(locationId: String) async throws -> [WAPFeedItem] {
         try await client
             .from("feed_posts")
             .select("*, profiles(*)")
-            .eq("venue_id", value: venueId)
+            .eq("location_id", value: locationId)
             .order("created_at", ascending: false)
             .limit(100)
             .execute()
             .value
     }
 
-    func postToFeed(venueId: String, text: String) async throws {
+    func postToFeed(locationId: String, text: String) async throws {
         guard let uid = WAPAuth.currentUserID else { return }
         struct Post: Encodable {
-            let venue_id: String
+            let location_id: String
             let user_id: String
-            let text: String
+            let content: String
         }
         try await client
             .from("feed_posts")
-            .insert(Post(venue_id: venueId, user_id: uid, text: text))
+            .insert(Post(location_id: locationId, user_id: uid, content: text))
             .execute()
     }
 
