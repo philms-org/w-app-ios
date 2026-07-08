@@ -28,6 +28,7 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
     var timer: Timer!
     
     var locationID = String()
+    private let attendeesButton = WPillButton()
     var inLocation = Bool()
     var isMaster = Bool()
     var isOwner = Bool()
@@ -61,6 +62,42 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
             let customCell = CustomCell(string1: locationID, string2: locationName)
             wingIn(customCell: customCell)
         }
+
+        setupAttendeesButton()
+        Task { await refreshAttendeesButtonVisibility() }
+    }
+
+    private func setupAttendeesButton() {
+        attendeesButton.setTitle("Attendees", for: .normal)
+        attendeesButton.isHidden = true
+        attendeesButton.addTarget(self, action: #selector(openAttendeeHistory), for: .touchUpInside)
+        attendeesButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(attendeesButton)
+        NSLayoutConstraint.activate([
+            attendeesButton.topAnchor.constraint(equalTo: bannerView.bottomAnchor, constant: 8),
+            attendeesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            attendeesButton.heightAnchor.constraint(equalToConstant: 36),
+        ])
+    }
+
+    private func refreshAttendeesButtonVisibility() async {
+        guard !locationID.isEmpty, let uid = WAPAuth.currentUserID else { return }
+        do {
+            let venue = try await WAPData.shared.fetchVenue(id: locationID)
+            let enabled = try await WAPData.shared.resolveFeatureFlag(
+                featureName: "attendee_history_view", userId: uid, location: venue
+            )
+            attendeesButton.isHidden = !enabled
+        } catch {
+            attendeesButton.isHidden = true
+        }
+    }
+
+    @objc private func openAttendeeHistory() {
+        guard !locationID.isEmpty else { return }
+        let vc = AttendeeHistoryVC(locationId: locationID, locationName: bannerLabel.text ?? "Venue")
+        let nav = UINavigationController(rootViewController: vc)
+        present(nav, animated: true)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
