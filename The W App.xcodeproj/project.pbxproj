@@ -15,6 +15,7 @@
 		6FEF1C8B4A028EE0108A1C63 /* WAPSupabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6910AB8B22298C3110519B /* WAPSupabase.swift */; };
 		8E7DB50170C8EBF17E2F3F2A /* OTPVerifyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2416921BF3BC05936D07382 /* OTPVerifyVC.swift */; };
 		95A5D462C75CBD20B2199D1F /* WAPTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935CB7CB760189C3BB308833 /* WAPTabBarVC.swift */; };
+		9F2838A2D063F549BD88ADBD /* AttendeeHistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D4FFF4995D1B74DA5019CD /* AttendeeHistoryVC.swift */; };
 		CB044600283D3A4400ED2C37 /* FcbRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0445FF283D3A4400ED2C37 /* FcbRegisterVC.swift */; };
 		CB044602283D3AE800ED2C37 /* FcbRegisterPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB044601283D3AE800ED2C37 /* FcbRegisterPicker.swift */; };
 		CB063BE0286F212100F61029 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB063BDF286F212100F61029 /* HomeVC.swift */; };
@@ -140,6 +141,7 @@
 		644AFD6638D1F0C5E4D66FF7 /* WAPModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPModels.swift; sourceTree = "<group>"; };
 		6FEE26D61189FF52A2DDE987 /* WAPAuth.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPAuth.swift; sourceTree = "<group>"; };
 		7779BED81522DE2EFBA8A0D5 /* Pods-Wing Me.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wing Me.debug.xcconfig"; path = "Target Support Files/Pods-Wing Me/Pods-Wing Me.debug.xcconfig"; sourceTree = "<group>"; };
+		92D4FFF4995D1B74DA5019CD /* AttendeeHistoryVC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AttendeeHistoryVC.swift; sourceTree = "<group>"; };
 		935CB7CB760189C3BB308833 /* WAPTabBarVC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPTabBarVC.swift; sourceTree = "<group>"; };
 		A2416921BF3BC05936D07382 /* OTPVerifyVC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OTPVerifyVC.swift; sourceTree = "<group>"; };
 		AE65EA55DF549EE4620BA406 /* WAPAuthTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPAuthTests.swift; sourceTree = "<group>"; };
@@ -328,6 +330,7 @@
 				CB1A56B82D413972003D818D /* CommentCell.swift */,
 				CB5EB9BB2B7A0EBB0093070E /* ReplyVC.swift */,
 				CB5EB9B92B7A0C1E0093070E /* ReplyCell.swift */,
+				92D4FFF4995D1B74DA5019CD /* AttendeeHistoryVC.swift */,
 			);
 			path = "New My Location";
 			sourceTree = "<group>";
@@ -932,6 +935,7 @@
 				50382402BB2D0665A123E738 /* WPillButton.swift in Sources */,
 				95A5D462C75CBD20B2199D1F /* WAPTabBarVC.swift in Sources */,
 				52498B7BD49D7623D015B79B /* WAPFeatureFlags.swift in Sources */,
+				9F2838A2D063F549BD88ADBD /* AttendeeHistoryVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
