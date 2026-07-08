@@ -60,6 +60,7 @@ final class AttendeeHistoryVC: UIViewController, UITableViewDataSource, UITableV
                 featureName: "attendee_history_hide_self", userId: uid, location: venue
             )
             attendees = try await WAPData.shared.fetchAttendeeHistory(locationId: locationId)
+            isHidden = try await WAPData.shared.isOptedOutOfAttendeeHistory(locationId: locationId)
             tableView.reloadData()
         } catch {
             AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)

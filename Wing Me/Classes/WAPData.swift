@@ -174,6 +174,7 @@ final class WAPData {
             .from("location_checkins")
             .select("profiles(*)")
             .eq("location_id", value: locationId)
+            .eq("mode", value: "live")
             .execute()
             .value
         struct OptOutRow: Decodable { let user_id: String }
@@ -193,6 +194,19 @@ final class WAPData {
             result.append(profile)
         }
         return result
+    }
+
+    func isOptedOutOfAttendeeHistory(locationId: String) async throws -> Bool {
+        guard let uid = WAPAuth.currentUserID else { return false }
+        struct OptOutCheck: Decodable { let user_id: String }
+        let rows: [OptOutCheck] = try await client
+            .from("attendee_history_opt_outs")
+            .select("user_id")
+            .eq("location_id", value: locationId)
+            .eq("user_id", value: uid)
+            .execute()
+            .value
+        return !rows.isEmpty
     }
 
     func setAttendeeHistoryOptOut(locationId: String, hidden: Bool) async throws {
