@@ -43,7 +43,7 @@ Single scrolling page, sections top to bottom:
 
 ### 3.2 Hero — Interactive Crowd
 - 13 draggable stick figures scattered across the top of the hero, like an event mixer crowd
-  - Mixed attire: roughly half wearing a tie, half in a business dress
+  - Mixed attire: 7 wearing a tie, 6 in a business dress
   - Idle animation: gentle bob/sway (GSAP) so the crowd feels alive at rest
 - Below the crowd: 4 labeled drop zones, side by side — **WHO** · **QR Connect** · **Live Feed** · **Rewards**
 - Interaction: dragging a figure into a zone (GSAP Draggable)
@@ -88,7 +88,7 @@ New standalone Supabase project (not the WAP app's production project). Single t
 
 | Table | Columns |
 |---|---|
-| `leads` | id, email, track (attendee/organizer), role (event_owner/location_owner/organizer/other, nullable), source, created_at |
+| `leads` | id, email, track (attendee/organizer), role (event_owner/location_owner/organizer/other, nullable), source (static string identifying this site, e.g. "wap-landing"), created_at |
 
 Both forms validate client-side (valid email required; role required for the organizer form) and insert directly into `leads` via the Supabase JS client. On success, show an inline "thanks, we'll be in touch" state in place of the form.
 
