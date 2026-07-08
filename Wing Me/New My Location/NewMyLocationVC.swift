@@ -417,9 +417,10 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
         appDelegate.inLocation = true
         inLocation = true
         noLocationView.isHidden = true
-        
+
         locationID = customCell.string1
-        
+        Task { await refreshAttendeesButtonVisibility() }
+
         UserDefaults.standard.set(locationID, forKey: "LocationID")
         UserDefaults.standard.set(customCell.string2, forKey: "LocationName")
         
