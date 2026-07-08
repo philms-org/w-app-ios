@@ -92,31 +92,20 @@ extension FcbRegisterVC: UIImagePickerControllerDelegate, UINavigationController
                 .from("avatars").getPublicURL(path: path)
             avatarURL = url.absoluteString
         }
-        struct ProfileUpsert: Encodable {
-            let id: String
-            let display_name: String
-            let gender: String
-            let date_of_birth: String
-            let avatar_url: String?
-        }
-        try await WAPSupabase.shared.client
-            .from("profiles")
-            .upsert(ProfileUpsert(
-                id: uid,
-                display_name: nameTextField.getText(),
-                gender: getGender(),
-                date_of_birth: birthDate,
-                avatar_url: avatarURL
-            ))
-            .execute()
+        try await WAPSupabase.shared.upsertRegistrationProfile(WAPRegistrationProfile(
+            id: uid,
+            display_name: nameTextField.getText(),
+            phone: nil,
+            gender: getGender(),
+            date_of_birth: birthDate,
+            avatar_url: avatarURL
+        ))
     }
 
     func openMain() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let viewController = storyboard.instantiateViewController(withIdentifier: "MainVC") as? MainVC {
-            viewController.modalPresentationStyle = .currentContext
-            present(viewController, animated: true, completion: nil)
-        }
+        let vc = WAPTabBarVC()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true)
     }
 
     func getGender() -> String {
