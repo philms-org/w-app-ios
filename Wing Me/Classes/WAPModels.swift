@@ -73,17 +73,21 @@ struct WAPFeedItem: Codable, Identifiable {
 
 struct WAPPresence: Codable, Identifiable {
     let id: String
-    let venueId: String
+    let locationId: String
     let userId: String
+    var mode: String
     var checkedInAt: String?
+    var checkedOutAt: String?
     var profile: WAPProfile?
 
     enum CodingKeys: String, CodingKey {
         case id
-        case venueId     = "venue_id"
+        case locationId  = "location_id"
         case userId      = "user_id"
-        case checkedInAt = "checked_in_at"
-        case profile     = "profiles"
+        case mode
+        case checkedInAt  = "checked_in_at"
+        case checkedOutAt = "checked_out_at"
+        case profile      = "profiles"
     }
 }
 

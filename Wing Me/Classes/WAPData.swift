@@ -77,34 +77,39 @@ final class WAPData {
 
     // MARK: - Presence (who's here)
 
-    func fetchPresence(venueId: String) async throws -> [WAPPresence] {
+    func fetchPresence(locationId: String) async throws -> [WAPPresence] {
         try await client
-            .from("venue_presence")
+            .from("location_checkins")
             .select("*, profiles(*)")
-            .eq("venue_id", value: venueId)
+            .eq("location_id", value: locationId)
+            .is("checked_out_at", value: nil)
             .execute()
             .value
     }
 
-    func checkIn(venueId: String) async throws {
+    func checkIn(locationId: String) async throws {
         guard let uid = WAPAuth.currentUserID else { return }
-        struct Presence: Encodable {
-            let venue_id: String
+        struct CheckIn: Encodable {
             let user_id: String
+            let location_id: String
+            let mode: String
         }
         try await client
-            .from("venue_presence")
-            .upsert(Presence(venue_id: venueId, user_id: uid))
+            .from("location_checkins")
+            .insert(CheckIn(user_id: uid, location_id: locationId, mode: "live"))
             .execute()
     }
 
-    func checkOut(venueId: String) async throws {
+    func checkOut(locationId: String) async throws {
         guard let uid = WAPAuth.currentUserID else { return }
+        struct CheckOut: Encodable { let checked_out_at: String }
+        let now = ISO8601DateFormatter().string(from: Date())
         try await client
-            .from("venue_presence")
-            .delete()
-            .eq("venue_id", value: venueId)
+            .from("location_checkins")
+            .update(CheckOut(checked_out_at: now))
             .eq("user_id", value: uid)
+            .eq("location_id", value: locationId)
+            .is("checked_out_at", value: nil)
             .execute()
     }
 
