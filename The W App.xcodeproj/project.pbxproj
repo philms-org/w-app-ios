@@ -9,8 +9,11 @@
 /* Begin PBXBuildFile section */
 		02612ECD19DDE92BEC342668 /* Pods_Wing_Me.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA2D57BDB7954F09BD755E2 /* Pods_Wing_Me.framework */; };
 		225686879AB5C4D93858B385 /* WAPAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FEE26D61189FF52A2DDE987 /* WAPAuth.swift */; };
+		251F7EDDDBAA9F1F5303B20B /* WAPModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 644AFD6638D1F0C5E4D66FF7 /* WAPModels.swift */; };
+		50382402BB2D0665A123E738 /* WPillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9271C19549F90E884736ED /* WPillButton.swift */; };
 		6FEF1C8B4A028EE0108A1C63 /* WAPSupabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6910AB8B22298C3110519B /* WAPSupabase.swift */; };
 		8E7DB50170C8EBF17E2F3F2A /* OTPVerifyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2416921BF3BC05936D07382 /* OTPVerifyVC.swift */; };
+		95A5D462C75CBD20B2199D1F /* WAPTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935CB7CB760189C3BB308833 /* WAPTabBarVC.swift */; };
 		CB044600283D3A4400ED2C37 /* FcbRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0445FF283D3A4400ED2C37 /* FcbRegisterVC.swift */; };
 		CB044602283D3AE800ED2C37 /* FcbRegisterPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB044601283D3AE800ED2C37 /* FcbRegisterPicker.swift */; };
 		CB063BE0286F212100F61029 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB063BDF286F212100F61029 /* HomeVC.swift */; };
@@ -125,14 +128,18 @@
 		CBFD8867281CCBDE0050A2AA /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBFD8866281CCBDE0050A2AA /* LoginVC.swift */; };
 		CBFD8869281CCCBE0050A2AA /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBFD8868281CCCBE0050A2AA /* RegisterVC.swift */; };
 		CBFDAB92286F538B0092EE21 /* VastVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBFDAB91286F538B0092EE21 /* VastVC.swift */; };
+		D958D374A520532063C3DA9A /* WAPData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312584F0B2EE04E4163FDF98 /* WAPData.swift */; };
 		DA73C504F59E3CC5CB439E99 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43027E9F1830D67F90A46640 /* KeychainHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2AA2D57BDB7954F09BD755E2 /* Pods_Wing_Me.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wing_Me.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		312584F0B2EE04E4163FDF98 /* WAPData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPData.swift; sourceTree = "<group>"; };
 		43027E9F1830D67F90A46640 /* KeychainHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+		644AFD6638D1F0C5E4D66FF7 /* WAPModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPModels.swift; sourceTree = "<group>"; };
 		6FEE26D61189FF52A2DDE987 /* WAPAuth.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPAuth.swift; sourceTree = "<group>"; };
 		7779BED81522DE2EFBA8A0D5 /* Pods-Wing Me.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wing Me.debug.xcconfig"; path = "Target Support Files/Pods-Wing Me/Pods-Wing Me.debug.xcconfig"; sourceTree = "<group>"; };
+		935CB7CB760189C3BB308833 /* WAPTabBarVC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPTabBarVC.swift; sourceTree = "<group>"; };
 		A2416921BF3BC05936D07382 /* OTPVerifyVC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OTPVerifyVC.swift; sourceTree = "<group>"; };
 		AE65EA55DF549EE4620BA406 /* WAPAuthTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPAuthTests.swift; sourceTree = "<group>"; };
 		CB0445FF283D3A4400ED2C37 /* FcbRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FcbRegisterVC.swift; sourceTree = "<group>"; };
@@ -252,6 +259,7 @@
 		CBFD8866281CCBDE0050A2AA /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		CBFD8868281CCCBE0050A2AA /* RegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
 		CBFDAB91286F538B0092EE21 /* VastVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VastVC.swift; sourceTree = "<group>"; };
+		CE9271C19549F90E884736ED /* WPillButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WPillButton.swift; sourceTree = "<group>"; };
 		DB2165C222A1CEDC4EF0D26A /* Pods-Wing Me.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wing Me.release.xcconfig"; path = "Target Support Files/Pods-Wing Me/Pods-Wing Me.release.xcconfig"; sourceTree = "<group>"; };
 		DE6910AB8B22298C3110519B /* WAPSupabase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPSupabase.swift; sourceTree = "<group>"; };
 		F7D3D47231D7E637722BCF49 /* KeychainHelperTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = KeychainHelperTests.swift; sourceTree = "<group>"; };
@@ -461,6 +469,7 @@
 			children = (
 				CB55813B281B171800E49052 /* MainVC.swift */,
 				CB624B88281D016E00E66FDA /* MainFunctions.swift */,
+				935CB7CB760189C3BB308833 /* WAPTabBarVC.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -481,6 +490,9 @@
 				DE6910AB8B22298C3110519B /* WAPSupabase.swift */,
 				43027E9F1830D67F90A46640 /* KeychainHelper.swift */,
 				6FEE26D61189FF52A2DDE987 /* WAPAuth.swift */,
+				644AFD6638D1F0C5E4D66FF7 /* WAPModels.swift */,
+				312584F0B2EE04E4163FDF98 /* WAPData.swift */,
+				CE9271C19549F90E884736ED /* WPillButton.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -912,6 +924,10 @@
 				DA73C504F59E3CC5CB439E99 /* KeychainHelper.swift in Sources */,
 				225686879AB5C4D93858B385 /* WAPAuth.swift in Sources */,
 				8E7DB50170C8EBF17E2F3F2A /* OTPVerifyVC.swift in Sources */,
+				251F7EDDDBAA9F1F5303B20B /* WAPModels.swift in Sources */,
+				D958D374A520532063C3DA9A /* WAPData.swift in Sources */,
+				50382402BB2D0665A123E738 /* WPillButton.swift in Sources */,
+				95A5D462C75CBD20B2199D1F /* WAPTabBarVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

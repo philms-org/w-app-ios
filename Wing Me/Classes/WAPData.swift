@@ -1,4 +1,5 @@
 import Foundation
+import Supabase
 
 // Central Supabase data service. Replaces all .php URLSession calls.
 // All methods are async throws; callers catch and show AlertClass errors.
