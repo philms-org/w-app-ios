@@ -113,21 +113,22 @@ final class WAPData {
             .execute()
     }
 
-    // MARK: - Social Links
+    // MARK: - Contact Methods
 
-    func fetchLinks(userId: String) async throws -> [WAPSocialLink] {
+    func fetchContactMethods(userId: String) async throws -> [WAPContactMethod] {
         try await client
-            .from("social_links")
+            .from("contact_methods")
             .select()
             .eq("user_id", value: userId)
+            .order("slot_order")
             .execute()
             .value
     }
 
-    func upsertLink(_ link: WAPSocialLink) async throws {
+    func upsertContactMethod(_ method: WAPContactMethod) async throws {
         try await client
-            .from("social_links")
-            .upsert(link)
+            .from("contact_methods")
+            .upsert(method)
             .execute()
     }
 

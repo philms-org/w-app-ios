@@ -91,19 +91,21 @@ struct WAPPresence: Codable, Identifiable {
     }
 }
 
-struct WAPSocialLink: Codable, Identifiable {
+struct WAPContactMethod: Codable, Identifiable {
     let id: String
     let userId: String
-    var platform: String
-    var url: String
-    var isVisible: Bool
+    var slotOrder: Int
+    var type: String
+    var value: String?
+    var isEnabled: Bool
 
     enum CodingKeys: String, CodingKey {
         case id
         case userId    = "user_id"
-        case platform
-        case url
-        case isVisible = "is_visible"
+        case slotOrder = "slot_order"
+        case type
+        case value
+        case isEnabled = "is_enabled"
     }
 }
 
