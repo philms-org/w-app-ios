@@ -3,8 +3,8 @@ import UIKit
 class OTPVerifyVC: UIViewController {
     var phone = ""
     var name = ""
-    var gender = ""
-    var birthDate = ""
+    var gender: String? = nil
+    var birthDate: String? = nil
     var avatarImage: UIImage?
 
     private let codeField = UITextField()

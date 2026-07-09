@@ -27,8 +27,8 @@ struct WAPRegistrationProfile: Encodable {
     let id: String
     let display_name: String
     let phone: String?
-    let gender: String
-    let date_of_birth: String
+    let gender: String?
+    let date_of_birth: String?
     let avatar_url: String?
 }
 
