@@ -9,11 +9,9 @@ class WelcomeVC: UIViewController {
     }
     
     @IBAction func register(_ sender: UIButton) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let viewController = storyboard.instantiateViewController(withIdentifier: "RegisterVC") as? RegisterVC {
-            viewController.modalPresentationStyle = .currentContext
-            present(viewController, animated: true, completion: nil)
-        }
+        let viewController = RegisterVC()
+        viewController.modalPresentationStyle = .currentContext
+        present(viewController, animated: true, completion: nil)
     }
     
     @IBAction func login(_ sender: UIButton) {
