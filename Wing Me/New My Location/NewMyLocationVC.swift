@@ -459,169 +459,133 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
     }
     
     func getLocation() {
-        let path = "get_location.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "location_Id": locationID
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: locationStopLoading, requestSuccess: locationSuccess)
+        Task {
+            do {
+                let venue = try await WAPData.shared.fetchVenue(id: locationID)
+                await MainActor.run { self.locationSuccess(venue: venue) }
+            } catch {
+                await MainActor.run {
+                    self.locationStopLoading()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
+            }
+        }
     }
-    
+
     func locationStopLoading() {
         indicator.stopAnimating()
     }
-    
-    func locationSuccess(jsonObject: AnyObject) {
-        if let message = jsonObject["message"] as? NSDictionary {
-            isMaster = message.getBool(key: "is_master_account")
-            isOwner = message.getBool(key: "is_owner")
-            
-            if isOwner {
-                UserDefaults.standard.set(locationID, forKey: "MyLocationID")
-            }
-            bannerArray = []
-            commentsArray = []
-            
-            if let banner = message["banner"] as? [NSDictionary] {
-                for (index, each) in banner.enumerated() {
-                    let imageView = UIImageView()
-                    imageView.imageFromServerURL(urlString: each.getString(key: "image"),
-                                                 collectionView: collectionView)
-                    
-                    let item = BannerStruct(imageView: imageView,
-                                            title: each.getString(key: "title"),
-                                            url: each.getString(key: "url"),
-                                            blurred: each.getBool(key: "blurred"))
-                    
-                    if index == bannerIndex {
-                        updateUI(item: item)
+
+    func locationSuccess(venue: WAPVenue) {
+        isMaster = false
+        isOwner = false
+
+        bannerArray = []
+        commentsArray = []
+
+        if let bannerImageURLString = venue.bannerImage, !bannerImageURLString.isEmpty {
+            let bannerImageView = UIImageView()
+            bannerImageView.imageFromServerURL(urlString: bannerImageURLString, collectionView: collectionView)
+            bannerArray.append(BannerStruct(imageView: bannerImageView, title: "", url: "", blurred: false))
+        }
+        collectionView.reloadData()
+        pageControl.numberOfPages = bannerArray.count > 1 ? bannerArray.count : 0
+
+        myComment = CommentStruct(imageView: UIImageView(),
+                                  badgeImageView: UIImageView(),
+                                  id: "",
+                                  userID: "",
+                                  name: venue.name,
+                                  age: "",
+                                  gender: "",
+                                  country: "",
+                                  city: venue.city ?? "",
+                                  comment: "",
+                                  likes: 0,
+                                  isMyComment: false,
+                                  isLiked: false,
+                                  badgeTitle: "")
+
+        Task {
+            do {
+                let feedItems = try await WAPData.shared.fetchFeed(locationId: locationID)
+                await MainActor.run {
+                    for item in feedItems {
+                        let imageView = UIImageView()
+                        if let avatarURL = item.profile?.avatarURL, !avatarURL.isEmpty {
+                            imageView.imageFromServerURL(urlString: avatarURL, tableView: self.commentsTableView)
+                        }
+                        self.commentsArray.append(CommentStruct(
+                            imageView: imageView,
+                            badgeImageView: UIImageView(),
+                            id: item.id,
+                            userID: item.userId,
+                            name: item.profile?.displayName ?? "",
+                            age: "",
+                            gender: "",
+                            country: "",
+                            city: item.profile?.city ?? "",
+                            comment: item.content,
+                            likes: 0,
+                            isMyComment: item.userId == WAPAuth.currentUserID,
+                            isLiked: false,
+                            badgeTitle: ""
+                        ))
                     }
-                    bannerArray.append(item)
+                    self.commentsTableView.reloadData()
+                    self.locationView.isHidden = false
+                    self.locationStopLoading()
+                }
+            } catch {
+                await MainActor.run {
+                    self.locationStopLoading()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
                 }
             }
-            collectionView.reloadData()
-            
-            if bannerArray.isEmpty {
-                let image = message.getString(key: "image")
-                let imageView = UIImageView()
-                imageView.imageFromServerURL(urlString: image,
-                                             collectionView: collectionView)
-                
-                bannerArray.append(BannerStruct(imageView: imageView,
-                                                title: "",
-                                                url: "",
-                                                blurred: false))
-            }
-            if bannerArray.count == 1 {
-                pageControl.numberOfPages = 0
-            } else {
-                pageControl.numberOfPages = bannerArray.count
-            }
-            let image = message.getString(key: "image")
-            let name = message.getString(key: "name")
-            let name_city = message.getString(key: "name_city")
-            let default_message = message.getString(key: "default_message")
-            
-            let imageView = UIImageView()
-            imageView.imageFromServerURL(urlString: image,
-                                         tableView: commentsTableView)
-            
-            myComment = CommentStruct(imageView: imageView,
-                                      badgeImageView: UIImageView(),
-                                      id: "",
-                                      userID: "",
-                                      name: name,
-                                      age: "",
-                                      gender: "",
-                                      country: "",
-                                      city: name_city,
-                                      comment: default_message,
-                                      likes: 0,
-                                      isMyComment: false,
-                                      isLiked: false,
-                                      badgeTitle: "")
-            
-            if let comment = message["comment"] as? [NSDictionary] {
-                for each in comment {
-                    let imageView = UIImageView()
-                    imageView.imageFromServerURL(urlString: each.getString(key: "image"),
-                                                 tableView: commentsTableView)
-                    
-                    let badgeImageView = UIImageView()
-                    badgeImageView.imageFromServerURL(urlString: each.getString(key: "badges_image"),
-                                                      tableView: commentsTableView,
-                                                      tint: Colors.blue)
-                    
-                    commentsArray.append(CommentStruct(imageView: imageView,
-                                                       badgeImageView: badgeImageView,
-                                                       id: each.getString(key: "Id"),
-                                                       userID: each.getString(key: "user_Id"),
-                                                       name: each.getString(key: "name"),
-                                                       age: each.getString(key: "age"),
-                                                       gender: each.getString(key: "gender"),
-                                                       country: each.getString(key: "nationality"),
-                                                       city: each.getString(key: "city"),
-                                                       comment: each.getString(key: "comment"),
-                                                       likes: each.getInt(key: "number_of_like"),
-                                                       isMyComment: each.getBool(key: "is_my_comment"),
-                                                       isLiked: each.getBool(key: "is_liked"),
-                                                       badgeTitle: each.getString(key: "badges_title")))
-                }
-            }
-            commentsTableView.reloadData()
-            
-            locationView.isHidden = false
         }
     }
-    
+
     func getUsers() {
-        let path = "get_users.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "location_Id": locationID
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: usersStopLoading, requestSuccess: usersSuccess)
+        Task {
+            do {
+                let presenceRows = try await WAPData.shared.fetchPresence(locationId: locationID)
+                await MainActor.run { self.usersSuccess(presenceRows: presenceRows) }
+            } catch {
+                await MainActor.run {
+                    self.usersStopLoading()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
+            }
+        }
     }
-    
+
     func usersStopLoading() {
         indicator.stopAnimating()
     }
-    
-    func usersSuccess(jsonObject: AnyObject) {
-        if let message = jsonObject["message"] as? [NSDictionary] {
-            usersArray = []
-            
-            for each in message {
-                let image = each.getString(key: "image")
-                let name = each.getString(key: "name")
-                let is_master_account = each.getBool(key: "is_master_account")
-                
-                let imageView = UIImageView()
-                
-                if image.isEmpty {
-                    imageView.image = UIImage(named: "icon_logo_profile")
-                } else {
-                    imageView.imageFromServerURL(urlString: image,
-                                                 tableView: commentsTableView)
-                }
-                usersArray.append(CustomCell.init(imageView: imageView,
-                                                  string1: each.getString(key: "Id"),
-                                                  string2: name,
-                                                  string3: each.getString(key: "details"),
-                                                  string4: each.getString(key: "gender"),
-                                                  string5: each.getString(key: "age"),
-                                                  string6: each.getString(key: "city"),
-                                                  string7: each.getString(key: "nationality"),
-                                                  isMaster: is_master_account))
+
+    func usersSuccess(presenceRows: [WAPPresence]) {
+        usersArray = []
+        for presence in presenceRows {
+            let imageView = UIImageView()
+            if let avatarURL = presence.profile?.avatarURL, !avatarURL.isEmpty {
+                imageView.imageFromServerURL(urlString: avatarURL, tableView: commentsTableView)
+            } else {
+                imageView.image = UIImage(named: "icon_logo_profile")
             }
-            commentsTableView.reloadData()
+            usersArray.append(CustomCell(imageView: imageView,
+                                         string1: presence.userId,
+                                         string2: presence.profile?.displayName ?? "",
+                                         string3: "",
+                                         string4: "",
+                                         string5: "",
+                                         string6: presence.profile?.city ?? "",
+                                         string7: "",
+                                         isMaster: false))
         }
+        commentsTableView.reloadData()
+        usersStopLoading()
     }
-    
+
     func getEvent() {
         let path = "get_event.php"
         
