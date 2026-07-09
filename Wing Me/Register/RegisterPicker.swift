@@ -3,30 +3,30 @@ import UIKit
 
 extension RegisterVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    func showPicker(button: UIButton) {
+    func showPicker(sourceView: UIView) {
         let picker = UIImagePickerController()
         picker.delegate = self
-        
+
         let actionSheet = UIAlertController(title: Strings.optionTitle, message: Strings.optionDetails, preferredStyle: .actionSheet)
-        
+
         actionSheet.addAction(UIAlertAction(title: Strings.optionCamera, style: .default) {
             _ in
             picker.allowsEditing = false
             picker.sourceType = .camera
             self.present(picker, animated: true)
         })
-        
+
         actionSheet.addAction(UIAlertAction(title: Strings.optionGallery, style: .default) {
             _ in
             picker.allowsEditing = false
             picker.sourceType = .photoLibrary
             self.present(picker, animated: true)
         })
-        
+
         actionSheet.addAction(UIAlertAction(title: Strings.optionCancel, style: .cancel))
-        
-        actionSheet.popoverPresentationController?.sourceView = button
-        actionSheet.popoverPresentationController?.sourceRect = button.bounds
+
+        actionSheet.popoverPresentationController?.sourceView = sourceView
+        actionSheet.popoverPresentationController?.sourceRect = sourceView.bounds
         actionSheet.popoverPresentationController?.permittedArrowDirections = .up
         present(actionSheet, animated: true, completion: nil)
     }
@@ -67,11 +67,6 @@ extension RegisterVC: UIImagePickerControllerDelegate, UINavigationControllerDel
         let vc = WAPTabBarVC()
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true)
-    }
-
-    func getGender() -> String {
-        let genders = ["M", "F", "O"]
-        return genders[lastGender - 11]
     }
 }
 
