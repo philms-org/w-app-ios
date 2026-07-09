@@ -681,87 +681,58 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
     }
     
     func wingIn() {
-        let path = "wing_on.php"
-        
         if locationID.contains("Event") {
             return
         }
-        var params: NSDictionary {
-            if locationID.contains("Event") {
-                return [
-                    "language": Strings.language,
-                    "event_Id": locationID.replacingOccurrences(of: "Event_", with: "")
-                ]
-            } else {
-                return [
-                    "language": Strings.language,
-                    "location_Id": locationID
-                ]
+        Task {
+            do {
+                try await WAPData.shared.checkIn(locationId: locationID)
+            } catch {
+                await MainActor.run {
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
             }
         }
-        
-        params.request(delegate: self, path: path, stopLoading: wingInStopLoading, requestSuccess: wingInSuccess)
     }
-    
-    func wingInStopLoading() {
-        
-    }
-    
-    func wingInSuccess(jsonObject: AnyObject) {
-        
-    }
-    
+
     func wingOff() {
-        let path = "wing_off.php"
-        
         if locationID.contains("Event") {
             return
         }
-        var params: NSDictionary {
-            if locationID.contains("Event") {
-                return [
-                    "language": Strings.language,
-                    "event_Id": locationID.replacingOccurrences(of: "Event_", with: "")
-                ]
-            } else {
-                return [
-                    "language": Strings.language,
-                    "location_Id": locationID
-                ]
+        Task {
+            do {
+                try await WAPData.shared.checkOut(locationId: locationID)
+            } catch {
+                await MainActor.run {
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
             }
         }
-        
-        params.request(delegate: self, path: path, stopLoading: wingOffStopLoading, requestSuccess: wingOffSuccess)
     }
-    
-    func wingOffStopLoading() {
-        
-    }
-    
-    func wingOffSuccess(jsonObject: AnyObject) {
-        
-    }
-    
+
     func addComment() {
-        let path = "add_comment.php"
-        
-        var params: NSDictionary {
-            if locationID.contains("Event") {
-                return [
-                    "language": Strings.language,
-                    "event_Id": locationID.replacingOccurrences(of: "Event_", with: ""),
-                    "comment": commentTextField.getText()
-                ]
-            } else {
-                return [
-                    "language": Strings.language,
-                    "location_Id": locationID,
-                    "comment": commentTextField.getText()
-                ]
+        if locationID.contains("Event") {
+            let path = "add_comment.php"
+            let params: NSDictionary = [
+                "language": Strings.language,
+                "event_Id": locationID.replacingOccurrences(of: "Event_", with: ""),
+                "comment": commentTextField.getText()
+            ]
+            params.request(delegate: self, path: path, stopLoading: addCommentStopLoading, requestSuccess: addCommentSuccess)
+            return
+        }
+        let text = commentTextField.getText()
+        Task {
+            do {
+                try await WAPData.shared.postToFeed(locationId: locationID, text: text)
+                await MainActor.run { self.addCommentSuccess(jsonObject: [:] as AnyObject) }
+            } catch {
+                await MainActor.run {
+                    self.addCommentStopLoading()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
             }
         }
-        
-        params.request(delegate: self, path: path, stopLoading: addCommentStopLoading, requestSuccess: addCommentSuccess)
     }
     
     func addCommentStopLoading() {
