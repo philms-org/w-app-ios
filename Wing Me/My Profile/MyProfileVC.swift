@@ -42,16 +42,10 @@ class MyProfileVC: UIViewController {
     var phone = String()
     var email = String()
     var city = String()
-    var nationality = String()
-    var birthDate = String()
-    var agePrivacy = String()
-    var gender = String()
-    var height = String()
-    var relationship = String()
     var drink = String()
     var activity = String()
     var profession = String()
-    
+
     var isMaster = Bool()
     var isOwner = Bool()
     
@@ -104,19 +98,13 @@ class MyProfileVC: UIViewController {
             viewController.phone = phone
             viewController.email = email
             viewController.city = city
-            viewController.nationality = nationality
-            viewController.birthDate = birthDate
-            viewController.agePrivacy = agePrivacy
-            viewController.gender = gender
-            viewController.height = height
-            viewController.relationship = relationship
             viewController.datingID = delegate.datingID
             viewController.socialisingID = delegate.socialisingID
             viewController.networkingID = delegate.networkingID
             viewController.drink = drink
             viewController.activity = activity
             viewController.profession = profession
-            
+
             viewController.reloadProfile = {
                 self.reload()
             }
@@ -192,150 +180,59 @@ class MyProfileVC: UIViewController {
     }
     
     func request() {
-        let path = "get_info.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: stopLoading, requestSuccess: requestSuccess)
+        guard let uid = WAPAuth.currentUserID else { return }
+        Task { @MainActor in
+            do {
+                let profile = try await WAPData.shared.fetchProfile(id: uid)
+                displayProfile(profile)
+            } catch {
+                indicator.stopAnimating()
+                AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+            }
+        }
     }
-    
-    func stopLoading() {
+
+    private func displayProfile(_ profile: WAPProfile) {
+        nameLabel.text = profile.displayName
+        professionLabel.text = profile.profession ?? ""
+        cityLabel.text = profile.city ?? ""
+        drinkLabel.text = profile.faveDrink ?? ""
+        fridayActivityLabel.text = profile.fridayNight ?? ""
+
+        if let url = profile.avatarURL, !url.isEmpty {
+            imageView.imageFromServerURL(urlString: url)
+        }
+
+        checkmarkImageView.isHidden = !(profile.isVerified ?? false)
+
+        // Hide dating-era fields that have no WAP equivalent
+        phoneLabel.isHidden = true
+        emailLabel.isHidden = true
+        nationalityLabel.isHidden = true
+        ageLabel.isHidden = true
+        genderLabel.isHidden = true
+        heightLabel.isHidden = true
+        relationshipLabel.isHidden = true
+
+        // Hide owner/master controls (not wired to WAPProfile yet)
+        editLocationView.isHidden = true
+        generateUsersView.isHidden = true
+        sendMessageView.isHidden = true
+        eventsView.isHidden = true
+        badgesView.isHidden = true
+
         indicator.stopAnimating()
+        scrollView.isHidden = false
     }
     
-    func requestSuccess(jsonObject: AnyObject) {
-        if let message = jsonObject["message"] as? NSDictionary {
-            imageURL = message.getString(key: "image")
-            imageView.imageFromServerURL(urlString: imageURL)
-            
-            name = message.getString(key: "name")
-            phone = message.getString(key: "phone")
-            email = message.getString(key: "email")
-            city = message.getString(key: "city")
-            drink = message.getString(key: "drink")
-            activity = message.getString(key: "activity")
-            profession = message.getString(key: "profession")
-            
-            let split = name.split(separator: " ")
-            
-            if let firstName = split.first {
-                UserDefaults.standard.set(firstName, forKey: "FirstName")
-            }
-            nameLabel.text = name
-            phoneLabel.text = phone.fill()
-            emailLabel.text = email.fill()
-            cityLabel.text = city.fill()
-            drinkLabel.text = drink.fill()
-            fridayActivityLabel.text = activity.fill()
-            professionLabel.text = profession.fill()
-            
-            isMaster = message.getBool(key: "is_master_account")
-            isOwner = message.getBool(key: "is_owner")
-            let add_event = message.getBool(key: "add_event")
-            
-            checkmarkImageView.isHidden = !isMaster
-            editLocationView.isHidden = !isOwner
-            generateUsersView.isHidden = !(isMaster || isOwner)
-            sendMessageView.isHidden = !(isMaster || isOwner)
-            eventsView.isHidden = !(isMaster || (isOwner && add_event))
-            badgesView.isHidden = !(isMaster || isOwner)
-            
-            nationality = message.getString(key: "nationality")
-            let countryName = getCountryName(countryCode: nationality)
-            
-            if let emoji = Constants.flags[nationality] {
-                nationalityLabel.text = "\(countryName) \(emoji)"
-            } else {
-                nationalityLabel.text = "".fill()
-            }
-            
-            birthDate = message.getString(key: "birth")
-            ageLabel.text = getAge(date: birthDate)
-            
-            agePrivacy = message.getString(key: "age_privacy")
-            
-            gender = message.getString(key: "gender")
-            genderLabel.text = getGender(gender: gender)
-            
-            height = message.getString(key: "height")
-            
-            if height.isEmpty {
-                heightLabel.text = "".fill()
-            } else {
-                heightLabel.text = "\(height)m"
-            }
-            
-            relationship = message.getString(key: "relationship")
-            
-            relationshipLabel.text = "".fill()
-
-            delegate.datingID = message.getString(key: "dating_Id")
-            delegate.socialisingID = message.getString(key: "socialising_Id")
-            delegate.networkingID = message.getString(key: "networking_Id")
-
-            if gender == "F" {
-                editAccountView.backgroundColor = Colors.pink
-                settingsView.backgroundColor = Colors.pink
-            } else {
-                editAccountView.backgroundColor = Colors.blue
-                settingsView.backgroundColor = Colors.blue
-            }
-            scrollView.isHidden = false
-            
-            if city.isEmpty || nationality.isEmpty || height.isEmpty || drink.isEmpty || activity.isEmpty {
-                setup()
-            }
-        }
-    }
-    
-    func getCountryName(countryCode: String) -> String {
-        let current = Locale(identifier: "en_US")
-        if let name = current.localizedString(forRegionCode: countryCode) {
-            return name
-        }
-        return ""
-    }
-    
-    func getGender(gender: String) -> String {
-        let genders = [
-            "M": "Male",
-            "F": "Female",
-            "O": "Other"
-        ]
-        if let gender = genders[gender] {
-            return gender
-        }
-        return ""
-    }
-    
-    func getAge(date: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        if let date = dateFormatter.date(from: date) {
-            let calendar = Calendar.current
-            let ageComponents = calendar.dateComponents([.year], from: date, to: Date())
-            return String(ageComponents.year!)
-        }
-        return ""
-    }
     
     func logout() {
-        // TODO: Task 6 — replace with Supabase sign-out
-        delegate.logout()
-    }
-    
-    func logoutError() {
-        logout()
-    }
-    
-    func logoutSuccess(jsonObject: AnyObject) {
-        delegate.logout()
-        
-        logoutButton.isHidden = false
-        logoutIndicator.stopAnimating()
+        Task { @MainActor in
+            await WAPAuth.signOut()
+            delegate.logout()
+            logoutButton.isHidden = false
+            logoutIndicator.stopAnimating()
+        }
     }
     
     func setup() {
@@ -365,14 +262,11 @@ class MyProfileVC: UIViewController {
     func openProfileSetup() {
         let locale = Locale.current
         let regionCode = locale.region?.identifier ?? ""
-        
+
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let viewController = storyboard.instantiateViewController(withIdentifier: "SecondSetupVC") as? SecondSetupVC {
             viewController.regionCode = regionCode
             viewController.city = city
-            viewController.nationality = nationality
-            viewController.height = height
-            viewController.relationship = relationship
             viewController.datingID = delegate.datingID
             viewController.socialisingID = delegate.socialisingID
             viewController.networkingID = delegate.networkingID
