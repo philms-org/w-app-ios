@@ -442,7 +442,7 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
     }
     
     @objc func reload() {
-        guard let _ = UserDefaults.standard.object(forKey: "Token") else {
+        guard WAPAuth.currentUserID != nil else {
             return
         }
         if (!inLocation) {
