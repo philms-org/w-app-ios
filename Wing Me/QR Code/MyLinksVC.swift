@@ -27,18 +27,23 @@ class MyLinksVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
 
     private func loadMethods() {
         guard let uid = WAPAuth.currentUserID else { return }
-        Task { @MainActor in
+        Task { [weak self] in
+            guard let self else { return }
             do {
                 let fetched = try await WAPData.shared.fetchContactMethods(userId: uid)
-                methods = MyLinksVC.slotTypes.enumerated().map { i, type in
-                    fetched.first { $0.type == type }
-                        ?? WAPContactMethod(id: "", userId: uid,
-                                           slotOrder: i + 1, type: type,
-                                           value: nil, isEnabled: false)
+                await MainActor.run {
+                    self.methods = MyLinksVC.slotTypes.enumerated().map { i, type in
+                        fetched.first { $0.type == type }
+                            ?? WAPContactMethod(id: "", userId: uid,
+                                               slotOrder: i + 1, type: type,
+                                               value: nil, isEnabled: false)
+                    }
+                    self.collectionView?.reloadData()
                 }
-                collectionView.reloadData()
             } catch {
-                AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                await MainActor.run {
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
             }
         }
     }
