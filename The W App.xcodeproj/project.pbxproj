@@ -10,6 +10,7 @@
 		02612ECD19DDE92BEC342668 /* Pods_Wing_Me.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA2D57BDB7954F09BD755E2 /* Pods_Wing_Me.framework */; };
 		225686879AB5C4D93858B385 /* WAPAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FEE26D61189FF52A2DDE987 /* WAPAuth.swift */; };
 		251F7EDDDBAA9F1F5303B20B /* WAPModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 644AFD6638D1F0C5E4D66FF7 /* WAPModels.swift */; };
+		30BE59052FFED0C0009C54F5 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = E1C14D94426AB8DEAFF1D52E /* Supabase */; };
 		50382402BB2D0665A123E738 /* WPillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9271C19549F90E884736ED /* WPillButton.swift */; };
 		52498B7BD49D7623D015B79B /* WAPFeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C85DC25ADB285B9A6E3246 /* WAPFeatureFlags.swift */; };
 		6FEF1C8B4A028EE0108A1C63 /* WAPSupabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6910AB8B22298C3110519B /* WAPSupabase.swift */; };
@@ -196,7 +197,7 @@
 		CB508FE6283FF16000FD8A63 /* FilterClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterClass.swift; sourceTree = "<group>"; };
 		CB508FE8283FFA8B00FD8A63 /* FullImageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullImageVC.swift; sourceTree = "<group>"; };
 		CB54132F2A2F2A6500D329B0 /* PickerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerVC.swift; sourceTree = "<group>"; };
-		CB558134281B171800E49052 /* Wing Me.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wing Me.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB558134281B171800E49052 /* The W App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The W App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB558137281B171800E49052 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CB55813B281B171800E49052 /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		CB55813E281B171800E49052 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -274,6 +275,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30BE59052FFED0C0009C54F5 /* Supabase in Frameworks */,
 				02612ECD19DDE92BEC342668 /* Pods_Wing_Me.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -287,7 +289,6 @@
 				F7D3D47231D7E637722BCF49 /* KeychainHelperTests.swift */,
 				AE65EA55DF549EE4620BA406 /* WAPAuthTests.swift */,
 			);
-			name = "The W AppTests";
 			path = "The W AppTests";
 			sourceTree = "<group>";
 		};
@@ -415,7 +416,7 @@
 		CB558135281B171800E49052 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CB558134281B171800E49052 /* Wing Me.app */,
+				CB558134281B171800E49052 /* The W App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -691,7 +692,7 @@
 				E1C14D94426AB8DEAFF1D52E /* Supabase */,
 			);
 			productName = "The W App";
-			productReference = CB558134281B171800E49052 /* Wing Me.app */;
+			productReference = CB558134281B171800E49052 /* The W App.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

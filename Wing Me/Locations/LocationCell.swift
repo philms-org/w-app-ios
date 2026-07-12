@@ -14,4 +14,11 @@ class LocationCell: UITableViewCell {
         detailsLabel.text = customCell.string3
         countLabel.text = "\(customCell.count!)"
     }
+
+    func updateCell(venue: WAPVenue) {
+        locationLabel.text = venue.name
+        detailsLabel.text = venue.address ?? venue.city ?? ""
+        countLabel.text = ""
+        locationImageView.image = nil
+    }
 }
