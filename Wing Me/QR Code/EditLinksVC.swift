@@ -181,6 +181,7 @@ class EditLinksVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                                             value: m.value, isEnabled: m.isEnabled)
                     }
                     try await WAPData.shared.upsertContactMethod(m)
+                    if isNew { methods[i] = m }  // persist UUID so retry won't duplicate
                 }
                 dismiss(animated: true)
             } catch {
