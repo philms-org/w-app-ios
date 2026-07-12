@@ -201,6 +201,7 @@ class LocationsVC: UIViewController, UITextFieldDelegate, CLLocationManagerDeleg
     }
 
     func setTimer() {
+        setMap()
         timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(request), userInfo: nil, repeats: true)
         RunLoop.current.add(timer, forMode: .common)
         request()
@@ -218,7 +219,7 @@ class LocationsVC: UIViewController, UITextFieldDelegate, CLLocationManagerDeleg
                     self.venues = fetched
                     self.filteredVenues = fetched
                     self.tableView.reloadData()
-                    self.setMap()
+                    self.addMapMarkers()
                     self.indicator.stopAnimating()
                 }
             } catch {
@@ -241,8 +242,6 @@ class LocationsVC: UIViewController, UITextFieldDelegate, CLLocationManagerDeleg
 
         locationManager.stopMonitoringSignificantLocationChanges()
         locationManager.startUpdatingLocation()
-
-        addMapMarkers()
     }
 
     private func addMapMarkers() {
@@ -291,11 +290,10 @@ class LocationsVC: UIViewController, UITextFieldDelegate, CLLocationManagerDeleg
         guard WAPAuth.currentUserID != nil else { return }
         let locationID = UserDefaults.getString(key: "LocationID")
         if locationID.contains("Event") { return }
-        guard let _ = accurateLocation else { return }
+        guard let loc = accurateLocation else { return }
 
-        let userCoord = CLLocation(latitude: latitude, longitude: longitude)
-        let accuracy = sqrt(pow(accurateLocation!.horizontalAccuracy, 2) +
-                            pow(accurateLocation!.verticalAccuracy, 2))
+        let userCoord = CLLocation(latitude: loc.coordinate.latitude, longitude: loc.coordinate.longitude)
+        let accuracy = sqrt(pow(loc.horizontalAccuracy, 2) + pow(loc.verticalAccuracy, 2))
 
         var nearby: [WAPVenue] = []
         for venue in venues {
@@ -366,7 +364,8 @@ class LocationsVC: UIViewController, UITextFieldDelegate, CLLocationManagerDeleg
                 UserDefaults.standard.set(venue.id, forKey: "LastLocationAlert")
                 UserDefaults.standard.set(venue.id, forKey: "LastLocationNotification")
 
-                alert.addAction(UIAlertAction(title: "Wing me into \(venue.name)", style: .default, handler: { _ in
+                alert.addAction(UIAlertAction(title: "Wing me into \(venue.name)", style: .default, handler: { [weak self] _ in
+                    guard let self else { return }
                     self.delegate.wingIn(CustomCell(string1: venue.id, string2: venue.name))
                     self.delegate.selectTab(tag: 3)
                 }))
@@ -382,7 +381,8 @@ class LocationsVC: UIViewController, UITextFieldDelegate, CLLocationManagerDeleg
             let alert = UIAlertController(title: alertTitle, message: alertBody, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: Strings.maybeLater, style: .destructive, handler: nil))
 
-            alert.addAction(UIAlertAction(title: "Wing in", style: .default, handler: { _ in
+            alert.addAction(UIAlertAction(title: "Wing in", style: .default, handler: { [weak self] _ in
+                guard let self else { return }
                 self.delegate.wingIn(CustomCell(string1: venue.id, string2: venue.name))
                 self.delegate.selectTab(tag: 3)
             }))
