@@ -180,7 +180,10 @@ class MyProfileVC: UIViewController {
     }
     
     func request() {
-        guard let uid = WAPAuth.currentUserID else { return }
+        guard let uid = WAPAuth.currentUserID else {
+            indicator.stopAnimating()
+            return
+        }
         Task { @MainActor in
             do {
                 let profile = try await WAPData.shared.fetchProfile(id: uid)
