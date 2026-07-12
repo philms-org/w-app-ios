@@ -55,7 +55,9 @@ class MyLinksVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LinkCell", for: indexPath) as! LinkCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LinkCell", for: indexPath) as? LinkCell else {
+            return UICollectionViewCell()
+        }
         cell.configure(method: methods[indexPath.row])
         return cell
     }

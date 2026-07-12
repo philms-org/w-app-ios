@@ -72,18 +72,23 @@ class EditLinksVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
 
     private func loadMethods() {
         guard let uid = WAPAuth.currentUserID else { return }
-        Task { @MainActor in
+        Task { [weak self] in
+            guard let self else { return }
             do {
                 let fetched = try await WAPData.shared.fetchContactMethods(userId: uid)
-                methods = EditLinksVC.slots.enumerated().map { i, slot in
-                    fetched.first { $0.type == slot.type }
-                        ?? WAPContactMethod(id: "", userId: uid,
-                                           slotOrder: i + 1, type: slot.type,
-                                           value: nil, isEnabled: false)
+                await MainActor.run {
+                    self.methods = EditLinksVC.slots.enumerated().map { i, slot in
+                        fetched.first { $0.type == slot.type }
+                            ?? WAPContactMethod(id: "", userId: uid,
+                                               slotOrder: i + 1, type: slot.type,
+                                               value: nil, isEnabled: false)
+                    }
+                    self.tableView.reloadData()
                 }
-                tableView.reloadData()
             } catch {
-                AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                await MainActor.run {
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
             }
         }
     }
@@ -168,7 +173,8 @@ class EditLinksVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
 
         if let saveBtn = view.viewWithTag(99) as? UIButton { saveBtn.isEnabled = false }
 
-        Task { @MainActor in
+        Task { [weak self] in
+            guard let self else { return }
             do {
                 for (i, method) in methods.enumerated() {
                     let isNew   = method.id.isEmpty
@@ -181,12 +187,18 @@ class EditLinksVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
                                             value: m.value, isEnabled: m.isEnabled)
                     }
                     try await WAPData.shared.upsertContactMethod(m)
-                    if isNew { methods[i] = m }  // persist UUID so retry won't duplicate
+                    await MainActor.run {
+                        if isNew { self.methods[i] = m }  // persist UUID so retry won't duplicate
+                    }
                 }
-                dismiss(animated: true)
+                await MainActor.run {
+                    self.dismiss(animated: true)
+                }
             } catch {
-                if let saveBtn = view.viewWithTag(99) as? UIButton { saveBtn.isEnabled = true }
-                AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                await MainActor.run {
+                    if let saveBtn = self.view.viewWithTag(99) as? UIButton { saveBtn.isEnabled = true }
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
             }
         }
     }

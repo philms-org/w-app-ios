@@ -23,13 +23,18 @@ class UserLinksVC: UIViewController, UICollectionViewDelegate, UICollectionViewD
     }
 
     private func loadMethods() {
-        Task { @MainActor in
+        Task { [weak self] in
+            guard let self else { return }
             do {
                 let fetched = try await WAPData.shared.fetchContactMethods(userId: id)
-                methods = fetched.filter { $0.isEnabled && !($0.value ?? "").isEmpty }
-                collectionView?.reloadData()
+                await MainActor.run {
+                    self.methods = fetched.filter { $0.isEnabled && !($0.value ?? "").isEmpty }
+                    self.collectionView?.reloadData()
+                }
             } catch {
-                AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                await MainActor.run {
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
             }
         }
     }
@@ -41,7 +46,9 @@ class UserLinksVC: UIViewController, UICollectionViewDelegate, UICollectionViewD
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LinkCell", for: indexPath) as! LinkCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LinkCell", for: indexPath) as? LinkCell else {
+            return UICollectionViewCell()
+        }
         cell.configure(method: methods[indexPath.row])
         return cell
     }

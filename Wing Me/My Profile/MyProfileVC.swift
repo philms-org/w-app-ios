@@ -184,13 +184,18 @@ class MyProfileVC: UIViewController {
             indicator.stopAnimating()
             return
         }
-        Task { @MainActor in
+        Task { [weak self] in
+            guard let self else { return }
             do {
                 let profile = try await WAPData.shared.fetchProfile(id: uid)
-                displayProfile(profile)
+                await MainActor.run {
+                    self.displayProfile(profile)
+                }
             } catch {
-                indicator.stopAnimating()
-                AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                await MainActor.run {
+                    self.indicator.stopAnimating()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
             }
         }
     }
@@ -230,36 +235,15 @@ class MyProfileVC: UIViewController {
     
     
     func logout() {
-        Task { @MainActor in
+        Task { [weak self] in
+            guard let self else { return }
             await WAPAuth.signOut()
-            delegate.logout()
-            logoutButton.isHidden = false
-            logoutIndicator.stopAnimating()
+            await MainActor.run {
+                self.delegate.logout()
+                self.logoutButton.isHidden = false
+                self.logoutIndicator.stopAnimating()
+            }
         }
-    }
-    
-    func setup() {
-        let delay = DispatchTime.now() + 30
-        DispatchQueue.main.asyncAfter(deadline: delay, execute: {
-            self.showSetupAlert()
-        })
-    }
-    
-    func showSetupAlert() {
-        if let _ = UserDefaults.standard.object(forKey: "Setup") {
-            return
-        }
-        let alert = UIAlertController(title: Strings.alertSetup, message: Strings.alertSetupProfile, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: Strings.alertSetupNow, style: .default, handler: {
-            _ in
-            self.openProfileSetup()
-        }))
-        alert.addAction(UIAlertAction(title: Strings.alertLater, style: .default, handler: nil))
-        alert.addAction(UIAlertAction(title: Strings.alertNever, style: .destructive, handler: {
-            _ in
-            UserDefaults.standard.set(false, forKey: "Setup")
-        }))
-        delegate.present(alert, animated: true, completion: nil)
     }
     
     func openProfileSetup() {

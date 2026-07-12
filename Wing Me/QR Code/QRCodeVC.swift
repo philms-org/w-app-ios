@@ -23,8 +23,11 @@ class QRCodeVC: UIViewController {
     }
 
     private func generateAndDisplayQR() {
-        guard let uid = WAPAuth.currentUserID,
-              let imageView = view.subviews.first?.subviews.first as? UIImageView else { return }
+        guard let uid = WAPAuth.currentUserID else { return }
+        guard let imageView = view.subviews.first?.subviews.first as? UIImageView else {
+            assertionFailure("QRCodeVC: expected UIImageView at view.subviews[0].subviews[0]")
+            return
+        }
         imageView.image = qrImage(from: "openWAPContact://id=\(uid)")
         imageView.contentMode = .scaleAspectFit
     }
