@@ -77,7 +77,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "HomeLocationCell", for: indexPath) as! HomeLocationCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "HomeLocationCell", for: indexPath) as? HomeLocationCell else { return UITableViewCell() }
         cell.updateCell(customCell: newAddedArray[indexPath.row])
         return cell
     }
