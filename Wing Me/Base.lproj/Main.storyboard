@@ -4528,8 +4528,6 @@
                         <outlet property="indicator" destination="CWN-GX-btS" id="Sol-NY-S4X"/>
                         <outlet property="logoutButton" destination="BxG-xW-fBC" id="jAm-y2-0ls"/>
                         <outlet property="logoutIndicator" destination="VSS-gi-oUi" id="ZrU-QM-8Pc"/>
-                        <outlet property="lookingForLabel" destination="JqU-Gf-Z5v" id="oKE-vD-3av"/>
-                        <outlet property="lookingForView" destination="5Mf-Da-gJB" id="6K1-wJ-k99"/>
                         <outlet property="nameLabel" destination="34n-aq-9Lu" id="qNy-0p-VnQ"/>
                         <outlet property="nationalityLabel" destination="WMD-7V-0Ds" id="HDY-fJ-2WN"/>
                         <outlet property="phoneLabel" destination="JXZ-It-fkZ" id="cck-9l-GuY"/>
@@ -9100,8 +9098,6 @@
                         <outlet property="heightView" destination="2Ci-py-t7q" id="svD-ej-WvR"/>
                         <outlet property="imageView" destination="JVy-wg-Vu3" id="C4x-Ea-TPL"/>
                         <outlet property="indicator" destination="mtZ-FQ-mkg" id="hpC-me-fkX"/>
-                        <outlet property="lookingForLabel" destination="4ys-d5-SSq" id="SzB-gf-gwF"/>
-                        <outlet property="lookingForView" destination="hd9-dY-Bkn" id="3af-TG-tTU"/>
                         <outlet property="nameLabel" destination="CpR-UW-q0B" id="fYw-r5-uJ6"/>
                         <outlet property="nationalityLabel" destination="qzL-QG-kmd" id="WOP-UE-flm"/>
                         <outlet property="nationalityView" destination="7sg-Ac-qba" id="r6K-35-BA2"/>
