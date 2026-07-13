@@ -29,6 +29,7 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
     
     var locationID = String()
     private let attendeesButton = WPillButton()
+    private let rewardsButton = WPillButton()
     var inLocation = Bool()
     var isMaster = Bool()
     var isOwner = Bool()
@@ -64,6 +65,7 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
         }
 
         setupAttendeesButton()
+        setupRewardsButton()
         Task { await refreshAttendeesButtonVisibility() }
     }
 
@@ -91,6 +93,25 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
         } catch {
             attendeesButton.isHidden = true
         }
+    }
+
+    private func setupRewardsButton() {
+        rewardsButton.setTitle("Rewards", for: .normal)
+        rewardsButton.addTarget(self, action: #selector(rewardsTapped), for: .touchUpInside)
+        rewardsButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(rewardsButton)
+        NSLayoutConstraint.activate([
+            rewardsButton.topAnchor.constraint(equalTo: bannerView.bottomAnchor, constant: 8),
+            rewardsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            rewardsButton.heightAnchor.constraint(equalToConstant: 36),
+        ])
+    }
+
+    @objc private func rewardsTapped() {
+        guard !locationID.isEmpty else { return }
+        let vc = RewardsVC(locationId: locationID)
+        vc.modalPresentationStyle = .pageSheet
+        present(vc, animated: true)
     }
 
     @objc private func openAttendeeHistory() {

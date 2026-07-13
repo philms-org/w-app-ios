@@ -133,11 +133,13 @@
 		CBFDAB92286F538B0092EE21 /* VastVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBFDAB91286F538B0092EE21 /* VastVC.swift */; };
 		D958D374A520532063C3DA9A /* WAPData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312584F0B2EE04E4163FDF98 /* WAPData.swift */; };
 		DA73C504F59E3CC5CB439E99 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43027E9F1830D67F90A46640 /* KeychainHelper.swift */; };
+		ECC9A57BB6B334123787E3CF /* RewardsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FDDD4B2F59D11C1C2C4442 /* RewardsVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2AA2D57BDB7954F09BD755E2 /* Pods_Wing_Me.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wing_Me.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		312584F0B2EE04E4163FDF98 /* WAPData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPData.swift; sourceTree = "<group>"; };
+		42FDDD4B2F59D11C1C2C4442 /* RewardsVC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RewardsVC.swift; sourceTree = "<group>"; };
 		43027E9F1830D67F90A46640 /* KeychainHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		644AFD6638D1F0C5E4D66FF7 /* WAPModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPModels.swift; sourceTree = "<group>"; };
 		6FEE26D61189FF52A2DDE987 /* WAPAuth.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPAuth.swift; sourceTree = "<group>"; };
@@ -332,6 +334,7 @@
 				CB5EB9BB2B7A0EBB0093070E /* ReplyVC.swift */,
 				CB5EB9B92B7A0C1E0093070E /* ReplyCell.swift */,
 				92D4FFF4995D1B74DA5019CD /* AttendeeHistoryVC.swift */,
+				42FDDD4B2F59D11C1C2C4442 /* RewardsVC.swift */,
 			);
 			path = "New My Location";
 			sourceTree = "<group>";
@@ -937,6 +940,7 @@
 				95A5D462C75CBD20B2199D1F /* WAPTabBarVC.swift in Sources */,
 				52498B7BD49D7623D015B79B /* WAPFeatureFlags.swift in Sources */,
 				9F2838A2D063F549BD88ADBD /* AttendeeHistoryVC.swift in Sources */,
+				ECC9A57BB6B334123787E3CF /* RewardsVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
