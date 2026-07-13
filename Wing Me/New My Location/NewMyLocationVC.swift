@@ -97,6 +97,7 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
 
     private func setupRewardsButton() {
         rewardsButton.setTitle("Rewards", for: .normal)
+        rewardsButton.isHidden = true
         rewardsButton.addTarget(self, action: #selector(rewardsTapped), for: .touchUpInside)
         rewardsButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(rewardsButton)
@@ -440,6 +441,7 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
         noLocationView.isHidden = true
 
         locationID = customCell.string1
+        rewardsButton.isHidden = false
         Task { await refreshAttendeesButtonVisibility() }
 
         UserDefaults.standard.set(locationID, forKey: "LocationID")
@@ -455,6 +457,7 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
     func hideLocation() {
         inLocation = false
         noLocationView.isHidden = false
+        rewardsButton.isHidden = true
         
         if let _ = timer {
             timer.invalidate()
