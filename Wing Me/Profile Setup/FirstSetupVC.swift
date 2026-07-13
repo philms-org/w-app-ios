@@ -87,34 +87,11 @@ class FirstSetupVC: UIViewController {
     }
     
     func save() {
-        let path = "set_up_profile.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "height": height,
-            "relationship": relationship,
-            "dating_Id": datingID,
-            "socialising_Id": socialisingID,
-            "networking_Id": networkingID,
-            "nationality": nationality,
-            "city": city,
-            "drink": drink,
-            "activity": activity,
-            "profession": profession
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: stopLoading, requestSuccess: requestSuccess)
-    }
-    
-    func stopLoading() {
         backButton.isHidden = false
         indicator.stopAnimating()
-    }
-    
-    func requestSuccess(jsonObject: AnyObject) {
         openMain()
     }
-    
+
     func openMain() {
         appDelegate.inLocation = false
         UserDefaults.standard.set(true, forKey: "Setup")

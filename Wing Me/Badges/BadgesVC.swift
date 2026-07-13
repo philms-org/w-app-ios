@@ -18,7 +18,7 @@ class BadgesVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getCategories()
+        indicator.stopAnimating()
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -86,8 +86,6 @@ class BadgesVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
             
             if !categoriesArray[indexPath.row].isRequested {
                 categoriesArray[indexPath.row].isRequested = true
-                indicator.startAnimating()
-                getBadges(index: indexPath.row)
             }
         } else {
             if indexPath.section == 0 {
@@ -119,10 +117,9 @@ class BadgesVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         
         let actionSheet = UIAlertController(title: "", message: Strings.optionTitle, preferredStyle: .actionSheet)
         
-        actionSheet.addAction(UIAlertAction(title: "Delete Badge", style: .destructive) {
-            _ in
-            self.indicator.startAnimating()
-            self.deleteBadge(id: item.id)
+        actionSheet.addAction(UIAlertAction(title: "Delete Badge", style: .destructive) { [weak self] _ in
+            _ = item.id
+            _ = self
         })
         
         actionSheet.addAction(UIAlertAction(title: Strings.optionCancel, style: .cancel))
@@ -143,98 +140,9 @@ class BadgesVC: UIViewController, UICollectionViewDelegate, UICollectionViewData
         }
     }
     
-    func getCategories() {
-        let path = "get_badge_categories.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: categoriesStopLoading, requestSuccess: categoriesSuccess)
-    }
-    
-    func categoriesStopLoading() {
-        indicator.stopAnimating()
-    }
-    
-    func categoriesSuccess(jsonObject: AnyObject) {
-        if let message = jsonObject["message"] as? [NSDictionary] {
-            for (index, each) in message.enumerated() {
-                categoriesArray.append(BadgeCategoryStruct(id: each.getString(key: "Id"),
-                                                           title: each.getString(key: "name"),
-                                                           isSelected: index == 0,
-                                                           isRequested: false,
-                                                           array: []))
-                
-                if index == 0 {
-                    categoriesArray[0].isRequested = true
-                    indicator.startAnimating()
-                    getBadges(index: 0)
-                }
-            }
-            categoriesCollectionView.reloadData()
-            badgesCollectionView.reloadData()
-        }
-    }
-    
     func reload() {
+        guard !categoriesArray.isEmpty else { return }
         categoriesArray[lastCategorySelected].array = []
         badgesCollectionView.reloadData()
-        
-        indicator.startAnimating()
-        getBadges(index: lastCategorySelected)
-    }
-    
-    func getBadges(index: Int) {
-        let path = "get_badges.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "badges_category_Id": categoriesArray[index].id
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: badgesStopLoading, requestSuccess: {
-            jsonObject in
-            self.badgesSuccess(jsonObject: jsonObject, index: index)
-        })
-    }
-    
-    func badgesStopLoading() {
-        indicator.stopAnimating()
-    }
-    
-    func badgesSuccess(jsonObject: AnyObject, index: Int) {
-        if let badges = jsonObject["badges"] as? [NSDictionary] {
-            for each in badges {
-                let imageView = UIImageView()
-                imageView.imageFromServerURL(urlString: each.getString(key: "image"),
-                                             collectionView: badgesCollectionView,
-                                             tint: .white)
-                
-                categoriesArray[index].array.append(BadgeStruct(imageView: imageView,
-                                                                id: each.getString(key: "Id"),
-                                                                title: each.getString(key: "title")))
-            }
-            badgesCollectionView.reloadData()
-        }
-    }
-    
-    func deleteBadge(id: String) {
-        let path = "delete_badge.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "badge_Id": id
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: deleteStopLoading, requestSuccess: deleteSuccess)
-    }
-    
-    func deleteStopLoading() {
-        indicator.stopAnimating()
-    }
-    
-    func deleteSuccess(jsonObject: AnyObject) {
-        reload()
     }
 }

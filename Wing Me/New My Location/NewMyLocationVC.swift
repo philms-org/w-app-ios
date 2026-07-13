@@ -612,97 +612,7 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
     }
 
     func getEvent() {
-        let path = "get_event.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "event_Id": locationID.replacingOccurrences(of: "Event_", with: "")
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: eventStopLoading, requestSuccess: eventSuccess)
-    }
-    
-    func eventStopLoading() {
         indicator.stopAnimating()
-    }
-    
-    func eventSuccess(jsonObject: AnyObject) {
-        if let message = jsonObject["message"] as? NSDictionary {
-            isMaster = message.getBool(key: "is_master_account")
-            isOwner = message.getBool(key: "is_owner")
-            
-            if isOwner {
-                UserDefaults.standard.set(locationID, forKey: "MyLocationID")
-            }
-            bannerArray = []
-            commentsArray = []
-            
-            let imageView1 = UIImageView()
-            imageView1.imageFromServerURL(urlString: message.getString(key: "event_image"),
-                                          collectionView: collectionView)
-            
-            let item = BannerStruct(imageView: imageView1,
-                                    title: "",
-                                    url: "",
-                                    blurred: false)
-            
-            bannerArray.append(item)
-            collectionView.reloadData()
-            pageControl.numberOfPages = 0
-            
-            let image = UIImage(named: "icon_logo_profile")
-            let name = message.getString(key: "title")
-            let default_message = message.getString(key: "description")
-            
-            let imageView2 = UIImageView()
-            imageView2.image = image
-            
-            myComment = CommentStruct(imageView: imageView2,
-                                      badgeImageView: UIImageView(),
-                                      id: "",
-                                      userID: "",
-                                      name: name,
-                                      age: "",
-                                      gender: "",
-                                      country: "",
-                                      city: "Welcome to our Event!",
-                                      comment: default_message,
-                                      likes: 0,
-                                      isMyComment: false,
-                                      isLiked: false,
-                                      badgeTitle: "")
-            
-            if let comment = message["comments"] as? [NSDictionary] {
-                for each in comment {
-                    let imageView = UIImageView()
-                    imageView.imageFromServerURL(urlString: each.getString(key: "image"),
-                                                 tableView: commentsTableView)
-                    
-                    let badgeImageView = UIImageView()
-                    badgeImageView.imageFromServerURL(urlString: each.getString(key: "badges_image"),
-                                                      tableView: commentsTableView,
-                                                      tint: Colors.blue)
-                    
-                    commentsArray.append(CommentStruct(imageView: imageView,
-                                                       badgeImageView: badgeImageView,
-                                                       id: each.getString(key: "Id"),
-                                                       userID: each.getString(key: "user_Id"),
-                                                       name: each.getString(key: "name"),
-                                                       age: each.getString(key: "age"),
-                                                       gender: each.getString(key: "gender"),
-                                                       country: each.getString(key: "nationality"),
-                                                       city: each.getString(key: "city"),
-                                                       comment: each.getString(key: "comment"),
-                                                       likes: each.getInt(key: "number_of_like"),
-                                                       isMyComment: each.getBool(key: "is_my_comment"),
-                                                       isLiked: each.getBool(key: "is_liked"),
-                                                       badgeTitle: each.getString(key: "badges_title")))
-                }
-            }
-            commentsTableView.reloadData()
-            
-            locationView.isHidden = false
-        }
     }
     
     func wingIn() {
@@ -736,16 +646,6 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
     }
 
     func addComment() {
-        if locationID.contains("Event") {
-            let path = "add_comment.php"
-            let params: NSDictionary = [
-                "language": Strings.language,
-                "event_Id": locationID.replacingOccurrences(of: "Event_", with: ""),
-                "comment": commentTextField.getText()
-            ]
-            params.request(delegate: self, path: path, stopLoading: addCommentStopLoading, requestSuccess: addCommentSuccess)
-            return
-        }
         let text = commentTextField.getText()
         Task {
             do {
@@ -771,134 +671,21 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
         reload()
     }
     
-    func addLike(commentID: String) {
-        let path = "add_like.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "comment_Id": commentID
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: addLikeStopLoading, requestSuccess: addLikeSuccess)
-    }
-    
-    func addLikeStopLoading() {
-        
-    }
-    
-    func addLikeSuccess(jsonObject: AnyObject) {
-        
-    }
-    
-    func deleteLike(commentID: String) {
-        let path = "delete_comment_likes.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "comment_Id": commentID
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: deleteLikeStopLoading, requestSuccess: deleteLikeSuccess)
-    }
-    
-    func deleteLikeStopLoading() {
-        
-    }
-    
-    func deleteLikeSuccess(jsonObject: AnyObject) {
-        
-    }
-    
+    func addLike(commentID: String) { }
+    func deleteLike(commentID: String) { }
+
     func deleteComment(commentID: String) {
-        let path = "delete_comment.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "comment_Id": commentID
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: deleteCommentStopLoading, requestSuccess: deleteCommentSuccess)
-    }
-    
-    func deleteCommentStopLoading() {
         indicator.stopAnimating()
-    }
-    
-    func deleteCommentSuccess(jsonObject: AnyObject) {
         reload()
     }
-    
+
     func assignBadge(comment: CommentStruct, badgeID: String) {
-        var path: String {
-            if isMaster {
-                return "master_assign_badge.php"
-            } else {
-                return "assign_badge.php"
-            }
-        }
-        
-        var params: NSDictionary {
-            if locationID.contains("Event") {
-                return [
-                    "language": Strings.language,
-                    "event_Id": locationID.replacingOccurrences(of: "Event_", with: ""),
-                    "user_Id": comment.userID,
-                    "badge_Id": badgeID
-                ]
-            } else {
-                return [
-                    "language": Strings.language,
-                    "location_Id": locationID,
-                    "user_Id": comment.userID,
-                    "badge_Id": badgeID
-                ]
-            }
-        }
-        
-        params.request(delegate: self, path: path, stopLoading: assignBadgeStopLoading, requestSuccess: assignBadgeSuccess)
-    }
-    
-    func assignBadgeStopLoading() {
         indicator.stopAnimating()
-    }
-    
-    func assignBadgeSuccess(jsonObject: AnyObject) {
         reload()
     }
-    
+
     func removeBadge(comment: CommentStruct) {
-        var path: String {
-            if isMaster {
-                return "master_remove_badge.php"
-            } else {
-                return "remove_badge.php"
-            }
-        }
-        
-        var params: NSDictionary {
-            if locationID.contains("Event") {
-                return [
-                    "language": Strings.language,
-                    "event_Id": locationID.replacingOccurrences(of: "Event_", with: ""),
-                    "user_Id": comment.userID
-                ]
-            } else {
-                return [
-                    "language": Strings.language,
-                    "location_Id": locationID,
-                    "user_Id": comment.userID
-                ]
-            }
-        }
-        
-        params.request(delegate: self, path: path, stopLoading: removeBadgeStopLoading, requestSuccess: removeBadgeSuccess)
-    }
-    
-    func removeBadgeStopLoading() {
         indicator.stopAnimating()
-    }
-    
-    func removeBadgeSuccess(jsonObject: AnyObject) {
         reload()
     }
 }

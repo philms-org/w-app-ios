@@ -106,34 +106,11 @@ class ThirdSetupVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func save() {
-        let path = "set_up_profile.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "height": height,
-            "relationship": relationship,
-            "dating_Id": String(array[0].progress),
-            "socialising_Id": String(array[1].progress),
-            "networking_Id": String(array[2].progress),
-            "nationality": nationality,
-            "city": city,
-            "drink": drink,
-            "activity": activity,
-            "profession": profession
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: stopLoading, requestSuccess: requestSuccess)
-    }
-    
-    func stopLoading() {
         backButton.isHidden = false
         indicator.stopAnimating()
-    }
-    
-    func requestSuccess(jsonObject: AnyObject) {
         openMain()
     }
-    
+
     func openMain() {
         appDelegate.inLocation = false
         UserDefaults.standard.set(true, forKey: "Setup")

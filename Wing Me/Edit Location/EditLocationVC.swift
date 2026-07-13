@@ -30,7 +30,7 @@ class EditLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDel
         stackView.isHidden = true
         
         setKeyboard()
-        request()
+        indicator.stopAnimating()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -112,10 +112,8 @@ class EditLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDel
         
         let actionSheet = UIAlertController(title: "", message: Strings.optionTitle, preferredStyle: .actionSheet)
         
-        actionSheet.addAction(UIAlertAction(title: "Delete", style: .destructive) {
-            _ in
-            self.indicator.startAnimating()
-            self.delete(id: item.id)
+        actionSheet.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            _ = item.id
         })
         
         actionSheet.addAction(UIAlertAction(title: Strings.optionCancel, style: .cancel))
@@ -148,111 +146,14 @@ class EditLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDel
     func reload() {
         bannerArray = []
         collectionView.reloadData()
-        
         stackView.isHidden = true
-        indicator.startAnimating()
-        request()
     }
-    
-    func request() {
-        let path = "get_my_location_info.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: stopLoading, requestSuccess: requestSuccess)
-    }
-    
-    func stopLoading() {
-        indicator.stopAnimating()
-    }
-    
-    func requestSuccess(jsonObject: AnyObject) {
-        if let message = jsonObject["message"] as? NSDictionary {
-            if let banner = message["banner"] as? [NSDictionary] {
-                for (index, each) in banner.enumerated() {
-                    let imageView = UIImageView()
-                    imageView.imageFromServerURL(urlString: each.getString(key: "image"),
-                                                 collectionView: collectionView)
-                    
-                    let item = EditBannerStruct(imageView: imageView,
-                                                id: each.getString(key: "Id"),
-                                                title: each.getString(key: "title"),
-                                                url: each.getString(key: "url"),
-                                                blurred: each.getBool(key: "blurred"))
-                    
-                    if index == 0 {
-                        updateUI(item: item)
-                    }
-                    bannerArray.append(item)
-                }
-            }
-            collectionView.reloadData()
-            
-            if bannerArray.count == 0 {
-                pageControl.numberOfPages = 0
-            } else if bannerArray.count < maximumBanner {
-                collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredHorizontally, animated: false)
-                pageControl.numberOfPages = bannerArray.count + 1
-                pageControl.currentPage = 0
-            } else {
-                collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredHorizontally, animated: false)
-                pageControl.numberOfPages = maximumBanner
-                pageControl.currentPage = 0
-            }
-            titleLabel.text = message.getString(key: "name")
-            
-            messageTextView.text = message.getString(key: "default_message")
-            whatsappTextField.text = message.getString(key: "whatsapp")
-            addressTextView.text = message.getString(key: "address")
-            descriptionView.text = message.getString(key: "description")
-            
-            stackView.isHidden = false
-        }
-    }
-    
+
     func save() {
-        let path = "edit_my_location.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "default_message": messageTextView.getText(),
-            "whatsapp": whatsappTextField.getText(),
-            "address": addressTextView.getText(),
-            "description": descriptionView.getText()
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: saveStopLoading, requestSuccess: saveSuccess)
-    }
-    
-    func saveStopLoading() {
         saveButton.isHidden = false
         saveIndicator.stopAnimating()
-    }
-    
-    func saveSuccess(jsonObject: AnyObject) {
-        AlertClass().showSuccessAlert(delegate: self, message: Strings.alertLocationInfo, action: {
-            self.dismiss(animated: true)
-        })
-    }
-    
-    func delete(id: String) {
-        let path = "delete_banner_image.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "Id": id
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: deleteStopLoading, requestSuccess: deleteSuccess)
-    }
-    
-    func deleteStopLoading() {
-        indicator.stopAnimating()
-    }
-    
-    func deleteSuccess(jsonObject: AnyObject) {
-        reload()
+        AlertClass().showSuccessAlert(delegate: self, message: Strings.alertLocationInfo) { [weak self] in
+            self?.dismiss(animated: true)
+        }
     }
 }

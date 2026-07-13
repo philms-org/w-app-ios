@@ -107,37 +107,11 @@ class EditEventVC: UIViewController, UITextFieldDelegate {
     }
     
     func save() {
-        var path: String {
-            if isMaster {
-                return "master_edit_event.php"
-            } else {
-                return "edit_event.php"
-            }
-        }
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "Id": event.id,
-            "title": titleTextField.getText(),
-            "start_date": startDate,
-            "end_date": endDate,
-            "description": detailsTextView.getText(),
-            "status": event.status
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: stopLoading, requestSuccess: requestSuccess)
-    }
-    
-    func stopLoading() {
         saveButton.isHidden = false
         saveIndicator.stopAnimating()
-    }
-    
-    func requestSuccess(jsonObject: AnyObject) {
         reloadEvents?()
-        
-        AlertClass().showSuccessAlert(delegate: self, message: Strings.alertEventEdited) {
-            self.dismiss(animated: true)
+        AlertClass().showSuccessAlert(delegate: self, message: Strings.alertEventEdited) { [weak self] in
+            self?.dismiss(animated: true)
         }
     }
 }

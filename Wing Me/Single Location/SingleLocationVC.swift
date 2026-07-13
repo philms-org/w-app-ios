@@ -28,7 +28,7 @@ class SingleLocationVC: UIViewController, UICollectionViewDelegate, UICollection
         scrollView.isHidden = true
         bannerView.isHidden = true
         bookingView.isHidden = true
-        request()
+        indicator.stopAnimating()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -109,71 +109,4 @@ class SingleLocationVC: UIViewController, UICollectionViewDelegate, UICollection
         }
     }
     
-    func request() {
-        let path = "get_location.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "location_Id": id
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: stopLoading, requestSuccess: requestSuccess)
-    }
-    
-    func stopLoading() {
-        indicator.stopAnimating()
-    }
-    
-    func requestSuccess(jsonObject: AnyObject) {
-        if let message = jsonObject["message"] as? NSDictionary {
-            if let banner = message["banner"] as? [NSDictionary] {
-                for (index, each) in banner.enumerated() {
-                    let imageView = UIImageView()
-                    imageView.imageFromServerURL(urlString: each.getString(key: "image"),
-                                                 collectionView: collectionView)
-                    
-                    let item = BannerStruct(imageView: imageView,
-                                            title: each.getString(key: "title"),
-                                            url: each.getString(key: "url"),
-                                            blurred: each.getBool(key: "blurred"))
-                    
-                    if index == 0 {
-                        updateUI(item: item)
-                    }
-                    bannerArray.append(item)
-                }
-            }
-            collectionView.reloadData()
-            
-            if bannerArray.isEmpty {
-                let image = message.getString(key: "image")
-                let imageView = UIImageView()
-                imageView.imageFromServerURL(urlString: image,
-                                             collectionView: collectionView)
-                
-                bannerArray.append(BannerStruct(imageView: imageView,
-                                                title: "",
-                                                url: "",
-                                                blurred: false))
-            }
-            if bannerArray.count == 1 {
-                pageControl.numberOfPages = 0
-            } else {
-                pageControl.numberOfPages = bannerArray.count
-            }
-            nameLabel.text = message.getString(key: "name")
-            detailsLabel.text = message.getString(key: "description")
-            addressLabel.text = message.getString(key: "address")
-            
-            let country_name = message.getString(key: "country_name")
-            let name_city = message.getString(key: "name_city")
-            
-            cityLabel.text = "\(country_name) - \(name_city)"
-            
-            whatsappURL = message.getString(key: "whatsapp")
-            
-            bookingView.isHidden = whatsappURL.isEmpty
-            scrollView.isHidden = false
-        }
-    }
 }

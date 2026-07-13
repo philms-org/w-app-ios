@@ -114,34 +114,8 @@ extension MyProfileVC: UIDocumentPickerDelegate {
     }
     
     func generate() {
-        var path: String {
-            if isMaster {
-                return "generate_users.php"
-            } else {
-                return "generate_location_users.php"
-            }
-        }
-        
-        let data = try? JSONSerialization.data(withJSONObject: generateArray)
-        let jsonObject = String(data: data!, encoding: .utf8)!
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "users": jsonObject
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: generateStopLoading, requestSuccess: generateSuccess)
-    }
-    
-    func generateStopLoading() {
         generateUsersButton.isHidden = false
         generateUsersIndicator.stopAnimating()
-    }
-    
-    func generateSuccess(jsonObject: AnyObject) {
-        let alertClass = AlertClass()
-        alertClass.showSuccessAlert(delegate: self, message: Strings.alertGenerated, action: {
-            
-        })
+        AlertClass().showSuccessAlert(delegate: self, message: Strings.alertGenerated) { }
     }
 }
