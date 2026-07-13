@@ -66,6 +66,20 @@ class UserProfileVC: UIViewController {
         present(sheet, animated: true)
     }
 
+    @IBAction func sendMessage(_ sender: UIButton) {
+        if fromChat {
+            dismiss(animated: true)
+            return
+        }
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let vc = storyboard.instantiateViewController(withIdentifier: "ChatVC") as? ChatVC {
+            vc.id = id
+            vc.close = close
+            vc.modalPresentationStyle = .currentContext
+            present(vc, animated: true)
+        }
+    }
+
     @IBAction func viewImage(_ sender: UIButton) {
         guard let image = imageView.image else { return }
         let storyboard = UIStoryboard(name: "Main", bundle: nil)

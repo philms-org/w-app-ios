@@ -105,8 +105,8 @@ class EditProfileVC: UIViewController, UITextFieldDelegate {
                     self.saveButton.isHidden = false
                     self.saveIndicator.stopAnimating()
                     self.reloadProfile?()
-                    AlertClass().showSuccessAlert(delegate: self, message: Strings.alertInfoEdited, action: {
-                        self.dismiss(animated: true)
+                    AlertClass().showSuccessAlert(delegate: self, message: Strings.alertInfoEdited, action: { [weak self] in
+                        self?.dismiss(animated: true)
                     })
                 }
             } catch {
