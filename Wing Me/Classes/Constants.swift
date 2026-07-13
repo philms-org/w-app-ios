@@ -3,6 +3,9 @@ import UIKit
 class Constants {
     static let appURL = "https://thewapp.com/"
     static let deleteAccountURL = "https://thewapp.com/delete_account"
+    static let aboutURL = "https://thewapp.com/about"
+    static let termsURL = "https://thewapp.com/terms"
+    static let privacyURL = "https://thewapp.com/privacy"
     static var savedImages = [String: UIImage]()
 
     static var imagesDownloading = Int()
