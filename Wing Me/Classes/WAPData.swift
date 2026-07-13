@@ -240,4 +240,15 @@ final class WAPData {
                 .execute()
         }
     }
+
+    // MARK: - Avatar Storage
+
+    func uploadAvatar(imageData: Data, userId: String) async throws -> String {
+        let path = "\(userId)/avatar.jpg"
+        try await client.storage
+            .from("avatars")
+            .upload(path: path, file: imageData, options: FileOptions(contentType: "image/jpeg", upsert: true))
+        let url = try client.storage.from("avatars").getPublicURL(path: path)
+        return url.absoluteString
+    }
 }
