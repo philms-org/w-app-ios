@@ -252,7 +252,9 @@ class LocationsVC: UIViewController, UITextFieldDelegate, CLLocationManagerDeleg
             marker.position = CLLocationCoordinate2D(latitude: lat, longitude: lng)
             marker.title = venue.name
             marker.snippet = venue.id
-            marker.icon = imageWithImage(image: UIImage(named: "icon_pin")!, scaledToSize: CGSize(width: 60, height: 60))
+            if let pin = UIImage(named: "icon_pin") {
+                marker.icon = imageWithImage(image: pin, scaledToSize: CGSize(width: 60, height: 60))
+            }
             marker.map = mapView
         }
     }

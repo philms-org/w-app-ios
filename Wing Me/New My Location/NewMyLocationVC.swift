@@ -59,13 +59,14 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
         let locationID = UserDefaults.getString(key: "LocationID")
         let locationName = UserDefaults.getString(key: "LocationName")
         
+        setupAttendeesButton()
+        setupRewardsButton()
+
         if locationID.contains("Event") {
             let customCell = CustomCell(string1: locationID, string2: locationName)
             wingIn(customCell: customCell)
         }
 
-        setupAttendeesButton()
-        setupRewardsButton()
         Task { await refreshAttendeesButtonVisibility() }
     }
 
