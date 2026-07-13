@@ -1,6 +1,6 @@
 import UIKit
 
-class NotificationVC: UIViewController {
+class NotificationVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var indicator: UIActivityIndicatorView!
@@ -30,4 +30,10 @@ class NotificationVC: UIViewController {
     @IBAction func back(_ sender: UIButton) {
         dismiss(animated: true)
     }
+
+    // MARK: - UITableViewDataSource / Delegate stubs (storyboard wires delegate+dataSource)
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 0 }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell { UITableViewCell() }
 }
