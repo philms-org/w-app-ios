@@ -22,15 +22,40 @@ class EditLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDel
     let maximumBanner = 5
     
     var bannerArray: [EditBannerStruct] = []
-    
+    var currentVenue: WAPVenue?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         picker.delegate = self
         bannerView.isHidden = true
         stackView.isHidden = true
-        
         setKeyboard()
-        indicator.stopAnimating()
+        indicator.startAnimating()
+        loadVenue()
+    }
+
+    func loadVenue() {
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let venue = try await WAPData.shared.fetchMyVenue()
+                await MainActor.run {
+                    self.currentVenue = venue
+                    self.titleLabel.text = venue?.name ?? ""
+                    self.messageTextView.text = venue?.defaultMessage ?? ""
+                    self.whatsappTextField.text = venue?.whatsapp ?? ""
+                    self.addressTextView.text = venue?.address ?? ""
+                    self.descriptionView.text = venue?.description ?? ""
+                    self.indicator.stopAnimating()
+                    self.stackView.isHidden = false
+                }
+            } catch {
+                await MainActor.run {
+                    self.indicator.stopAnimating()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
+            }
+        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -150,10 +175,31 @@ class EditLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDel
     }
 
     func save() {
-        saveButton.isHidden = false
-        saveIndicator.stopAnimating()
-        AlertClass().showSuccessAlert(delegate: self, message: Strings.alertLocationInfo) { [weak self] in
-            self?.dismiss(animated: true)
+        guard var venue = currentVenue else {
+            saveButton.isHidden = false
+            saveIndicator.stopAnimating()
+            return
+        }
+        venue.address = addressTextView.getText()
+        venue.description = descriptionView.getText().isEmpty ? nil : descriptionView.getText()
+        venue.whatsapp = whatsappTextField.getText().isEmpty ? nil : whatsappTextField.getText()
+        venue.defaultMessage = messageTextView.getText().isEmpty ? nil : messageTextView.getText()
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                try await WAPData.shared.updateVenue(venue)
+                await MainActor.run {
+                    AlertClass().showSuccessAlert(delegate: self, message: Strings.alertLocationInfo) { [weak self] in
+                        self?.dismiss(animated: true)
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    self.saveButton.isHidden = false
+                    self.saveIndicator.stopAnimating()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
+            }
         }
     }
 }

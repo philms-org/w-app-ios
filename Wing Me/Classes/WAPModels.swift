@@ -58,15 +58,18 @@ struct WAPVenue: Codable, Identifiable {
     var eventStatus: String?
     var description: String?
     var bannerImage: String?
+    var whatsapp: String?
+    var defaultMessage: String?
 
     enum CodingKeys: String, CodingKey {
-        case id, name, address, city, lat, lng, description
+        case id, name, address, city, lat, lng, description, whatsapp
         case geofenceRadiusMeters = "geofence_radius_meters"
-        case isEvent     = "is_event"
-        case eventDate   = "event_date"
-        case eventEndDate = "event_end_date"
-        case eventStatus  = "event_status"
-        case bannerImage = "banner_image"
+        case isEvent       = "is_event"
+        case eventDate     = "event_date"
+        case eventEndDate  = "event_end_date"
+        case eventStatus   = "event_status"
+        case bannerImage   = "banner_image"
+        case defaultMessage = "default_message"
     }
 }
 
