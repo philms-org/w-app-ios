@@ -49,14 +49,45 @@ class FifthSetupVC: UIViewController, UITextFieldDelegate {
     }
     
     func send() {
-        saveButton.isHidden = false
-        saveIndicator.stopAnimating()
-        appDelegate.inLocation = false
-        UserDefaults.standard.set(true, forKey: "Setup")
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let viewController = storyboard.instantiateViewController(withIdentifier: "MainVC") as? MainVC {
-            viewController.modalPresentationStyle = .currentContext
-            present(viewController, animated: true, completion: nil)
+        guard let uid = WAPAuth.currentUserID else {
+            saveButton.isHidden = false
+            saveIndicator.stopAnimating()
+            return
+        }
+        let profile = WAPProfile(
+            id: uid,
+            displayName: "",
+            city: cityTextField.getText().isEmpty ? nil : cityTextField.getText(),
+            faveDrink: drinkTextField.getText().isEmpty ? nil : drinkTextField.getText(),
+            fridayNight: fridayTextField.getText().isEmpty ? nil : fridayTextField.getText(),
+            profession: professionTextField.getText().isEmpty ? nil : professionTextField.getText(),
+            height: Double(height),
+            nationality: nationality.isEmpty ? nil : nationality,
+            relationship: relationship.isEmpty ? nil : relationship,
+            datingId: Int(datingID),
+            socialisingId: Int(socialisingID),
+            networkingId: Int(networkingID)
+        )
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                try await WAPData.shared.upsertProfile(profile)
+            } catch {
+                await MainActor.run {
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
+            }
+            await MainActor.run {
+                self.saveButton.isHidden = false
+                self.saveIndicator.stopAnimating()
+                appDelegate.inLocation = false
+                UserDefaults.standard.set(true, forKey: "Setup")
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                if let vc = storyboard.instantiateViewController(withIdentifier: "MainVC") as? MainVC {
+                    vc.modalPresentationStyle = .currentContext
+                    self.present(vc, animated: true)
+                }
+            }
         }
     }
 }

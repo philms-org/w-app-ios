@@ -28,7 +28,40 @@ class SingleLocationVC: UIViewController, UICollectionViewDelegate, UICollection
         scrollView.isHidden = true
         bannerView.isHidden = true
         bookingView.isHidden = true
-        indicator.stopAnimating()
+        indicator.startAnimating()
+        loadVenue()
+    }
+
+    func loadVenue() {
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let venue = try await WAPData.shared.fetchVenue(id: id)
+                await MainActor.run {
+                    self.nameLabel.text = venue.name
+                    self.addressLabel.text = venue.address ?? ""
+                    let city = venue.city ?? ""
+                    self.cityLabel.text = city
+                    self.detailsLabel.text = venue.address ?? ""
+
+                    if let imageURL = venue.bannerImage, !imageURL.isEmpty {
+                        let imageView = UIImageView()
+                        imageView.imageFromServerURL(urlString: imageURL, collectionView: self.collectionView)
+                        self.bannerArray = [BannerStruct(imageView: imageView, title: venue.name, url: "", blurred: false)]
+                        self.collectionView.reloadData()
+                        self.pageControl.numberOfPages = 0
+                        self.updateUI(item: self.bannerArray[0])
+                    }
+                    self.indicator.stopAnimating()
+                    self.scrollView.isHidden = false
+                }
+            } catch {
+                await MainActor.run {
+                    self.indicator.stopAnimating()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

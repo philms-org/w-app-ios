@@ -14,6 +14,12 @@ struct WAPProfile: Codable, Identifiable {
     var fridayNight: String?
     var profession: String?
     var isVerified: Bool?
+    var height: Double?
+    var nationality: String?
+    var relationship: String?
+    var datingId: Int?
+    var socialisingId: Int?
+    var networkingId: Int?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -29,6 +35,12 @@ struct WAPProfile: Codable, Identifiable {
         case fridayNight   = "friday_night"
         case profession
         case isVerified    = "is_verified"
+        case height
+        case nationality
+        case relationship
+        case datingId      = "dating_id"
+        case socialisingId = "socialising_id"
+        case networkingId  = "networking_id"
     }
 }
 
