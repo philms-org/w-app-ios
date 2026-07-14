@@ -64,125 +64,29 @@ extension CreateEventVC: UIImagePickerControllerDelegate, UINavigationController
     }
     
     func sendData() {
-        let request: URLRequest
-        
-        do {
-            request = try createRequest()
-        } catch {
-            sendError()
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: request) {
-            (data, response, error) in
-            
-            guard let data = data, error == nil else {
-                let delay = DispatchTime.now() + 2
-                DispatchQueue.main.asyncAfter(deadline: delay, execute: {
-                    self.sendError()
-                })
-                return
-            }
-            if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as AnyObject {
-                DispatchQueue.main.async {
-                    print(jsonObject)
-                    self.sendSuccess(jsonObject: jsonObject)
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                try await WAPData.shared.createEvent(
+                    name: titleTextField.getText(),
+                    description: detailsTextView.getText(),
+                    startDate: startDate,
+                    endDate: endDate
+                )
+                await MainActor.run {
+                    self.reloadEvents?()
+                    AlertClass().showSuccessAlert(delegate: self, message: Strings.alertEventCreated) { [weak self] in
+                        self?.dismiss(animated: true)
+                    }
                 }
-            } else {
-                let responseString = String(data: data, encoding: .utf8)
-                print(responseString as AnyObject)
-            }
-        }
-        task.resume()
-    }
-    
-    func sendError() {
-        createButton.isHidden = false
-        createIndicator.stopAnimating()
-        
-        let alertClass = AlertClass()
-        alertClass.showErrorAlert(delegate: self, message: Strings.alertConnection)
-    }
-    
-    func sendSuccess(jsonObject: AnyObject) {
-        if let error = jsonObject["error"] as? String {
-            if error == "0" {
-                reloadEvents?()
-                
-                AlertClass().showSuccessAlert(delegate: self, message: Strings.alertEventCreated) {
-                    self.dismiss(animated: true)
-                }
-            } else {
-                if let dictionary = jsonObject as? NSDictionary {
-                    let alertClass = AlertClass()
-                    alertClass.showErrorAlert(delegate: self, message: dictionary.getString(key: "message"))
+            } catch {
+                await MainActor.run {
+                    self.createButton.isHidden = false
+                    self.createIndicator.stopAnimating()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
                 }
             }
         }
-        createButton.isHidden = false
-        createIndicator.stopAnimating()
-    }
-    
-    func openMain() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let viewController = storyboard.instantiateViewController(withIdentifier: "MainVC") as? MainVC {
-            viewController.modalPresentationStyle = .currentContext
-            present(viewController, animated: true, completion: nil)
-        }
-    }
-    
-    func createRequest() throws -> URLRequest {
-        let parameters: [String: Any] = [
-            "language": Strings.language,
-            "title": titleTextField.getText(),
-            "start_date": startDate,
-            "end_date": endDate,
-            "description": detailsTextView.getText()
-        ]
-        
-        let boundary = generateBoundaryString()
-        
-        var url: URL {
-            if isMaster {
-                return URL(string: "master_create_event.php")!
-            } else {
-                return URL(string: "create_event.php")!
-            }
-        }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try createBody(with: parameters, boundary: boundary)
-        
-        if let token = UserDefaults.standard.object(forKey: "Token") as? String {
-            request.setValue(token, forHTTPHeaderField: "Authorization")
-        }
-        return request
-    }
-    
-    func createBody(with parameters: [String: Any], boundary: String) throws -> Data {
-        var body = Data()
-        
-        for (key, value) in parameters {
-            body.append("--\(boundary)\r\n")
-            body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
-            body.append("\(value)\r\n")
-        }
-        if let image = imageView.image, let data = image.jpegData(compressionQuality: 0.5) {
-            let mimetype = "image/jpeg"
-            
-            body.append("--\(boundary)\r\n")
-            body.append("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpeg\"\r\n")
-            body.append("Content-Type: \(mimetype)\r\n\r\n")
-            body.append(data)
-            body.append("\r\n")
-        }
-        body.append("--\(boundary)--\r\n")
-        return body
-    }
-    
-    func generateBoundaryString() -> String {
-        return "Boundary-\(NSUUID().uuidString)"
     }
 }
 

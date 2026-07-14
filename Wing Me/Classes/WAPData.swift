@@ -75,6 +75,23 @@ final class WAPData {
             .execute()
     }
 
+    func createEvent(name: String, description: String, startDate: String, endDate: String) async throws {
+        guard let uid = WAPAuth.currentUserID else { return }
+        try await client
+            .from("locations")
+            .insert([
+                "name": name,
+                "description": description,
+                "event_date": startDate,
+                "event_end_date": endDate,
+                "is_event": "true",
+                "owner_id": uid,
+                "lat": "0",
+                "lng": "0"
+            ])
+            .execute()
+    }
+
     func fetchEvents() async throws -> [WAPVenue] {
         guard let uid = WAPAuth.currentUserID else { return [] }
         return try await client

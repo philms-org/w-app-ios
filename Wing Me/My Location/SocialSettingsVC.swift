@@ -63,30 +63,30 @@ class SocialSettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func send() {
-        let path = "update_emojis.php"
-        
-        let params: NSDictionary = [
-            "language": Strings.language,
-            "dating_Id": String(array[0].progress),
-            "socialising_Id": String(array[1].progress),
-            "networking_Id": String(array[2].progress)
-        ]
-        
-        params.request(delegate: self, path: path, stopLoading: stopLoading, requestSuccess: requestSuccess)
-    }
-    
-    func stopLoading() {
-        saveButton.isHidden = false
-        saveIndicator.stopAnimating()
-    }
-    
-    func requestSuccess(jsonObject: AnyObject) {
-        appDelegate.inLocation = false
-        
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let viewController = storyboard.instantiateViewController(withIdentifier: "MainVC") as? MainVC {
-            viewController.modalPresentationStyle = .currentContext
-            present(viewController, animated: true, completion: nil)
+        guard let uid = WAPAuth.currentUserID, array.count >= 3 else {
+            saveButton.isHidden = false
+            saveIndicator.stopAnimating()
+            dismiss(animated: true)
+            return
+        }
+        let profile = WAPProfile(id: uid, displayName: "",
+                                  datingId: array[0].progress,
+                                  socialisingId: array[1].progress,
+                                  networkingId: array[2].progress)
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                try await WAPData.shared.upsertProfile(profile)
+            } catch {
+                await MainActor.run {
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
+            }
+            await MainActor.run {
+                self.saveButton.isHidden = false
+                self.saveIndicator.stopAnimating()
+                self.dismiss(animated: true)
+            }
         }
     }
 }
