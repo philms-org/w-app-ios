@@ -49,6 +49,32 @@ final class WAPData {
             .value
     }
 
+    func fetchEvents() async throws -> [WAPVenue] {
+        guard let uid = WAPAuth.currentUserID else { return [] }
+        return try await client
+            .from("locations")
+            .select()
+            .eq("is_event", value: true)
+            .eq("owner_id", value: uid)
+            .order("event_date", ascending: false)
+            .execute()
+            .value
+    }
+
+    func updateEvent(_ venue: WAPVenue) async throws {
+        try await client
+            .from("locations")
+            .update([
+                "name": venue.name,
+                "description": venue.description ?? "",
+                "event_date": venue.eventDate ?? "",
+                "event_end_date": venue.eventEndDate ?? "",
+                "event_status": venue.eventStatus ?? "Active"
+            ])
+            .eq("id", value: venue.id)
+            .execute()
+    }
+
     // MARK: - Feed
 
     func fetchFeed(locationId: String) async throws -> [WAPFeedItem] {

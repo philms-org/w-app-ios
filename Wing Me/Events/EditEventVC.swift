@@ -107,11 +107,28 @@ class EditEventVC: UIViewController, UITextFieldDelegate {
     }
     
     func save() {
-        saveButton.isHidden = false
-        saveIndicator.stopAnimating()
-        reloadEvents?()
-        AlertClass().showSuccessAlert(delegate: self, message: Strings.alertEventEdited) { [weak self] in
-            self?.dismiss(animated: true)
+        var venue = WAPVenue(id: event.id, name: titleTextField.getText())
+        venue.description = detailsTextView.getText().isEmpty ? nil : detailsTextView.getText()
+        venue.eventDate = startDate.isEmpty ? nil : startDate
+        venue.eventEndDate = endDate.isEmpty ? nil : endDate
+        venue.eventStatus = event.status
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                try await WAPData.shared.updateEvent(venue)
+                await MainActor.run {
+                    self.reloadEvents?()
+                    AlertClass().showSuccessAlert(delegate: self, message: Strings.alertEventEdited) { [weak self] in
+                        self?.dismiss(animated: true)
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    self.saveButton.isHidden = false
+                    self.saveIndicator.stopAnimating()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
+            }
         }
     }
 }

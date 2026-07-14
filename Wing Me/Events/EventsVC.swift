@@ -13,7 +13,42 @@ class EventsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        indicator.stopAnimating()
+        indicator.startAnimating()
+        loadEvents()
+    }
+
+    func loadEvents() {
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let venues = try await WAPData.shared.fetchEvents()
+                let fmt = DateFormatter()
+                fmt.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                let display = DateFormatter()
+                display.dateFormat = "EEEE dd MMM yyyy"
+                let items: [EventStruct] = venues.map { v in
+                    let start = v.eventDate.flatMap { fmt.date(from: $0) }.map { display.string(from: $0) } ?? ""
+                    let end   = v.eventEndDate.flatMap { fmt.date(from: $0) }.map { display.string(from: $0) } ?? start
+                    return EventStruct(imageView: UIImageView(),
+                                       id: v.id,
+                                       title: v.name,
+                                       details: v.description ?? v.address ?? "",
+                                       startDate: start,
+                                       endDate: end,
+                                       status: v.eventStatus ?? "Active")
+                }
+                await MainActor.run {
+                    self.eventsArray = items
+                    self.tableView.reloadData()
+                    self.indicator.stopAnimating()
+                }
+            } catch {
+                await MainActor.run {
+                    self.indicator.stopAnimating()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -89,5 +124,7 @@ class EventsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func reload() {
         eventsArray = []
         tableView.reloadData()
+        indicator.startAnimating()
+        loadEvents()
     }
 }
