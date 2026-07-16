@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Rebrand Wing Me to The W App, replace the PHP/wingme.app backend with Supabase, and establish auth — producing a building, launchable app shell with working sign-in.
+**Goal:** Rebrand The W App to The W App, replace the PHP/thewapp.app backend with Supabase, and establish auth — producing a building, launchable app shell with working sign-in.
 
-**Architecture:** Fork wingme-copy in-place; strip dating logic; wire Supabase Swift SDK (SPM) for auth + database + storage; keep Firebase for push notifications only; replace UserDefaults token with Keychain.
+**Architecture:** Fork thewapp-copy in-place; strip dating logic; wire Supabase Swift SDK (SPM) for auth + database + storage; keep Firebase for push notifications only; replace UserDefaults token with Keychain.
 
 **Tech Stack:** Swift/UIKit, CocoaPods (Firebase, GoogleMaps, GooglePlaces, FBSDKLoginKit), Supabase Swift SDK 2.x (SPM), XCTest
 
@@ -12,20 +12,20 @@
 
 - iOS deployment target: 15.6 (unchanged)
 - Bundle ID change: `com.vastlb.Wing-Me` → `com.thewapp.wap`
-- Target name: `Wing Me` → `The W App`
+- Target name: `The W App` → `The W App`
 - Supabase Swift SDK added via Swift Package Manager (no CocoaPods pod exists)
 - Firebase kept for push notifications only — Firebase/Auth removed
-- All `wingme.app` URLs removed — no calls to old backend ever made
+- All `thewapp.app` URLs removed — no calls to old backend ever made
 - No dating fields: remove relationship status, "looking for" enums, all related UI
-- Ponytail rule: reuse existing Wing Me code before writing anything new
+- Ponytail rule: reuse existing The W App code before writing anything new
 
 ---
 
 ### Task 1: Rename Xcode Target and Update Bundle ID
 
 **Files:**
-- Modify: `Wing Me.xcodeproj/project.pbxproj` (via Ruby xcodeproj gem — CLI only)
-- Modify: `Wing Me/Info.plist`
+- Modify: `The W App.xcodeproj/project.pbxproj` (via Ruby xcodeproj gem — CLI only)
+- Modify: `The W App/Info.plist`
 - Modify: `Podfile`
 - Create: `scripts/rebrand_target.rb`
 
@@ -35,7 +35,7 @@
 - [ ] **Step 1: Create scripts directory**
 
   ```bash
-  mkdir -p /Users/sr/wingme-copy/scripts
+  mkdir -p /Users/sr/thewapp-copy/scripts
   ```
 
 - [ ] **Step 2: Create rebrand_target.rb**
@@ -45,8 +45,8 @@
   ```ruby
   require 'xcodeproj'
 
-  PROJECT_PATH = File.join(__dir__, '..', 'Wing Me.xcodeproj')
-  OLD_NAME = 'Wing Me'
+  PROJECT_PATH = File.join(__dir__, '..', 'The W App.xcodeproj')
+  OLD_NAME = 'The W App'
   NEW_NAME = 'The W App'
   NEW_BUNDLE_ID = 'com.thewapp.wap'
 
@@ -70,22 +70,22 @@
 - [ ] **Step 3: Run the rebrand script**
 
   ```bash
-  cd /Users/sr/wingme-copy
+  cd /Users/sr/thewapp-copy
   ruby scripts/rebrand_target.rb
   ```
 
   Expected output:
   ```
-  Renamed target 'Wing Me' → 'The W App'
+  Renamed target 'The W App' → 'The W App'
   Bundle ID set to 'com.thewapp.wap'
-  Saved .../Wing Me.xcodeproj
+  Saved .../The W App.xcodeproj
   ```
 
 - [ ] **Step 4: Update Info.plist display name**
 
   ```bash
-  /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName 'The W App'" "/Users/sr/wingme-copy/Wing Me/Info.plist"
-  /usr/libexec/PlistBuddy -c "Set :CFBundleName 'TheWApp'" "/Users/sr/wingme-copy/Wing Me/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName 'The W App'" "/Users/sr/thewapp-copy/The W App/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set :CFBundleName 'TheWApp'" "/Users/sr/thewapp-copy/The W App/Info.plist"
   ```
 
   Expected: no output (silent success).
@@ -114,7 +114,7 @@
 - [ ] **Step 6: Run pod install**
 
   ```bash
-  cd /Users/sr/wingme-copy && pod install 2>&1 | tail -5
+  cd /Users/sr/thewapp-copy && pod install 2>&1 | tail -5
   ```
 
   Expected: `Pod installation complete!`
@@ -122,8 +122,8 @@
 - [ ] **Step 7: Verify project.pbxproj contains new values**
 
   ```bash
-  grep -c "com.thewapp.wap" "/Users/sr/wingme-copy/Wing Me.xcodeproj/project.pbxproj"
-  grep -c "The W App" "/Users/sr/wingme-copy/Wing Me.xcodeproj/project.pbxproj"
+  grep -c "com.thewapp.wap" "/Users/sr/thewapp-copy/The W App.xcodeproj/project.pbxproj"
+  grep -c "The W App" "/Users/sr/thewapp-copy/The W App.xcodeproj/project.pbxproj"
   ```
 
   Expected: both return `2` (one per build configuration).
@@ -131,7 +131,7 @@
 - [ ] **Step 8: Commit**
 
   ```bash
-  cd /Users/sr/wingme-copy
+  cd /Users/sr/thewapp-copy
   git add -A
   git commit -m "rebrand: rename target to The W App, update bundle ID, add GooglePlaces"
   ```
@@ -141,7 +141,7 @@
 ### Task 2: Add Supabase Swift SDK via SPM
 
 **Files:**
-- Modify: `Wing Me.xcodeproj/project.pbxproj` (via Ruby xcodeproj gem — CLI only)
+- Modify: `The W App.xcodeproj/project.pbxproj` (via Ruby xcodeproj gem — CLI only)
 - Create: `scripts/add_supabase_spm.rb`
 - Create: `The W App/Classes/WAPSupabase.swift`
 - Create: `The W AppTests/WAPSupabaseTests.swift`
@@ -157,7 +157,7 @@
   ```ruby
   require 'xcodeproj'
 
-  PROJECT_PATH = File.join(__dir__, '..', 'Wing Me.xcodeproj')
+  PROJECT_PATH = File.join(__dir__, '..', 'The W App.xcodeproj')
   TARGET_NAME  = 'The W App'
   REPO_URL     = 'https://github.com/supabase/supabase-swift'
   MIN_VERSION  = '2.0.0'
@@ -199,7 +199,7 @@
 - [ ] **Step 2: Run the SPM script**
 
   ```bash
-  cd /Users/sr/wingme-copy
+  cd /Users/sr/thewapp-copy
   ruby scripts/add_supabase_spm.rb
   ```
 
@@ -211,8 +211,8 @@
 - [ ] **Step 3: Verify package reference in project.pbxproj**
 
   ```bash
-  grep -c "supabase-swift" "/Users/sr/wingme-copy/Wing Me.xcodeproj/project.pbxproj"
-  grep -c "XCRemoteSwiftPackageReference" "/Users/sr/wingme-copy/Wing Me.xcodeproj/project.pbxproj"
+  grep -c "supabase-swift" "/Users/sr/thewapp-copy/The W App.xcodeproj/project.pbxproj"
+  grep -c "XCRemoteSwiftPackageReference" "/Users/sr/thewapp-copy/The W App.xcodeproj/project.pbxproj"
   ```
 
   Expected: both return at least `1`.
@@ -255,13 +255,13 @@
   }
   ```
 
-  Note: `@testable import TheWApp` must match the Product Module Name (found in Build Settings → Product Module Name). If the target was renamed via xcodeproj gem, the module name may still be `Wing_Me` — check and update accordingly.
+  Note: `@testable import TheWApp` must match the Product Module Name (found in Build Settings → Product Module Name). If the target was renamed via xcodeproj gem, the module name may still be `TheWApp` — check and update accordingly.
 
 - [ ] **Step 6: Commit**
 
   ```bash
-  cd /Users/sr/wingme-copy
-  git add "Wing Me.xcodeproj/project.pbxproj" scripts/add_supabase_spm.rb \
+  cd /Users/sr/thewapp-copy
+  git add "The W App.xcodeproj/project.pbxproj" scripts/add_supabase_spm.rb \
     "The W App/Classes/WAPSupabase.swift" "The W AppTests/WAPSupabaseTests.swift"
   git commit -m "feat: add Supabase Swift SDK via SPM, create WAPSupabase singleton"
   ```
@@ -388,7 +388,7 @@
 - Modify: `The W App/Classes/Strings.swift`
 
 **Interfaces:**
-- Produces: `Strings.checkIn`, `Strings.checkOut`, `Strings.whoIsHere`, `Strings.alertCheckIn` replacing old Wing Me equivalents
+- Produces: `Strings.checkIn`, `Strings.checkOut`, `Strings.whoIsHere`, `Strings.alertCheckIn` replacing old The W App equivalents
 
 - [ ] **Step 1: Replace Constants.swift**
 
@@ -522,7 +522,7 @@
 
   ```bash
   grep -rn "wingOut\|alertWingout\|alertBadgeAdded\|alertEventCreated\|alertEventEdited" \
-    /Users/sr/wingme-copy/ --include="*.swift" 2>/dev/null
+    /Users/sr/thewapp-copy/ --include="*.swift" 2>/dev/null
   ```
 
   For each hit: replace `Strings.wingOut` → `Strings.checkIn`, `Strings.alertWingout` → `Strings.alertCheckIn`. Remove any reference to removed strings entirely if the caller is dating-specific code being deleted in Task 7.
@@ -535,7 +535,7 @@
 
   ```bash
   git add "The W App/Classes/Constants.swift" "The W App/Classes/Strings.swift"
-  git commit -m "rebrand: update Constants and Strings, remove Wing Me references"
+  git commit -m "rebrand: update Constants and Strings, remove The W App references"
   ```
 
 ---
@@ -552,7 +552,7 @@
 - [ ] **Step 1: Create migrations directory**
 
   ```bash
-  mkdir -p /Users/sr/wingme-copy/database/migrations
+  mkdir -p /Users/sr/thewapp-copy/database/migrations
   ```
 
 - [ ] **Step 2: Create 001_initial_schema.sql**
@@ -975,7 +975,7 @@
 
   ```bash
   grep -rn "Single\|\"Dating\"\|Married\|lookingFor\|Looking for\|Socializing\|Open to love\|Taken\b\|\"Fun\"\|relationship_status\|RelationshipStatus" \
-    /Users/sr/wingme-copy/ --include="*.swift" 2>/dev/null
+    /Users/sr/thewapp-copy/ --include="*.swift" 2>/dev/null
   ```
 
 - [ ] **Step 2: Remove each hit**

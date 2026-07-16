@@ -14,7 +14,7 @@
 - SUPABASE_URL/SUPABASE_ANON_KEY stay in Xcode Edit Scheme env vars, never committed.
 - Module name for `@testable import` is `The_W_App` (matches `WAPSupabaseTests.swift`; note `KeychainHelperTests.swift` and `WAPAuthTests.swift` currently import `TheWApp` without the underscore — a pre-existing bug outside this plan's scope, don't fix it here, don't copy it into new test files).
 - Open `The W App.xcworkspace`, never `.xcodeproj`.
-- Verify each Swift task by running a full build: `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -workspace "The W App.xcworkspace" -scheme "The W App" -destination "generic/platform=iOS Simulator" build` from `/Users/sr/wingme-copy`. Network-dependent Supabase calls (fetch/insert/upsert against live tables) have no mocking infrastructure in this codebase yet — treat a clean build plus the existing pattern (as used for `WAPSupabaseTests.swift`) as the automated check for those; only pure, network-free logic (the flag resolver in Task 7) gets a real XCTest.
+- Verify each Swift task by running a full build: `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -workspace "The W App.xcworkspace" -scheme "The W App" -destination "generic/platform=iOS Simulator" build` from `/Users/sr/thewapp-copy`. Network-dependent Supabase calls (fetch/insert/upsert against live tables) have no mocking infrastructure in this codebase yet — treat a clean build plus the existing pattern (as used for `WAPSupabaseTests.swift`) as the automated check for those; only pure, network-free logic (the flag resolver in Task 7) gets a real XCTest.
 - New/changed SQL migrations are numbered sequentially after the existing `003_rls_policies.sql`: `004`, `005`, `006`. Each is idempotent-safe (`drop policy if exists` before `create policy`) since it's unknown exactly how far `003` got before failing (see Task 5).
 
 ---
@@ -27,7 +27,7 @@
 - Create: `database/migrations/004_profile_columns.sql`
 
 **Interfaces:**
-- Produces: `profiles` table with columns `display_name`, `phone`, `gender`, `date_of_birth`, `avatar_url`, `affiliation text[]`, `role text[]`, replacing the old `name`/`photo_url`/`industry text` shape — matches what `WAPProfile`/`WAPRegistrationProfile` (in `Wing Me/Classes/WAPModels.swift` and `Wing Me/Classes/WAPSupabase.swift`) already assume.
+- Produces: `profiles` table with columns `display_name`, `phone`, `gender`, `date_of_birth`, `avatar_url`, `affiliation text[]`, `role text[]`, replacing the old `name`/`photo_url`/`industry text` shape — matches what `WAPProfile`/`WAPRegistrationProfile` (in `The W App/Classes/WAPModels.swift` and `The W App/Classes/WAPSupabase.swift`) already assume.
 
 - [ ] **Step 1: Write the migration**
 
@@ -59,7 +59,7 @@ Paste the contents of `004_profile_columns.sql` into the Supabase project's SQL 
 - [ ] **Step 3: Commit**
 
 ```bash
-cd /Users/sr/wingme-copy
+cd /Users/sr/thewapp-copy
 git add database/migrations/004_profile_columns.sql
 git commit -m "chore: reconcile profiles table columns with WAPProfile model"
 ```
@@ -69,8 +69,8 @@ git commit -m "chore: reconcile profiles table columns with WAPProfile model"
 ### Task 2: Fix `WAPVenue` model and venue queries
 
 **Files:**
-- Modify: `Wing Me/Classes/WAPModels.swift` (the `WAPVenue` struct)
-- Modify: `Wing Me/Classes/WAPData.swift` (`fetchVenues`, `fetchVenue`)
+- Modify: `The W App/Classes/WAPModels.swift` (the `WAPVenue` struct)
+- Modify: `The W App/Classes/WAPData.swift` (`fetchVenues`, `fetchVenue`)
 - Test: `The W AppTests/WAPModelsTests.swift`
 
 **Interfaces:**
@@ -106,7 +106,7 @@ Expected: FAIL — `WAPVenue` has no member `geofenceRadiusMeters`/`bannerImage`
 
 - [ ] **Step 3: Fix `WAPVenue`**
 
-In `Wing Me/Classes/WAPModels.swift`, replace the `WAPVenue` struct:
+In `The W App/Classes/WAPModels.swift`, replace the `WAPVenue` struct:
 
 ```swift
 struct WAPVenue: Codable, Identifiable {
@@ -187,7 +187,7 @@ Then: `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -work
 - [ ] **Step 6: Commit**
 
 ```bash
-git add "Wing Me/Classes/WAPModels.swift" "Wing Me/Classes/WAPData.swift" "The W AppTests/WAPModelsTests.swift"
+git add "The W App/Classes/WAPModels.swift" "The W App/Classes/WAPData.swift" "The W AppTests/WAPModelsTests.swift"
 git commit -m "fix: WAPVenue and venue queries target real locations table/columns"
 ```
 
@@ -196,8 +196,8 @@ git commit -m "fix: WAPVenue and venue queries target real locations table/colum
 ### Task 3: Fix presence (`location_checkins`)
 
 **Files:**
-- Modify: `Wing Me/Classes/WAPModels.swift` (the `WAPPresence` struct)
-- Modify: `Wing Me/Classes/WAPData.swift` (`fetchPresence`, `checkIn`, `checkOut`)
+- Modify: `The W App/Classes/WAPModels.swift` (the `WAPPresence` struct)
+- Modify: `The W App/Classes/WAPData.swift` (`fetchPresence`, `checkIn`, `checkOut`)
 
 **Interfaces:**
 - Consumes: real `location_checkins` columns: `id`, `user_id`, `location_id`, `mode` (`'live'|'peeking'`), `checked_in_at`, `checked_out_at`.
@@ -205,7 +205,7 @@ git commit -m "fix: WAPVenue and venue queries target real locations table/colum
 
 - [ ] **Step 1: Fix `WAPPresence`**
 
-In `Wing Me/Classes/WAPModels.swift`, replace:
+In `The W App/Classes/WAPModels.swift`, replace:
 
 ```swift
 struct WAPPresence: Codable, Identifiable {
@@ -328,7 +328,7 @@ with:
 
 - [ ] **Step 3: Update callers**
 
-Run: `grep -rn "fetchPresence(venueId\|checkIn(venueId\|checkOut(venueId" "Wing Me" --include="*.swift"` from `/Users/sr/wingme-copy`. Update any call sites found to use `locationId:` instead of `venueId:` (parameter name changed, not just type — Swift call sites use argument labels).
+Run: `grep -rn "fetchPresence(venueId\|checkIn(venueId\|checkOut(venueId" "The W App" --include="*.swift"` from `/Users/sr/thewapp-copy`. Update any call sites found to use `locationId:` instead of `venueId:` (parameter name changed, not just type — Swift call sites use argument labels).
 
 - [ ] **Step 4: Build to verify**
 
@@ -338,7 +338,7 @@ Expected: BUILD SUCCEEDED.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add "Wing Me/Classes/WAPModels.swift" "Wing Me/Classes/WAPData.swift"
+git add "The W App/Classes/WAPModels.swift" "The W App/Classes/WAPData.swift"
 git commit -m "fix: presence targets real location_checkins table/shape instead of venue_presence"
 ```
 
@@ -347,8 +347,8 @@ git commit -m "fix: presence targets real location_checkins table/shape instead 
 ### Task 4: Fix contacts (`contact_methods`)
 
 **Files:**
-- Modify: `Wing Me/Classes/WAPModels.swift` (rename `WAPSocialLink` → `WAPContactMethod`)
-- Modify: `Wing Me/Classes/WAPData.swift` (`fetchLinks`/`upsertLink` → `fetchContactMethods`/`upsertContactMethod`)
+- Modify: `The W App/Classes/WAPModels.swift` (rename `WAPSocialLink` → `WAPContactMethod`)
+- Modify: `The W App/Classes/WAPData.swift` (`fetchLinks`/`upsertLink` → `fetchContactMethods`/`upsertContactMethod`)
 
 **Interfaces:**
 - Consumes: real `contact_methods` columns: `id`, `user_id`, `slot_order` (1–6), `type` (`whatsapp|linkedin|facebook|instagram|phone|link`), `value`, `is_enabled`.
@@ -356,11 +356,11 @@ git commit -m "fix: presence targets real location_checkins table/shape instead 
 
 - [ ] **Step 1: Check for existing usages before renaming**
 
-Run: `grep -rln "WAPSocialLink\|fetchLinks\|upsertLink" "Wing Me" --include="*.swift"` from `/Users/sr/wingme-copy`. Expected today: only `WAPModels.swift` and `WAPData.swift` (no UI built against this yet, per the QR Code screens still being on the old PHP path) — if any other file appears, update it in Step 3 alongside the rename.
+Run: `grep -rln "WAPSocialLink\|fetchLinks\|upsertLink" "The W App" --include="*.swift"` from `/Users/sr/thewapp-copy`. Expected today: only `WAPModels.swift` and `WAPData.swift` (no UI built against this yet, per the QR Code screens still being on the old PHP path) — if any other file appears, update it in Step 3 alongside the rename.
 
 - [ ] **Step 2: Rename and reshape the model**
 
-In `Wing Me/Classes/WAPModels.swift`, replace:
+In `The W App/Classes/WAPModels.swift`, replace:
 
 ```swift
 struct WAPSocialLink: Codable, Identifiable {
@@ -453,7 +453,7 @@ Expected: BUILD SUCCEEDED.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add "Wing Me/Classes/WAPModels.swift" "Wing Me/Classes/WAPData.swift"
+git add "The W App/Classes/WAPModels.swift" "The W App/Classes/WAPData.swift"
 git commit -m "fix: rename WAPSocialLink to WAPContactMethod, target real contact_methods table/shape"
 ```
 
@@ -590,7 +590,7 @@ git commit -m "feat: add attendee history flag system schema (feature_flags, ove
 ### Task 7: Flag resolver
 
 **Files:**
-- Create: `Wing Me/Classes/WAPFeatureFlags.swift`
+- Create: `The W App/Classes/WAPFeatureFlags.swift`
 - Test: `The W AppTests/WAPFeatureFlagsTests.swift`
 
 **Interfaces:**
@@ -716,13 +716,13 @@ Run the same `-only-testing:TheWAppTests/WAPFeatureFlagsTests` command. Expected
 Same issue as the Phase 0 files — a new `.swift` file on disk isn't automatically in `project.pbxproj`. Add it via the `xcodeproj` gem (as used previously in this project):
 
 ```bash
-cd /Users/sr/wingme-copy
+cd /Users/sr/thewapp-copy
 ruby -e '
 require "xcodeproj"
 project = Xcodeproj::Project.open("The W App.xcodeproj")
 target = project.targets.find { |t| t.name == "The W App" }
-wing_me = project.main_group.children.find { |c| c.display_name == "Wing Me" }
-classes = wing_me.children.find { |c| c.display_name == "Classes" }
+the_w_app = project.main_group.children.find { |c| c.display_name == "The W App" }
+classes = the_w_app.children.find { |c| c.display_name == "Classes" }
 ref = classes.new_file("WAPFeatureFlags.swift")
 target.add_file_references([ref])
 project.save
@@ -734,7 +734,7 @@ Also add `The W AppTests/WAPFeatureFlagsTests.swift` to the `The W AppTests` tar
 - [ ] **Step 6: Commit**
 
 ```bash
-git add "Wing Me/Classes/WAPFeatureFlags.swift" "The W AppTests/WAPFeatureFlagsTests.swift" "The W App.xcodeproj/project.pbxproj"
+git add "The W App/Classes/WAPFeatureFlags.swift" "The W AppTests/WAPFeatureFlagsTests.swift" "The W App.xcodeproj/project.pbxproj"
 git commit -m "feat: add WAPFeatureFlagResolver — pure 4-level flag resolution (location>user>city>global)"
 ```
 
@@ -743,7 +743,7 @@ git commit -m "feat: add WAPFeatureFlagResolver — pure 4-level flag resolution
 ### Task 8: Attendee history data layer
 
 **Files:**
-- Modify: `Wing Me/Classes/WAPData.swift`
+- Modify: `The W App/Classes/WAPData.swift`
 
 **Interfaces:**
 - Consumes: `WAPFeatureFlagOverride`, `WAPFeatureFlagDefault`, `WAPFeatureFlagResolver` (Task 7); `WAPVenue` (Task 2); `WAPProfile` (existing).
@@ -751,7 +751,7 @@ git commit -m "feat: add WAPFeatureFlagResolver — pure 4-level flag resolution
 
 - [ ] **Step 1: Add the methods**
 
-Append to `WAPData` in `Wing Me/Classes/WAPData.swift`:
+Append to `WAPData` in `The W App/Classes/WAPData.swift`:
 
 ```swift
     // MARK: - Attendee History
@@ -832,7 +832,7 @@ Expected: BUILD SUCCEEDED.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add "Wing Me/Classes/WAPData.swift"
+git add "The W App/Classes/WAPData.swift"
 git commit -m "feat: add WAPData.resolveFeatureFlag/fetchAttendeeHistory/setAttendeeHistoryOptOut"
 ```
 
@@ -841,10 +841,10 @@ git commit -m "feat: add WAPData.resolveFeatureFlag/fetchAttendeeHistory/setAtte
 ### Task 9: `AttendeeHistoryVC` screen
 
 **Files:**
-- Create: `Wing Me/New My Location/AttendeeHistoryVC.swift`
+- Create: `The W App/New My Location/AttendeeHistoryVC.swift`
 
 **Interfaces:**
-- Consumes: `WAPData.shared.fetchAttendeeHistory(locationId:)`, `WAPData.shared.setAttendeeHistoryOptOut(locationId:hidden:)`, `WAPData.shared.resolveFeatureFlag` (Task 8); `WPillButton`, `Colors` (existing, from Phase 0); `WAPAuth.currentUserID` (existing); `UIImageView.imageFromServerURL(urlString:tableView:)` (existing, `Wing Me/Classes/Extensions.swift`).
+- Consumes: `WAPData.shared.fetchAttendeeHistory(locationId:)`, `WAPData.shared.setAttendeeHistoryOptOut(locationId:hidden:)`, `WAPData.shared.resolveFeatureFlag` (Task 8); `WPillButton`, `Colors` (existing, from Phase 0); `WAPAuth.currentUserID` (existing); `UIImageView.imageFromServerURL(urlString:tableView:)` (existing, `The W App/Classes/Extensions.swift`).
 - Produces: `AttendeeHistoryVC(locationId: String, locationName: String)` — a plain `UIViewController` with a `UITableView`, presentable from anywhere with a location context. Task 10 instantiates and presents it.
 
 - [ ] **Step 1: Write the view controller**
@@ -972,13 +972,13 @@ final class AttendeeHistoryVC: UIViewController, UITableViewDataSource, UITableV
 - [ ] **Step 2: Add the file to the Xcode target**
 
 ```bash
-cd /Users/sr/wingme-copy
+cd /Users/sr/thewapp-copy
 ruby -e '
 require "xcodeproj"
 project = Xcodeproj::Project.open("The W App.xcodeproj")
 target = project.targets.find { |t| t.name == "The W App" }
-wing_me = project.main_group.children.find { |c| c.display_name == "Wing Me" }
-new_my_location = wing_me.children.find { |c| c.display_name == "New My Location" }
+the_w_app = project.main_group.children.find { |c| c.display_name == "The W App" }
+new_my_location = the_w_app.children.find { |c| c.display_name == "New My Location" }
 ref = new_my_location.new_file("AttendeeHistoryVC.swift")
 target.add_file_references([ref])
 project.save
@@ -993,7 +993,7 @@ Expected: BUILD SUCCEEDED.
 - [ ] **Step 4: Commit**
 
 ```bash
-git add "Wing Me/New My Location/AttendeeHistoryVC.swift" "The W App.xcodeproj/project.pbxproj"
+git add "The W App/New My Location/AttendeeHistoryVC.swift" "The W App.xcodeproj/project.pbxproj"
 git commit -m "feat: add AttendeeHistoryVC — all-time roster screen with per-venue hide toggle"
 ```
 
@@ -1002,14 +1002,14 @@ git commit -m "feat: add AttendeeHistoryVC — all-time roster screen with per-v
 ### Task 10: Wire the entry point into the venue screen
 
 **Files:**
-- Modify: `Wing Me/New My Location/NewMyLocationVC.swift`
+- Modify: `The W App/New My Location/NewMyLocationVC.swift`
 
 **Interfaces:**
 - Consumes: `AttendeeHistoryVC` (Task 9), `WAPData.shared.resolveFeatureFlag`/`fetchVenue` (Task 8/2), `WPillButton` (existing), `NewMyLocationVC.locationID` (existing property, line 30).
 
 - [ ] **Step 1: Add the button and gating logic**
 
-In `Wing Me/New My Location/NewMyLocationVC.swift`, add a property near the existing `var locationID = String()` (line 30):
+In `The W App/New My Location/NewMyLocationVC.swift`, add a property near the existing `var locationID = String()` (line 30):
 
 ```swift
     var locationID = String()
@@ -1072,7 +1072,7 @@ Run the app in Simulator (or have the user run it), navigate to a venue. Expecte
 - [ ] **Step 4: Commit**
 
 ```bash
-git add "Wing Me/New My Location/NewMyLocationVC.swift"
+git add "The W App/New My Location/NewMyLocationVC.swift"
 git commit -m "feat: wire Attendees entry point into venue screen, gated by attendee_history_view"
 ```
 

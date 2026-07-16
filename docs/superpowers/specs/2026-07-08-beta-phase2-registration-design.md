@@ -24,7 +24,7 @@ Apple Sign-In (already working, wired to `WAPAuth.signInWithApple`) and Facebook
 
 ## Data Model Impact
 
-`WAPRegistrationProfile` (`Wing Me/Classes/WAPSupabase.swift`) currently requires non-optional `gender: String` and `date_of_birth: String`. Since the phone-OTP path (`RegisterVC` → `OTPVerifyVC`) will no longer collect either, both become optional (`String?`). This is a minimal-blast-radius change: `FcbRegisterPicker.swift` (Facebook path, untouched in this phase, still has its own gender/birthdate storyboard UI) keeps passing its existing non-optional values unchanged — non-optional values assign fine to optional parameters, so it keeps compiling and behaving exactly as before.
+`WAPRegistrationProfile` (`The W App/Classes/WAPSupabase.swift`) currently requires non-optional `gender: String` and `date_of_birth: String`. Since the phone-OTP path (`RegisterVC` → `OTPVerifyVC`) will no longer collect either, both become optional (`String?`). This is a minimal-blast-radius change: `FcbRegisterPicker.swift` (Facebook path, untouched in this phase, still has its own gender/birthdate storyboard UI) keeps passing its existing non-optional values unchanged — non-optional values assign fine to optional parameters, so it keeps compiling and behaving exactly as before.
 
 `OTPVerifyVC`'s `gender`/`birthDate` properties (currently `String`, set by `RegisterVC.openOTPVerify`) become optional too, defaulting to `nil` since `RegisterVC` no longer collects them. `OTPVerifyVC.upsertProfile()` passes them straight through as `nil` to the now-optional `WAPRegistrationProfile` fields.
 

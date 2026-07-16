@@ -12,22 +12,22 @@
 
 - Auth source of truth: `WAPAuth.currentUserID` — never `UserDefaults.getString(key: "Token")`
 - Swift Concurrency: `Task { [weak self] in guard let self else { return } ... await MainActor.run {} }` — never `Task { @MainActor in }`
-- No PHP calls — no `params.request(...)`, no URLSession to wingme.app
+- No PHP calls — no `params.request(...)`, no URLSession to thewapp.app
 - No force-unwraps — use `guard let` / `if let`
 - `[weak self]` in all Task closures and UIAlertAction handlers
 - Safe cell casts: `guard let cell = ... as? CellType` — no force casts
 - No XCTest target — verify via `xcodebuild -workspace "The W App.xcworkspace" -scheme "The W App" -destination "generic/platform=iOS" build CODE_SIGNING_ALLOWED=NO 2>&1 | tail -5`
 - Commit only specific files by name — never `git add .` or `git add -A`
-- Project directory: `/Users/sr/wingme-copy`
+- Project directory: `/Users/sr/thewapp-copy`
 
 ---
 
 ### Task 1: EditProfileVC — Supabase profile save + avatar upload
 
 **Files:**
-- Modify: `Wing Me/My Profile/EditProfileVC.swift`
-- Modify: `Wing Me/My Profile/EditProfilePicker.swift`
-- Modify: `Wing Me/Classes/WAPData.swift`
+- Modify: `The W App/My Profile/EditProfileVC.swift`
+- Modify: `The W App/My Profile/EditProfilePicker.swift`
+- Modify: `The W App/Classes/WAPData.swift`
 
 **Interfaces:**
 - Consumes: `WAPAuth.currentUserID: String?`
@@ -40,7 +40,7 @@
 
 - [ ] **Step 1: Add `uploadAvatar` to WAPData**
 
-  Open `Wing Me/Classes/WAPData.swift`. After the last function, add:
+  Open `The W App/Classes/WAPData.swift`. After the last function, add:
 
   ```swift
   func uploadAvatar(imageData: Data, userId: String) async throws -> String {
@@ -190,7 +190,7 @@
 - [ ] **Step 4: Build**
 
   ```bash
-  cd /Users/sr/wingme-copy
+  cd /Users/sr/thewapp-copy
   DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -workspace "The W App.xcworkspace" -scheme "The W App" -destination "generic/platform=iOS" build CODE_SIGNING_ALLOWED=NO 2>&1 | tail -5
   ```
   Expected: `** BUILD SUCCEEDED **`
@@ -198,9 +198,9 @@
 - [ ] **Step 5: Commit**
 
   ```bash
-  git add "Wing Me/My Profile/EditProfileVC.swift" \
-          "Wing Me/My Profile/EditProfilePicker.swift" \
-          "Wing Me/Classes/WAPData.swift"
+  git add "The W App/My Profile/EditProfileVC.swift" \
+          "The W App/My Profile/EditProfilePicker.swift" \
+          "The W App/Classes/WAPData.swift"
   git commit -m "feat: wire EditProfileVC to Supabase upsertProfile + Supabase Storage avatar upload"
   ```
 
@@ -209,7 +209,7 @@
 ### Task 2: UserProfileVC — replace PHP fetch with fetchProfile()
 
 **Files:**
-- Modify: `Wing Me/User Profile/UserProfileVC.swift`
+- Modify: `The W App/User Profile/UserProfileVC.swift`
 
 **Interfaces:**
 - Consumes: `WAPData.shared.fetchProfile(id: String) async throws -> WAPProfile`
@@ -298,7 +298,7 @@
 
   ```bash
   DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -workspace "The W App.xcworkspace" -scheme "The W App" -destination "generic/platform=iOS" build CODE_SIGNING_ALLOWED=NO 2>&1 | tail -5
-  git add "Wing Me/User Profile/UserProfileVC.swift"
+  git add "The W App/User Profile/UserProfileVC.swift"
   git commit -m "feat: wire UserProfileVC to fetchProfile(), stub block/report, hide dating-era fields"
   ```
 
@@ -307,7 +307,7 @@
 ### Task 3: NotificationVC — stub to empty state
 
 **Files:**
-- Modify: `Wing Me/Notifications/NotificationVC.swift`
+- Modify: `The W App/Notifications/NotificationVC.swift`
 
 **Context:**
 `NotificationVC` is 57 lines and currently calls `get_notifications.php`. No Supabase notifications table exists yet. The VC is presented modally from `MyProfileVC` via storyboard (identifier "NotificationVC"). It has a `@IBAction func back` wired in storyboard — this must be preserved. Replace everything else with an empty-state label.
@@ -315,7 +315,7 @@
 - [ ] **Step 1: Read current file**
 
   ```bash
-  cat "Wing Me/Notifications/NotificationVC.swift"
+  cat "The W App/Notifications/NotificationVC.swift"
   ```
   Note any additional `@IBOutlet` or `@IBAction` beyond `back` — they must stay as empty stubs if they exist, to avoid storyboard KVC crashes.
 
@@ -358,7 +358,7 @@
 
   ```bash
   DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -workspace "The W App.xcworkspace" -scheme "The W App" -destination "generic/platform=iOS" build CODE_SIGNING_ALLOWED=NO 2>&1 | tail -5
-  git add "Wing Me/Notifications/NotificationVC.swift"
+  git add "The W App/Notifications/NotificationVC.swift"
   git commit -m "feat: stub NotificationVC to empty state, remove PHP notifications call"
   ```
 

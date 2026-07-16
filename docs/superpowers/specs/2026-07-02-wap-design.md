@@ -8,7 +8,7 @@ Date: 2026-07-02
 
 WAP is an iOS networking app for conferences and business/industry events. It helps people connect who are already in the same location — through a WHO mechanic (share who you are to see who's there), QR-based contact exchange, a live social feed, and a gamified engagement bar that unlocks premium features.
 
-Forked from `wingme-copy` (UIKit/Swift), backend replaced with Supabase.
+Forked from `thewapp-copy` (UIKit/Swift), backend replaced with Supabase.
 
 ---
 
@@ -21,7 +21,7 @@ Forked from `wingme-copy` (UIKit/Swift), backend replaced with Supabase.
 - **Storage**: Supabase Storage — buckets: `avatars`, `banners`, `qr-assets`
 - **Maps**: Google Maps iOS SDK + Places API for location search/add; iOS `CLLocationManager` + `CLCircularRegion` for geofencing
 - **Haptics/Audio**: `UIImpactFeedbackGenerator` + `AVFoundation` for engagement bar feedback
-- **Removed from Wing Me**: PHP URLSession calls, wingme.app backend, dating fields (relationship status, looking for love), UserDefaults token storage
+- **Removed from The W App**: PHP URLSession calls, thewapp.app backend, dating fields (relationship status, looking for love), UserDefaults token storage
 
 ---
 
@@ -91,7 +91,7 @@ Feed is blurred until user has at least 1 friend on the app:
 - "Sync Contacts" — matches phone contacts against `profiles`, notifies user on match
 - "Invite Friends" — native iOS share sheet with app link
 
-### Screens Reused from Wing Me
+### Screens Reused from The W App
 
 `RegisterVC`, `FcbRegisterVC`, `First–FifthSetupVC` (remapped to 4 steps), `WelcomeVC`, `FirstStartVC`, `SecondStartVC`
 
@@ -240,7 +240,7 @@ Location owner can grant any user instant access to any feature regardless of po
 
 ## 9. Messaging & Inbox
 
-Bottom nav right tab. Carried over from Wing Me and rewired to Supabase:
+Bottom nav right tab. Carried over from The W App and rewired to Supabase:
 - `MessagesVC` — conversation list
 - `ChatVC` — direct messages
 - `GroupChatVC` — group conversations
@@ -303,9 +303,9 @@ In-app `WKWebView` → Supabase-hosted dashboard. Location owners only.
 
 ---
 
-## 14. Wing Me → WAP Migration Notes
+## 14. The W App → WAP Migration Notes
 
-**Removed:** all ~55 PHP endpoint URLSession calls, relationship status fields, "looking for" categories, UserDefaults token storage, wingme.app URLs, dating-specific logic
+**Removed:** all ~55 PHP endpoint URLSession calls, relationship status fields, "looking for" categories, UserDefaults token storage, thewapp.app URLs, dating-specific logic
 
 **Reused and rewired to Supabase:** Auth VCs, profile setup VCs, messaging VCs (`MessagesVC`, `ChatVC`, `GroupChatVC`), QR code VCs (`QRCodeVC`, `MyLinksVC`, `UserLinksVC`), image caching, `LocationManager`, `NotificationVC`, `BlockListVC`
 
@@ -316,5 +316,5 @@ In-app `WKWebView` → Supabase-hosted dashboard. Location owners only.
 
 **Key constant replacements:**
 - `Constants.url` → Supabase project URL
-- `https://wingme.app/` → WAP app URL
+- `https://thewapp.app/` → WAP app URL
 - UserDefaults keys: Token → Keychain, dating-specific keys removed

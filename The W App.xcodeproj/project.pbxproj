@@ -7,13 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02612ECD19DDE92BEC342668 /* Pods_Wing_Me.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA2D57BDB7954F09BD755E2 /* Pods_Wing_Me.framework */; };
+		02612ECD19DDE92BEC342668 /* Pods_The_W_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AA2D57BDB7954F09BD755E2 /* Pods_The_W_App.framework */; };
 		225686879AB5C4D93858B385 /* WAPAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FEE26D61189FF52A2DDE987 /* WAPAuth.swift */; };
 		251F7EDDDBAA9F1F5303B20B /* WAPModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 644AFD6638D1F0C5E4D66FF7 /* WAPModels.swift */; };
 		30BE59052FFED0C0009C54F5 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = E1C14D94426AB8DEAFF1D52E /* Supabase */; };
 		50382402BB2D0665A123E738 /* WPillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9271C19549F90E884736ED /* WPillButton.swift */; };
 		52498B7BD49D7623D015B79B /* WAPFeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C85DC25ADB285B9A6E3246 /* WAPFeatureFlags.swift */; };
 		6FEF1C8B4A028EE0108A1C63 /* WAPSupabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6910AB8B22298C3110519B /* WAPSupabase.swift */; };
+		FB02191986A54C9FAA8BB5A9 /* WAPSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EE4AEAF9B441CCBCD53012 /* WAPSecrets.swift */; };
 		8E7DB50170C8EBF17E2F3F2A /* OTPVerifyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2416921BF3BC05936D07382 /* OTPVerifyVC.swift */; };
 		95A5D462C75CBD20B2199D1F /* WAPTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935CB7CB760189C3BB308833 /* WAPTabBarVC.swift */; };
 		9F2838A2D063F549BD88ADBD /* AttendeeHistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D4FFF4995D1B74DA5019CD /* AttendeeHistoryVC.swift */; };
@@ -70,7 +71,7 @@
 		CB558138281B171800E49052 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB558137281B171800E49052 /* AppDelegate.swift */; };
 		CB55813C281B171800E49052 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB55813B281B171800E49052 /* MainVC.swift */; };
 		CB55813F281B171800E49052 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB55813D281B171800E49052 /* Main.storyboard */; };
-		CB558142281B171800E49052 /* Wing_Me.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CB558140281B171800E49052 /* Wing_Me.xcdatamodeld */; };
+		CB558142281B171800E49052 /* TheWApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CB558140281B171800E49052 /* TheWApp.xcdatamodeld */; };
 		CB558144281B171900E49052 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB558143281B171900E49052 /* Assets.xcassets */; };
 		CB558147281B171900E49052 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB558145281B171900E49052 /* LaunchScreen.storyboard */; };
 		CB58B9F92D6644AB00424F63 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB58B9F82D6644AB00424F63 /* EventCell.swift */; };
@@ -137,13 +138,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2AA2D57BDB7954F09BD755E2 /* Pods_Wing_Me.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wing_Me.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2AA2D57BDB7954F09BD755E2 /* Pods_The_W_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_The_W_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		312584F0B2EE04E4163FDF98 /* WAPData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPData.swift; sourceTree = "<group>"; };
 		42FDDD4B2F59D11C1C2C4442 /* RewardsVC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RewardsVC.swift; sourceTree = "<group>"; };
 		43027E9F1830D67F90A46640 /* KeychainHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		644AFD6638D1F0C5E4D66FF7 /* WAPModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPModels.swift; sourceTree = "<group>"; };
 		6FEE26D61189FF52A2DDE987 /* WAPAuth.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPAuth.swift; sourceTree = "<group>"; };
-		7779BED81522DE2EFBA8A0D5 /* Pods-Wing Me.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wing Me.debug.xcconfig"; path = "Target Support Files/Pods-Wing Me/Pods-Wing Me.debug.xcconfig"; sourceTree = "<group>"; };
+		7779BED81522DE2EFBA8A0D5 /* Pods-The W App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The W App.debug.xcconfig"; path = "Target Support Files/Pods-The W App/Pods-The W App.debug.xcconfig"; sourceTree = "<group>"; };
 		92D4FFF4995D1B74DA5019CD /* AttendeeHistoryVC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AttendeeHistoryVC.swift; sourceTree = "<group>"; };
 		935CB7CB760189C3BB308833 /* WAPTabBarVC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPTabBarVC.swift; sourceTree = "<group>"; };
 		A2416921BF3BC05936D07382 /* OTPVerifyVC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OTPVerifyVC.swift; sourceTree = "<group>"; };
@@ -169,7 +170,7 @@
 		CB26FAFC281B24B90077D0EA /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		CB26FAFE281B25680077D0EA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CB26FB00281B25CF0077D0EA /* UIViewDesignable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewDesignable.swift; sourceTree = "<group>"; };
-		CB26FB02281B26760077D0EA /* Wing Me.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Wing Me.entitlements"; sourceTree = "<group>"; };
+		CB26FB02281B26760077D0EA /* The W App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "The W App.entitlements"; sourceTree = "<group>"; };
 		CB358DC9285549000057A572 /* WelcomeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeVC.swift; sourceTree = "<group>"; };
 		CB358DCB285549180057A572 /* SecondStartVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondStartVC.swift; sourceTree = "<group>"; };
 		CB358DCD28554F3B0057A572 /* ShadowDesignable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowDesignable.swift; sourceTree = "<group>"; };
@@ -203,7 +204,7 @@
 		CB558137281B171800E49052 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CB55813B281B171800E49052 /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		CB55813E281B171800E49052 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		CB558141281B171800E49052 /* Wing_Me.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Wing_Me.xcdatamodel; sourceTree = "<group>"; };
+		CB558141281B171800E49052 /* TheWApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheWApp.xcdatamodel; sourceTree = "<group>"; };
 		CB558143281B171900E49052 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CB558146281B171900E49052 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CB58B9F82D6644AB00424F63 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
@@ -267,8 +268,9 @@
 		CBFDAB91286F538B0092EE21 /* VastVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VastVC.swift; sourceTree = "<group>"; };
 		CE9271C19549F90E884736ED /* WPillButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WPillButton.swift; sourceTree = "<group>"; };
 		D1C85DC25ADB285B9A6E3246 /* WAPFeatureFlags.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPFeatureFlags.swift; sourceTree = "<group>"; };
-		DB2165C222A1CEDC4EF0D26A /* Pods-Wing Me.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wing Me.release.xcconfig"; path = "Target Support Files/Pods-Wing Me/Pods-Wing Me.release.xcconfig"; sourceTree = "<group>"; };
+		DB2165C222A1CEDC4EF0D26A /* Pods-The W App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The W App.release.xcconfig"; path = "Target Support Files/Pods-The W App/Pods-The W App.release.xcconfig"; sourceTree = "<group>"; };
 		DE6910AB8B22298C3110519B /* WAPSupabase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPSupabase.swift; sourceTree = "<group>"; };
+		51EE4AEAF9B441CCBCD53012 /* WAPSecrets.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WAPSecrets.swift; sourceTree = "<group>"; };
 		F7D3D47231D7E637722BCF49 /* KeychainHelperTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = KeychainHelperTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -278,7 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				30BE59052FFED0C0009C54F5 /* Supabase in Frameworks */,
-				02612ECD19DDE92BEC342668 /* Pods_Wing_Me.framework in Frameworks */,
+				02612ECD19DDE92BEC342668 /* Pods_The_W_App.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,8 +299,8 @@
 		BBC93BCBCF551C51127F102B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				7779BED81522DE2EFBA8A0D5 /* Pods-Wing Me.debug.xcconfig */,
-				DB2165C222A1CEDC4EF0D26A /* Pods-Wing Me.release.xcconfig */,
+				7779BED81522DE2EFBA8A0D5 /* Pods-The W App.debug.xcconfig */,
+				DB2165C222A1CEDC4EF0D26A /* Pods-The W App.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -408,7 +410,7 @@
 		CB55812B281B171700E49052 = {
 			isa = PBXGroup;
 			children = (
-				CB558136281B171800E49052 /* Wing Me */,
+				CB558136281B171800E49052 /* The W App */,
 				CB558135281B171800E49052 /* Products */,
 				BBC93BCBCF551C51127F102B /* Pods */,
 				F78B3C6A862B703ED074EEBB /* Frameworks */,
@@ -424,10 +426,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		CB558136281B171800E49052 /* Wing Me */ = {
+		CB558136281B171800E49052 /* The W App */ = {
 			isa = PBXGroup;
 			children = (
-				CB26FB02281B26760077D0EA /* Wing Me.entitlements */,
+				CB26FB02281B26760077D0EA /* The W App.entitlements */,
 				CB558145281B171900E49052 /* LaunchScreen.storyboard */,
 				CB55813D281B171800E49052 /* Main.storyboard */,
 				CB26FAF3281B1E080077D0EA /* Fonts */,
@@ -457,7 +459,7 @@
 				CBE9C9212D66426F00C09E94 /* Events */,
 				CB3AA47E2D6D1E7500164F17 /* Badges */,
 			);
-			path = "Wing Me";
+			path = "The W App";
 			sourceTree = "<group>";
 		};
 		CB55814E281B17D900E49052 /* Others */ = {
@@ -466,7 +468,7 @@
 				CB26FAFE281B25680077D0EA /* GoogleService-Info.plist */,
 				CB558137281B171800E49052 /* AppDelegate.swift */,
 				CBA759D9283F180100474209 /* LocationManager.swift */,
-				CB558140281B171800E49052 /* Wing_Me.xcdatamodeld */,
+				CB558140281B171800E49052 /* TheWApp.xcdatamodeld */,
 				CB558143281B171900E49052 /* Assets.xcassets */,
 				CB8C3F61283D304F00B2A3D1 /* Info.plist */,
 			);
@@ -497,6 +499,7 @@
 				CB26FAF8281B217C0077D0EA /* Strings.swift */,
 				CB26FAFC281B24B90077D0EA /* Colors.swift */,
 				DE6910AB8B22298C3110519B /* WAPSupabase.swift */,
+				51EE4AEAF9B441CCBCD53012 /* WAPSecrets.swift */,
 				43027E9F1830D67F90A46640 /* KeychainHelper.swift */,
 				6FEE26D61189FF52A2DDE987 /* WAPAuth.swift */,
 				644AFD6638D1F0C5E4D66FF7 /* WAPModels.swift */,
@@ -667,7 +670,7 @@
 		F78B3C6A862B703ED074EEBB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2AA2D57BDB7954F09BD755E2 /* Pods_Wing_Me.framework */,
+				2AA2D57BDB7954F09BD755E2 /* Pods_The_W_App.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -759,19 +762,19 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Wing Me/Pods-Wing Me-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-The W App/Pods-The W App-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			inputPaths = (
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Wing Me/Pods-Wing Me-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-The W App/Pods-The W App-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Wing Me/Pods-Wing Me-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-The W App/Pods-The W App-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C3C48EB90B7F279EBD1E2372 /* [CP] Check Pods Manifest.lock */ = {
@@ -789,7 +792,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Wing Me-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-The W App-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -802,19 +805,19 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Wing Me/Pods-Wing Me-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-The W App/Pods-The W App-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			inputPaths = (
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Wing Me/Pods-Wing Me-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-The W App/Pods-The W App-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Wing Me/Pods-Wing Me-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-The W App/Pods-The W App-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -899,7 +902,7 @@
 				CB3B655128562A2D00F29FA1 /* FourthSetupVC.swift in Sources */,
 				CBBD0D942D63BAAD001921F6 /* GroupMembersVC.swift in Sources */,
 				CB404F20283D728800AB5A39 /* NotificationVC.swift in Sources */,
-				CB558142281B171800E49052 /* Wing_Me.xcdatamodeld in Sources */,
+				CB558142281B171800E49052 /* TheWApp.xcdatamodeld in Sources */,
 				CB3B65572856350300F29FA1 /* NationalityCell.swift in Sources */,
 				CB0EAF0F2D3D416E00716266 /* NewMyLocationVC.swift in Sources */,
 				CBE798292D68C20E00807810 /* GenerateUserVC.swift in Sources */,
@@ -931,6 +934,7 @@
 				CBE2F73C2BF0D892007D37F1 /* QRCodeVC.swift in Sources */,
 				CB044600283D3A4400ED2C37 /* FcbRegisterVC.swift in Sources */,
 				6FEF1C8B4A028EE0108A1C63 /* WAPSupabase.swift in Sources */,
+				FB02191986A54C9FAA8BB5A9 /* WAPSecrets.swift in Sources */,
 				DA73C504F59E3CC5CB439E99 /* KeychainHelper.swift in Sources */,
 				225686879AB5C4D93858B385 /* WAPAuth.swift in Sources */,
 				8E7DB50170C8EBF17E2F3F2A /* OTPVerifyVC.swift in Sources */,
@@ -1082,16 +1086,16 @@
 		};
 		CB55814C281B171900E49052 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7779BED81522DE2EFBA8A0D5 /* Pods-Wing Me.debug.xcconfig */;
+			baseConfigurationReference = 7779BED81522DE2EFBA8A0D5 /* Pods-The W App.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Wing Me/Wing Me.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "The W App/The W App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DX45Z4996Z;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Wing Me/Others/Info.plist";
+				INFOPLIST_FILE = "The W App/Others/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The app needs to access your camera to take your profile picture";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "The app needs your location to show the nearby locations";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app needs your location to show the nearby locations";
@@ -1119,16 +1123,16 @@
 		};
 		CB55814D281B171900E49052 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DB2165C222A1CEDC4EF0D26A /* Pods-Wing Me.release.xcconfig */;
+			baseConfigurationReference = DB2165C222A1CEDC4EF0D26A /* Pods-The W App.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Wing Me/Wing Me.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "The W App/The W App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DX45Z4996Z;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Wing Me/Others/Info.plist";
+				INFOPLIST_FILE = "The W App/Others/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The app needs to access your camera to take your profile picture";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "The app needs your location to show the nearby locations";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app needs your location to show the nearby locations";
@@ -1197,13 +1201,13 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
-		CB558140281B171800E49052 /* Wing_Me.xcdatamodeld */ = {
+		CB558140281B171800E49052 /* TheWApp.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				CB558141281B171800E49052 /* Wing_Me.xcdatamodel */,
+				CB558141281B171800E49052 /* TheWApp.xcdatamodel */,
 			);
-			currentVersion = CB558141281B171800E49052 /* Wing_Me.xcdatamodel */;
-			path = Wing_Me.xcdatamodeld;
+			currentVersion = CB558141281B171800E49052 /* TheWApp.xcdatamodel */;
+			path = TheWApp.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

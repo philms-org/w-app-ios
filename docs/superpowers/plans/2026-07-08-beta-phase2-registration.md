@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - Open `The W App.xcworkspace`, never `.xcodeproj`.
-- Verify each task with a full build: `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -workspace "The W App.xcworkspace" -scheme "The W App" -destination "generic/platform=iOS Simulator" build` from `/Users/sr/wingme-copy`.
+- Verify each task with a full build: `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -workspace "The W App.xcworkspace" -scheme "The W App" -destination "generic/platform=iOS Simulator" build` from `/Users/sr/thewapp-copy`.
 - No functional XCTest target exists (known, pre-existing) — verification is build-only, no test files in this plan.
 - Do not modify `FcbRegisterVC.swift`/`FcbRegisterPicker.swift` (Facebook-path screen, out of scope) beyond what Task 1's optional-field change requires — which is nothing, since non-optional values assign fine to optional parameters.
 - Do not modify `PickerVC.swift` (country code) or the storyboard `AboutVC` scene (terms) — both stay as-is.
@@ -21,15 +21,15 @@
 ### Task 1: Make registration profile gender/birthdate optional
 
 **Files:**
-- Modify: `Wing Me/Classes/WAPSupabase.swift` (the `WAPRegistrationProfile` struct)
-- Modify: `Wing Me/Register/OTPVerifyVC.swift` (the `gender`/`birthDate` properties)
+- Modify: `The W App/Classes/WAPSupabase.swift` (the `WAPRegistrationProfile` struct)
+- Modify: `The W App/Register/OTPVerifyVC.swift` (the `gender`/`birthDate` properties)
 
 **Interfaces:**
 - Produces: `WAPRegistrationProfile.gender: String?`, `.date_of_birth: String?`; `OTPVerifyVC.gender: String?`, `.birthDate: String?` — Task 2's new `RegisterVC.openOTPVerify` relies on being able to leave these unset (defaulting to `nil`).
 
 - [ ] **Step 1: Update `WAPRegistrationProfile`**
 
-In `Wing Me/Classes/WAPSupabase.swift`, replace:
+In `The W App/Classes/WAPSupabase.swift`, replace:
 
 ```swift
 struct WAPRegistrationProfile: Encodable {
@@ -57,7 +57,7 @@ struct WAPRegistrationProfile: Encodable {
 
 - [ ] **Step 2: Update `OTPVerifyVC`'s properties**
 
-In `Wing Me/Register/OTPVerifyVC.swift`, replace:
+In `The W App/Register/OTPVerifyVC.swift`, replace:
 
 ```swift
     var phone = ""
@@ -87,8 +87,8 @@ Expected: BUILD SUCCEEDED. (`RegisterVC.openOTPVerify` still assigns non-optiona
 - [ ] **Step 4: Commit**
 
 ```bash
-cd /Users/sr/wingme-copy
-git add "Wing Me/Classes/WAPSupabase.swift" "Wing Me/Register/OTPVerifyVC.swift"
+cd /Users/sr/thewapp-copy
+git add "The W App/Classes/WAPSupabase.swift" "The W App/Register/OTPVerifyVC.swift"
 git commit -m "fix: make WAPRegistrationProfile/OTPVerifyVC gender and birthdate optional"
 ```
 
@@ -97,8 +97,8 @@ git commit -m "fix: make WAPRegistrationProfile/OTPVerifyVC gender and birthdate
 ### Task 2: Rebuild RegisterVC as a programmatic screen
 
 **Files:**
-- Modify: `Wing Me/Register/RegisterVC.swift` (full rewrite of the class body — same class name, same file, storyboard scene abandoned)
-- Modify: `Wing Me/Register/RegisterPicker.swift` (widen `showPicker`'s parameter type, remove the now-dead `getGender()` method)
+- Modify: `The W App/Register/RegisterVC.swift` (full rewrite of the class body — same class name, same file, storyboard scene abandoned)
+- Modify: `The W App/Register/RegisterPicker.swift` (widen `showPicker`'s parameter type, remove the now-dead `getGender()` method)
 
 **Interfaces:**
 - Consumes: `WAPRegistrationProfile`/`OTPVerifyVC.gender`/`.birthDate` optionality (Task 1); `WAPAuth.signInWithPhone`/`.signInWithApple` (existing, unchanged); `WPillButton`, `Colors`, `WAPTabBarVC` (existing, from Phase 0); `RegisterPicker.swift`'s `showPicker(sourceView:)`/`imagePickerController`/`resizeImage` (this task widens `showPicker`'s signature, see Step 2); `PickerVC` (existing storyboard scene, unchanged); `AboutVC` (existing storyboard scene, unchanged).
@@ -106,7 +106,7 @@ git commit -m "fix: make WAPRegistrationProfile/OTPVerifyVC gender and birthdate
 
 - [ ] **Step 1: Replace `RegisterVC.swift` entirely**
 
-Replace the full contents of `Wing Me/Register/RegisterVC.swift` with:
+Replace the full contents of `The W App/Register/RegisterVC.swift` with:
 
 ```swift
 import UIKit
@@ -538,7 +538,7 @@ Note: the original `RegisterVC` had a `setKeyboard()` call in `viewDidLoad` that
 
 The old `RegisterVC` triggered the photo picker from a `UIButton`'s `@IBAction`; the new one triggers it from a tap gesture on `imageView` (a `UIImageView`, not a button). `RegisterPicker.swift`'s `showPicker(button: UIButton)` only uses the parameter for `sourceView`/`.sourceRect` (any `UIView` works there), so widen it.
 
-In `Wing Me/Register/RegisterPicker.swift`, replace:
+In `The W App/Register/RegisterPicker.swift`, replace:
 
 ```swift
     func showPicker(button: UIButton) {
@@ -613,25 +613,25 @@ with:
     }
 ```
 
-Delete this method from `Wing Me/Register/RegisterPicker.swift`. Confirm nothing else calls `RegisterVC`'s `getGender()` first: `grep -rn "\.getGender()" "Wing Me" --include="*.swift"` — expect only `FcbRegisterPicker.swift`'s own separate `getGender()` (on a different type, `FcbRegisterVC`, untouched by this plan) to remain.
+Delete this method from `The W App/Register/RegisterPicker.swift`. Confirm nothing else calls `RegisterVC`'s `getGender()` first: `grep -rn "\.getGender()" "The W App" --include="*.swift"` — expect only `FcbRegisterPicker.swift`'s own separate `getGender()` (on a different type, `FcbRegisterVC`, untouched by this plan) to remain.
 
 - [ ] **Step 4: Check for other callers of the old `showPicker(button:)` signature**
 
-Run: `grep -rn "showPicker(button:\|showPicker(sourceView:" "Wing Me" --include="*.swift"` from `/Users/sr/wingme-copy`. Expect: `RegisterPicker.swift`'s new definition and `RegisterVC.swift`'s new call (both `sourceView:`), plus `FcbRegisterPicker.swift`'s own separate `showPicker(button:)` on a different type (`FcbRegisterVC`) — confirm that one is untouched (still says `button: UIButton`), not accidentally caught by find-and-replace.
+Run: `grep -rn "showPicker(button:\|showPicker(sourceView:" "The W App" --include="*.swift"` from `/Users/sr/thewapp-copy`. Expect: `RegisterPicker.swift`'s new definition and `RegisterVC.swift`'s new call (both `sourceView:`), plus `FcbRegisterPicker.swift`'s own separate `showPicker(button:)` on a different type (`FcbRegisterVC`) — confirm that one is untouched (still says `button: UIButton`), not accidentally caught by find-and-replace.
 
 - [ ] **Step 5: Build to verify**
 
 Run: `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -workspace "The W App.xcworkspace" -scheme "The W App" -destination "generic/platform=iOS Simulator" build`
-Expected: BUILD SUCCEEDED. This is a large rewrite — if anything fails to compile, check that `Strings.alertEmpty`/`Strings.alertTerms`/`Strings.alertConnection`/`Strings.terms`/`Strings.optionTitle`/`Strings.optionCamera`/`Strings.optionGallery`/`Strings.optionCancel`/`Strings.optionDetails` all exist with those exact names in `Wing Me/Classes/Strings.swift`, and that `AlertClass().showWarningAlert(delegate:message:)`/`.showErrorAlert(delegate:message:)` and `NSDictionary.getString(key:)` have the exact signatures used above (all of these existed in the original file this replaces, so they should already be correct — this check is a safety net, not an expected failure).
+Expected: BUILD SUCCEEDED. This is a large rewrite — if anything fails to compile, check that `Strings.alertEmpty`/`Strings.alertTerms`/`Strings.alertConnection`/`Strings.terms`/`Strings.optionTitle`/`Strings.optionCamera`/`Strings.optionGallery`/`Strings.optionCancel`/`Strings.optionDetails` all exist with those exact names in `The W App/Classes/Strings.swift`, and that `AlertClass().showWarningAlert(delegate:message:)`/`.showErrorAlert(delegate:message:)` and `NSDictionary.getString(key:)` have the exact signatures used above (all of these existed in the original file this replaces, so they should already be correct — this check is a safety net, not an expected failure).
 
 - [ ] **Step 6: Confirm the storyboard entry point still works**
 
-The old `RegisterVC` storyboard scene in `Main.storyboard` may still be instantiated via `storyboard.instantiateViewController(withIdentifier: "RegisterVC")` somewhere (e.g. from a Welcome/FirstStart screen). Run: `grep -rn "instantiateViewController(withIdentifier: \"RegisterVC\")" "Wing Me" --include="*.swift"`. If found, leave it as-is — instantiating the class via a storyboard identifier still works even though the class no longer declares any `@IBOutlet`s (there's simply nothing for the storyboard to connect, which is harmless), so no code change is needed. Do not hand-edit `Main.storyboard` XML to remove the scene — out of scope and risky for this plan.
+The old `RegisterVC` storyboard scene in `Main.storyboard` may still be instantiated via `storyboard.instantiateViewController(withIdentifier: "RegisterVC")` somewhere (e.g. from a Welcome/FirstStart screen). Run: `grep -rn "instantiateViewController(withIdentifier: \"RegisterVC\")" "The W App" --include="*.swift"`. If found, leave it as-is — instantiating the class via a storyboard identifier still works even though the class no longer declares any `@IBOutlet`s (there's simply nothing for the storyboard to connect, which is harmless), so no code change is needed. Do not hand-edit `Main.storyboard` XML to remove the scene — out of scope and risky for this plan.
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add "Wing Me/Register/RegisterVC.swift" "Wing Me/Register/RegisterPicker.swift"
+git add "The W App/Register/RegisterVC.swift" "The W App/Register/RegisterPicker.swift"
 git commit -m "feat: rebuild RegisterVC as a programmatic WAP-styled screen (photo/name/phone/terms only)"
 ```
 
@@ -641,7 +641,7 @@ git commit -m "feat: rebuild RegisterVC as a programmatic WAP-styled screen (pho
 
 1. Both tasks committed, `xcodebuild ... build` succeeds at HEAD.
 2. Manual: run the app, tap through to Register — verify photo picker, name field, country code + phone, terms toggle, Register button, Apple button, and Facebook button (still broken, as expected) all render in the dark WAP style and don't crash. Enter name + phone + accept terms + tap Register → OTP screen appears (existing, unchanged flow).
-3. `grep -rn "lastGender\|selectGender\|selectBithDate\|dateButton\|passwordTextField\|confirmTextField\|emailTextField" "Wing Me/Register/RegisterVC.swift"` returns zero hits — confirms the old fields are fully gone, not just hidden.
+3. `grep -rn "lastGender\|selectGender\|selectBithDate\|dateButton\|passwordTextField\|confirmTextField\|emailTextField" "The W App/Register/RegisterVC.swift"` returns zero hits — confirms the old fields are fully gone, not just hidden.
 
 ## Known Deferred
 - Affiliation/Industry/Role fields + multi-select component — future profile-edit phase.

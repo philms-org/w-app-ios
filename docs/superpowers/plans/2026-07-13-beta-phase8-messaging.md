@@ -23,7 +23,7 @@
 ### Task 1: MessagesVC — strip CoreData + PHP, show empty state
 
 **Files:**
-- Modify: `Wing Me/Messages/MessagesVC.swift`
+- Modify: `The W App/Messages/MessagesVC.swift`
 
 **IBOutlets to keep:** `messagesTableView`, `groupsTableView`, `noMessagesView`, `indicator`
 
@@ -81,7 +81,7 @@ func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRow
 ### Task 2: ChatVC — strip CoreData + PHP
 
 **Files:**
-- Modify: `Wing Me/Chat/ChatVC.swift`
+- Modify: `The W App/Chat/ChatVC.swift`
 
 **IBOutlets to keep (all storyboard wired):**
 `menuButton`, `genderView`, `imageView`, `nameLabel`, `checkmarkImageView`, `detailsLabel`, `tableView`, `indicator`, `stackView`, `messageView`, `textFieldView`, `messageTextView`, `messageLabel`, `sendButton`, `sendIndicator`, `acceptView`, `rejectButton`, `rejectIndicator`, `acceptButton`, `acceptIndicator`
@@ -124,7 +124,7 @@ override func viewDidLoad() {
 ### Task 3: GroupChatVC — strip CoreData + PHP
 
 **Files:**
-- Modify: `Wing Me/Group Chat/GroupChatVC.swift`
+- Modify: `The W App/Group Chat/GroupChatVC.swift`
 
 **IBOutlets to keep:** `menuButton`, `imageView`, `nameLabel`, `tableView`, `indicator`, `stackView`, `messageView`, `messageTextView`, `messageLabel`, `sendButton`, `sendIndicator`
 
@@ -163,7 +163,7 @@ override func viewDidLoad() {
 ### Task 4: GroupMembersVC — strip PHP, empty table
 
 **Files:**
-- Modify: `Wing Me/Group Chat/GroupMembersVC.swift`
+- Modify: `The W App/Group Chat/GroupMembersVC.swift`
 
 **IBOutlets to keep:** `tableView`, `indicator`
 
@@ -198,8 +198,8 @@ func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRow
 ### Task 5: SendMessageVC + SelectUsersVC — strip PHP, stub UI
 
 **Files:**
-- Modify: `Wing Me/Send Message/SendMessageVC.swift`
-- Modify: `Wing Me/Send Message/SelectUsersVC.swift`
+- Modify: `The W App/Send Message/SendMessageVC.swift`
+- Modify: `The W App/Send Message/SelectUsersVC.swift`
 
 #### SendMessageVC:
 **IBOutlets:** `messageTextView`, `sendButton`, `sendIndicator`
@@ -262,7 +262,7 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) { 
 ### Task 6: ReplyVC — strip PHP, stub comments, keep setUI()
 
 **Files:**
-- Modify: `Wing Me/New My Location/ReplyVC.swift`
+- Modify: `The W App/New My Location/ReplyVC.swift`
 
 **IBOutlets to keep:** `genderView`, `userImageView`, `nameLabel`, `detailsLabel`, `commentLabel`, `likeButton`, `likesLabel`, `indicator`, `commentsTableView`, `commentView`, `commentTextField`, `sendButton`, `sendIndicator`
 

@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- Backend: Supabase only — no `URLSession` calls to `wingme.app` or any PHP endpoint
+- Backend: Supabase only — no `URLSession` calls to `thewapp.app` or any PHP endpoint
 - Auth: user check via `WAPAuth.currentUserID != nil` — never `UserDefaults.getString(key: "Token")`
 - `CustomCell(string1:string2:)` bridge call in `checkLocation()` must be preserved: `string1 = venue.id`, `string2 = venue.name` — `NewMyLocationVC.wingIn(customCell:)` reads `customCell.string1` as the Supabase UUID
 - `WAPVenue`: `id: String`, `name: String`, `address: String?`, `city: String?`, `lat: Double?`, `lng: Double?`, `geofenceRadiusMeters: Int?`, `isEvent: Bool?`, `eventDate: String?`, `bannerImage: String?`
@@ -23,8 +23,8 @@
 ### Task 1: LocationsVC — Replace PHP + CustomCell with Supabase WAPVenue
 
 **Files:**
-- Modify: `Wing Me/Locations/LocationsVC.swift`
-- Modify: `Wing Me/Locations/LocationCell.swift`
+- Modify: `The W App/Locations/LocationsVC.swift`
+- Modify: `The W App/Locations/LocationCell.swift`
 
 **Interfaces:**
 - Consumes: `WAPData.shared.fetchVenues() async throws -> [WAPVenue]`
@@ -34,9 +34,9 @@
 - [ ] **Step 1: Read the existing file before editing**
 
   ```bash
-  wc -l "Wing Me/Locations/LocationsVC.swift"
-  grep -n "func \|var \|@IBOutlet\|@IBAction" "Wing Me/Locations/LocationsVC.swift" | head -60
-  cat "Wing Me/Locations/LocationCell.swift"
+  wc -l "The W App/Locations/LocationsVC.swift"
+  grep -n "func \|var \|@IBOutlet\|@IBAction" "The W App/Locations/LocationsVC.swift" | head -60
+  cat "The W App/Locations/LocationCell.swift"
   ```
 
 - [ ] **Step 2: Remove category properties and UI**
@@ -218,7 +218,7 @@
 
 - [ ] **Step 10: Add `updateCell(venue:)` to LocationCell**
 
-  Read `Wing Me/Locations/LocationCell.swift`, then add:
+  Read `The W App/Locations/LocationCell.swift`, then add:
   ```swift
   func updateCell(venue: WAPVenue) {
       // Set name label using venue.name
@@ -234,7 +234,7 @@
   Cmd+B → BUILD SUCCEEDED.
 
   ```bash
-  git add "Wing Me/Locations/LocationsVC.swift" "Wing Me/Locations/LocationCell.swift"
+  git add "The W App/Locations/LocationsVC.swift" "The W App/Locations/LocationCell.swift"
   git commit -m "feat: wire LocationsVC to Supabase fetchVenues, remove PHP categories"
   ```
 
@@ -243,8 +243,8 @@
 ### Task 2: RewardsVC — New programmatic rewards screen per venue
 
 **Files:**
-- Create: `Wing Me/New My Location/RewardsVC.swift`
-- Modify: `Wing Me/New My Location/NewMyLocationVC.swift`
+- Create: `The W App/New My Location/RewardsVC.swift`
+- Modify: `The W App/New My Location/NewMyLocationVC.swift`
 
 **Interfaces:**
 - Consumes: `WAPData.shared.fetchRewards(locationId: String) async throws -> [WAPReward]`
@@ -253,10 +253,10 @@
 - [ ] **Step 1: Read NewMyLocationVC to find the history button IBAction**
 
   ```bash
-  grep -n "@IBAction\|func history\|func attendee\|locationID\b" "Wing Me/New My Location/NewMyLocationVC.swift" | head -20
+  grep -n "@IBAction\|func history\|func attendee\|locationID\b" "The W App/New My Location/NewMyLocationVC.swift" | head -20
   ```
 
-- [ ] **Step 2: Create `Wing Me/New My Location/RewardsVC.swift`**
+- [ ] **Step 2: Create `The W App/New My Location/RewardsVC.swift`**
 
   ```swift
   import UIKit
@@ -389,9 +389,9 @@
   ```bash
   ruby -e "
   require 'xcodeproj'
-  project = Xcodeproj::Project.open('Wing Me.xcodeproj')
-  target = project.targets.find { |t| t.name == 'Wing Me' }
-  group = project.main_group.find_subpath('Wing Me/New My Location', true)
+  project = Xcodeproj::Project.open('The W App.xcodeproj')
+  target = project.targets.find { |t| t.name == 'The W App' }
+  group = project.main_group.find_subpath('The W App/New My Location', true)
   file_ref = group.new_reference('RewardsVC.swift')
   file_ref.last_known_file_type = 'sourcecode.swift'
   target.source_build_phase.add_file_reference(file_ref)
@@ -420,9 +420,9 @@
   Cmd+B → BUILD SUCCEEDED.
 
   ```bash
-  git add "Wing Me/New My Location/RewardsVC.swift" \
-          "Wing Me/New My Location/NewMyLocationVC.swift" \
-          "Wing Me.xcodeproj/project.pbxproj"
+  git add "The W App/New My Location/RewardsVC.swift" \
+          "The W App/New My Location/NewMyLocationVC.swift" \
+          "The W App.xcodeproj/project.pbxproj"
   git commit -m "feat: add RewardsVC and wire rewards entry point in NewMyLocationVC"
   ```
 

@@ -14,7 +14,7 @@
 - `[weak self]` required in every Task closure AND every UIAlertAction handler closure that captures self
 - No force-unwraps in new code
 - Swift Concurrency: `Task { [weak self] in guard let self else { return } ... await MainActor.run {} }` only — never `Task { @MainActor in }`
-- No calls to wingme.app or any `.php` path in modified files
+- No calls to thewapp.app or any `.php` path in modified files
 - All storyboard-wired IBActions, IBOutlets, and delegate/dataSource connections must remain present in the VC class
 - Build verification: `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -workspace "The W App.xcworkspace" -scheme "The W App" -destination "generic/platform=iOS" build CODE_SIGNING_ALLOWED=NO 2>&1 | tail -4`
 
@@ -23,7 +23,7 @@
 ### Task 1: ChangePasswordVC — Supabase auth.update
 
 **Files:**
-- Modify: `Wing Me/Settings/ChangePasswordVC.swift`
+- Modify: `The W App/Settings/ChangePasswordVC.swift`
 
 **Context:**
 - Old flow: POST to `change_password.php` → response writes new token to `UserDefaults`. Remove all of this.
@@ -34,7 +34,7 @@
 
 - [ ] **Step 1: Replace change() and remove PHP helpers**
 
-Replace the entire body of `Wing Me/Settings/ChangePasswordVC.swift` with:
+Replace the entire body of `The W App/Settings/ChangePasswordVC.swift` with:
 
 ```swift
 import UIKit
@@ -112,7 +112,7 @@ Expected: `** BUILD SUCCEEDED **`
 - [ ] **Step 3: Commit**
 
 ```bash
-git add "Wing Me/Settings/ChangePasswordVC.swift"
+git add "The W App/Settings/ChangePasswordVC.swift"
 git commit -m "feat(phase7): replace ChangePasswordVC PHP call with Supabase auth.update"
 ```
 
@@ -121,7 +121,7 @@ git commit -m "feat(phase7): replace ChangePasswordVC PHP call with Supabase aut
 ### Task 2: ForgotPasswordVC — email-based Supabase password reset
 
 **Files:**
-- Modify: `Wing Me/Launch/ForgotPasswordVC.swift`
+- Modify: `The W App/Launch/ForgotPasswordVC.swift`
 
 **Context:**
 - Old flow: 3 steps — (1) phone number → Firebase SMS, (2) verify code → Firebase sign-in, (3) new password → PHP reset. Remove all of this.
@@ -136,7 +136,7 @@ git commit -m "feat(phase7): replace ChangePasswordVC PHP call with Supabase aut
 
 - [ ] **Step 1: Rewrite ForgotPasswordVC**
 
-Replace the entire body of `Wing Me/Launch/ForgotPasswordVC.swift` with:
+Replace the entire body of `The W App/Launch/ForgotPasswordVC.swift` with:
 
 ```swift
 import UIKit
@@ -221,7 +221,7 @@ Note: if FirebaseAuth is no longer imported by any file after this change, that 
 - [ ] **Step 3: Commit**
 
 ```bash
-git add "Wing Me/Launch/ForgotPasswordVC.swift"
+git add "The W App/Launch/ForgotPasswordVC.swift"
 git commit -m "feat(phase7): replace ForgotPasswordVC Firebase/PHP flow with Supabase email reset"
 ```
 
@@ -230,8 +230,8 @@ git commit -m "feat(phase7): replace ForgotPasswordVC Firebase/PHP flow with Sup
 ### Task 3: SettingsVC + Constants — open static URLs instead of PHP AboutVC
 
 **Files:**
-- Modify: `Wing Me/Classes/Constants.swift`
-- Modify: `Wing Me/Settings/SettingsVC.swift`
+- Modify: `The W App/Classes/Constants.swift`
+- Modify: `The W App/Settings/SettingsVC.swift`
 
 **Context:**
 - `SettingsVC.openAbout(title:path:)` currently instantiates `AboutVC` with a `.php` path. Replace with direct URL open to static thewapp.com pages.
@@ -241,7 +241,7 @@ git commit -m "feat(phase7): replace ForgotPasswordVC Firebase/PHP flow with Sup
 
 - [ ] **Step 1: Add URL constants to Constants.swift**
 
-Read `Wing Me/Classes/Constants.swift` first. After the line `static let deleteAccountURL = "https://thewapp.com/delete_account"`, add:
+Read `The W App/Classes/Constants.swift` first. After the line `static let deleteAccountURL = "https://thewapp.com/delete_account"`, add:
 
 ```swift
 static let aboutURL = "https://thewapp.com/about"
@@ -330,7 +330,7 @@ Run build command. Expected: `** BUILD SUCCEEDED **`
 - [ ] **Step 4: Commit**
 
 ```bash
-git add "Wing Me/Classes/Constants.swift" "Wing Me/Settings/SettingsVC.swift"
+git add "The W App/Classes/Constants.swift" "The W App/Settings/SettingsVC.swift"
 git commit -m "feat(phase7): replace SettingsVC PHP AboutVC flow with static URL opens"
 ```
 
@@ -339,9 +339,9 @@ git commit -m "feat(phase7): replace SettingsVC PHP AboutVC flow with static URL
 ### Task 4: ContactVC, VastVC, BlockListVC — empty-state stubs
 
 **Files:**
-- Modify: `Wing Me/Settings/ContactVC.swift`
-- Modify: `Wing Me/Settings/VastVC.swift`
-- Modify: `Wing Me/Block List/BlockListVC.swift`
+- Modify: `The W App/Settings/ContactVC.swift`
+- Modify: `The W App/Settings/VastVC.swift`
+- Modify: `The W App/Block List/BlockListVC.swift`
 
 **Context:**
 
@@ -501,7 +501,7 @@ Run build command. Expected: `** BUILD SUCCEEDED **`
 - [ ] **Step 5: Commit**
 
 ```bash
-git add "Wing Me/Settings/ContactVC.swift" "Wing Me/Settings/VastVC.swift" "Wing Me/Block List/BlockListVC.swift"
+git add "The W App/Settings/ContactVC.swift" "The W App/Settings/VastVC.swift" "The W App/Block List/BlockListVC.swift"
 git commit -m "feat(phase7): stub ContactVC, VastVC, BlockListVC to empty state (remove PHP calls)"
 ```
 
@@ -510,7 +510,7 @@ git commit -m "feat(phase7): stub ContactVC, VastVC, BlockListVC to empty state 
 ### Task 5: HomeVC — replace PHP get_home with fetchVenues()
 
 **Files:**
-- Modify: `Wing Me/Home/HomeVC.swift`
+- Modify: `The W App/Home/HomeVC.swift`
 
 **Context:**
 - HomeVC currently fetches banners, events, new_locations, most_visited, last_visited from PHP.
@@ -670,7 +670,7 @@ Run build command. Expected: `** BUILD SUCCEEDED **`
 - [ ] **Step 3: Commit**
 
 ```bash
-git add "Wing Me/Home/HomeVC.swift"
+git add "The W App/Home/HomeVC.swift"
 git commit -m "feat(phase7): replace HomeVC PHP get_home with fetchVenues() showing venue list"
 ```
 

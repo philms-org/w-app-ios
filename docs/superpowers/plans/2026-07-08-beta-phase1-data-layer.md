@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - Open `The W App.xcworkspace`, never `.xcodeproj`.
-- Verify each Swift task by running a full build: `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -workspace "The W App.xcworkspace" -scheme "The W App" -destination "generic/platform=iOS Simulator" build` from `/Users/sr/wingme-copy`.
+- Verify each Swift task by running a full build: `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -workspace "The W App.xcworkspace" -scheme "The W App" -destination "generic/platform=iOS Simulator" build` from `/Users/sr/thewapp-copy`.
 - This project has no functional XCTest target (known, pre-existing, separate issue) — no test files are part of this plan, verification is build-only.
 - SQL migrations are numbered sequentially — this plan's migration is `007`, following the existing `001`-`006`. It has not been run against Supabase yet, so it's safe to edit directly if a fix is needed later.
 
@@ -39,7 +39,7 @@ This is a MANUAL action for the human — paste and run in the Supabase SQL Edit
 - [ ] **Step 3: Commit**
 
 ```bash
-cd /Users/sr/wingme-copy
+cd /Users/sr/thewapp-copy
 git add database/migrations/007_reward_tiering.sql
 git commit -m "feat: add rewards.feature_name column for derived reward tiering"
 ```
@@ -49,8 +49,8 @@ git commit -m "feat: add rewards.feature_name column for derived reward tiering"
 ### Task 2: Fix rewards data layer
 
 **Files:**
-- Modify: `Wing Me/Classes/WAPModels.swift` (the `WAPReward` struct, currently at line 112)
-- Modify: `Wing Me/Classes/WAPData.swift` (`fetchRewards`, currently at line 137; add `hasFeatureAccess`)
+- Modify: `The W App/Classes/WAPModels.swift` (the `WAPReward` struct, currently at line 112)
+- Modify: `The W App/Classes/WAPData.swift` (`fetchRewards`, currently at line 137; add `hasFeatureAccess`)
 
 **Interfaces:**
 - Consumes: `rewards.feature_name` (Task 1).
@@ -58,7 +58,7 @@ git commit -m "feat: add rewards.feature_name column for derived reward tiering"
 
 - [ ] **Step 1: Replace `WAPReward`**
 
-In `Wing Me/Classes/WAPModels.swift`, replace the existing `WAPReward` struct:
+In `The W App/Classes/WAPModels.swift`, replace the existing `WAPReward` struct:
 
 ```swift
 struct WAPReward: Codable, Identifiable {
@@ -114,7 +114,7 @@ struct WAPReward: Codable, Identifiable {
 
 - [ ] **Step 2: Fix `fetchRewards` and add `hasFeatureAccess`**
 
-In `Wing Me/Classes/WAPData.swift`, replace:
+In `The W App/Classes/WAPData.swift`, replace:
 
 ```swift
     func fetchRewards(venueId: String, tier: String) async throws -> [WAPReward] {
@@ -158,7 +158,7 @@ with:
 
 - [ ] **Step 3: Check for callers**
 
-Run: `grep -rn "fetchRewards(venueId\|WAPReward" "Wing Me" --include="*.swift"` from `/Users/sr/wingme-copy`. Expected today: only `WAPModels.swift` and `WAPData.swift` (nothing in the UI calls this yet, per the final review that flagged this as latent/unused code) — if any other file appears, update it to use the new `locationId:` signature and field names.
+Run: `grep -rn "fetchRewards(venueId\|WAPReward" "The W App" --include="*.swift"` from `/Users/sr/thewapp-copy`. Expected today: only `WAPModels.swift` and `WAPData.swift` (nothing in the UI calls this yet, per the final review that flagged this as latent/unused code) — if any other file appears, update it to use the new `locationId:` signature and field names.
 
 - [ ] **Step 4: Build to verify**
 
@@ -168,7 +168,7 @@ Expected: BUILD SUCCEEDED.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add "Wing Me/Classes/WAPModels.swift" "Wing Me/Classes/WAPData.swift"
+git add "The W App/Classes/WAPModels.swift" "The W App/Classes/WAPData.swift"
 git commit -m "fix: WAPReward and fetchRewards target real rewards columns, add hasFeatureAccess for derived tiering"
 ```
 
@@ -177,15 +177,15 @@ git commit -m "fix: WAPReward and fetchRewards target real rewards columns, add 
 ### Task 3: Fix feed data layer
 
 **Files:**
-- Modify: `Wing Me/Classes/WAPModels.swift` (the `WAPFeedItem` struct, currently at line 56)
-- Modify: `Wing Me/Classes/WAPData.swift` (`fetchFeed`, currently at line 54; `postToFeed`, currently at line 65)
+- Modify: `The W App/Classes/WAPModels.swift` (the `WAPFeedItem` struct, currently at line 56)
+- Modify: `The W App/Classes/WAPData.swift` (`fetchFeed`, currently at line 54; `postToFeed`, currently at line 65)
 
 **Interfaces:**
 - Produces: `WAPFeedItem(id, locationId, userId, content, zoneTag, createdAt, profile)`; `WAPData.fetchFeed(locationId:) async throws -> [WAPFeedItem]`; `WAPData.postToFeed(locationId:text:) async throws`. Not consumed by anything in this plan — the Phase 3 Main Feed rebuild will use them later.
 
 - [ ] **Step 1: Replace `WAPFeedItem`**
 
-In `Wing Me/Classes/WAPModels.swift`, replace the existing `WAPFeedItem` struct:
+In `The W App/Classes/WAPModels.swift`, replace the existing `WAPFeedItem` struct:
 
 ```swift
 struct WAPFeedItem: Codable, Identifiable {
@@ -233,7 +233,7 @@ struct WAPFeedItem: Codable, Identifiable {
 
 - [ ] **Step 2: Fix `fetchFeed` and `postToFeed`**
 
-In `Wing Me/Classes/WAPData.swift`, replace:
+In `The W App/Classes/WAPData.swift`, replace:
 
 ```swift
     func fetchFeed(venueId: String) async throws -> [WAPFeedItem] {
@@ -291,7 +291,7 @@ with:
 
 - [ ] **Step 3: Check for callers**
 
-Run: `grep -rn "fetchFeed(venueId\|postToFeed(venueId\|WAPFeedItem" "Wing Me" --include="*.swift"` from `/Users/sr/wingme-copy`. Expected today: only `WAPModels.swift` and `WAPData.swift` — if any other file appears, update it to use the new `locationId:` parameter label.
+Run: `grep -rn "fetchFeed(venueId\|postToFeed(venueId\|WAPFeedItem" "The W App" --include="*.swift"` from `/Users/sr/thewapp-copy`. Expected today: only `WAPModels.swift` and `WAPData.swift` — if any other file appears, update it to use the new `locationId:` parameter label.
 
 - [ ] **Step 4: Build to verify**
 
@@ -301,7 +301,7 @@ Expected: BUILD SUCCEEDED.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add "Wing Me/Classes/WAPModels.swift" "Wing Me/Classes/WAPData.swift"
+git add "The W App/Classes/WAPModels.swift" "The W App/Classes/WAPData.swift"
 git commit -m "fix: WAPFeedItem and fetchFeed/postToFeed target real feed_posts columns"
 ```
 
@@ -311,7 +311,7 @@ git commit -m "fix: WAPFeedItem and fetchFeed/postToFeed target real feed_posts 
 
 1. All 3 tasks committed, `xcodebuild ... build` succeeds at HEAD.
 2. Manual: `007_reward_tiering.sql` run in Supabase SQL Editor after `004`-`006` (also still pending from the attendee-history phase).
-3. `grep -rn "venue_id\|\.venueId\b" "Wing Me/Classes/WAPModels.swift" "Wing Me/Classes/WAPData.swift"` returns zero hits related to rewards/feed (some `venueId`/`venue_id` may legitimately remain elsewhere if any other domain still uses it — check context).
+3. `grep -rn "venue_id\|\.venueId\b" "The W App/Classes/WAPModels.swift" "The W App/Classes/WAPData.swift"` returns zero hits related to rewards/feed (some `venueId`/`venue_id` may legitimately remain elsewhere if any other domain still uses it — check context).
 
 ## Known Deferred
 - Reward claim flow (`reward_claims`) — Phase 5.

@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- Backend: Supabase only — no URLSession calls to wingme.app or any PHP endpoint
+- Backend: Supabase only — no URLSession calls to thewapp.app or any PHP endpoint
 - Auth: user ID from `WAPAuth.currentUserID` → `KeychainHelper.load(key: KeychainHelper.Keys.authToken)` — never from UserDefaults
 - Contact method types (exactly): `whatsapp`, `linkedin`, `facebook`, `instagram`, `phone`, `link`
 - Contact method slot ordering (fixed): slot 1=whatsapp, 2=linkedin, 3=facebook, 4=instagram, 5=phone, 6=link
@@ -23,7 +23,7 @@
 ### Task 1: MyProfileVC — Supabase profile loading + sign-out
 
 **Files:**
-- Modify: `Wing Me/My Profile/MyProfileVC.swift`
+- Modify: `The W App/My Profile/MyProfileVC.swift`
 
 **Interfaces:**
 - Consumes: `WAPData.shared.fetchProfile(id: String) async throws -> WAPProfile`
@@ -39,7 +39,7 @@
 - [ ] **Step 1: Check MainVC for datingID properties**
 
   ```bash
-  grep -n "datingID\|socialisingID\|networkingID" "Wing Me/Main/MainVC.swift" | head -10
+  grep -n "datingID\|socialisingID\|networkingID" "The W App/Main/MainVC.swift" | head -10
   ```
 
   If found: keep the `editProfile(_:)` pass-through lines that read `delegate.datingID` etc.
@@ -132,7 +132,7 @@
   - `getAge(date:)` — check it's not called elsewhere first
 
   ```bash
-  grep -n "getCountryName\|getGender\|getAge\|showActionSheet" "Wing Me/My Profile/MyProfileVC.swift"
+  grep -n "getCountryName\|getGender\|getAge\|showActionSheet" "The W App/My Profile/MyProfileVC.swift"
   ```
 
   Remove each method that is only called within MyProfileVC and no longer referenced.
@@ -151,7 +151,7 @@
 - [ ] **Step 6: Commit**
 
   ```bash
-  git add "Wing Me/My Profile/MyProfileVC.swift"
+  git add "The W App/My Profile/MyProfileVC.swift"
   git commit -m "feat: wire MyProfileVC to Supabase fetchProfile, fix sign-out"
   ```
 
@@ -160,7 +160,7 @@
 ### Task 2: QRCodeVC — real Core Image QR code
 
 **Files:**
-- Modify: `Wing Me/QR Code/QRCodeVC.swift`
+- Modify: `The W App/QR Code/QRCodeVC.swift`
 
 **Interfaces:**
 - Consumes: `WAPAuth.currentUserID: String?`
@@ -229,7 +229,7 @@ Access the image view at runtime as: `view.subviews.first?.subviews.first as? UI
 - [ ] **Step 3: Commit**
 
   ```bash
-  git add "Wing Me/QR Code/QRCodeVC.swift"
+  git add "The W App/QR Code/QRCodeVC.swift"
   git commit -m "feat: generate real QR code in QRCodeVC using CIQRCodeGenerator"
   ```
 
@@ -238,8 +238,8 @@ Access the image view at runtime as: `view.subviews.first?.subviews.first as? UI
 ### Task 3: MyLinksVC + LinkCell — load contact methods from WAPData
 
 **Files:**
-- Modify: `Wing Me/QR Code/LinkCell.swift`
-- Modify: `Wing Me/QR Code/MyLinksVC.swift`
+- Modify: `The W App/QR Code/LinkCell.swift`
+- Modify: `The W App/QR Code/MyLinksVC.swift`
 
 **Interfaces:**
 - Consumes: `WAPData.shared.fetchContactMethods(userId: String) async throws -> [WAPContactMethod]`
@@ -289,7 +289,7 @@ Access the image view at runtime as: `view.subviews.first?.subviews.first as? UI
 - [ ] **Step 2: Check storyboard collectionView outlet for MyLinksVC**
 
   ```bash
-  grep -n "collectionView\|XYU-fs-U6C" "Wing Me/Base.lproj/Main.storyboard" | grep -i "outlet\|collection" | head -5
+  grep -n "collectionView\|XYU-fs-U6C" "The W App/Base.lproj/Main.storyboard" | grep -i "outlet\|collection" | head -5
   ```
 
   If an outlet named "collectionView" exists in the storyboard scene: keep the `@IBOutlet` declaration.
@@ -409,7 +409,7 @@ Access the image view at runtime as: `view.subviews.first?.subviews.first as? UI
 - [ ] **Step 5: Commit**
 
   ```bash
-  git add "Wing Me/QR Code/LinkCell.swift" "Wing Me/QR Code/MyLinksVC.swift"
+  git add "The W App/QR Code/LinkCell.swift" "The W App/QR Code/MyLinksVC.swift"
   git commit -m "feat: wire MyLinksVC to WAPData contact methods, add configure(method:) to LinkCell"
   ```
 
@@ -418,7 +418,7 @@ Access the image view at runtime as: `view.subviews.first?.subviews.first as? UI
 ### Task 4: EditLinksVC — programmatic 6-slot contact editor
 
 **Files:**
-- Modify: `Wing Me/QR Code/EditLinksVC.swift` (full rewrite, programmatic UI)
+- Modify: `The W App/QR Code/EditLinksVC.swift` (full rewrite, programmatic UI)
 
 **Interfaces:**
 - Consumes: `WAPData.shared.fetchContactMethods(userId: String) async throws -> [WAPContactMethod]`
@@ -427,7 +427,7 @@ Access the image view at runtime as: `view.subviews.first?.subviews.first as? UI
 - Consumes: `LinkCell.assetName(for type: String) -> String`
 - Consumes: `WAPContactMethod(id:userId:slotOrder:type:value:isEnabled:)` memberwise init
 
-**Why programmatic:** MyLinksVC already uses `EditLinksVC()` (no storyboard). The existing storyboard scene for EditLinksVC has unrelated content from a Wing Me profile edit form. `viewDidLoad` wipes all storyboard subviews and rebuilds from scratch.
+**Why programmatic:** MyLinksVC already uses `EditLinksVC()` (no storyboard). The existing storyboard scene for EditLinksVC has unrelated content from a The W App profile edit form. `viewDidLoad` wipes all storyboard subviews and rebuilds from scratch.
 
 **Sentinel for new slots:** `id: ""` means the slot has never been saved to DB. On save, a new UUID is generated. Slots with `id != ""` were fetched from DB and upsert by PK updates them in-place.
 
@@ -646,7 +646,7 @@ Access the image view at runtime as: `view.subviews.first?.subviews.first as? UI
 - [ ] **Step 3: Commit**
 
   ```bash
-  git add "Wing Me/QR Code/EditLinksVC.swift"
+  git add "The W App/QR Code/EditLinksVC.swift"
   git commit -m "feat: rebuild EditLinksVC as programmatic 6-slot contact method editor"
   ```
 
@@ -655,7 +655,7 @@ Access the image view at runtime as: `view.subviews.first?.subviews.first as? UI
 ### Task 5: UserLinksVC — another user's enabled contact methods
 
 **Files:**
-- Modify: `Wing Me/QR Code/UserLinksVC.swift`
+- Modify: `The W App/QR Code/UserLinksVC.swift`
 
 **Interfaces:**
 - Consumes: `WAPData.shared.fetchContactMethods(userId: String) async throws -> [WAPContactMethod]`
@@ -774,7 +774,7 @@ Access the image view at runtime as: `view.subviews.first?.subviews.first as? UI
 - [ ] **Step 3: Commit**
 
   ```bash
-  git add "Wing Me/QR Code/UserLinksVC.swift"
+  git add "The W App/QR Code/UserLinksVC.swift"
   git commit -m "feat: wire UserLinksVC to WAPData contact methods by user ID"
   ```
 
