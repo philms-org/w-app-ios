@@ -164,3 +164,41 @@ struct WAPReward: Codable, Identifiable {
         case featureName  = "feature_name"
     }
 }
+
+struct WAPConversation: Codable, Identifiable {
+    let id: String
+    var isGroup: Bool
+    var name: String?
+    var lastMessage: String?
+    var lastMessageAt: String?
+    var myStatus: String
+    var otherProfile: WAPProfile?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case isGroup       = "is_group"
+        case name
+        case lastMessage   = "last_message"
+        case lastMessageAt = "last_message_at"
+        case myStatus      = "my_status"
+        case otherProfile  = "other_profile"
+    }
+}
+
+struct WAPMessage: Codable, Identifiable {
+    let id: String
+    let conversationId: String
+    let senderId: String
+    var content: String
+    var createdAt: String
+    var profile: WAPProfile?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case conversationId = "conversation_id"
+        case senderId       = "sender_id"
+        case content
+        case createdAt      = "created_at"
+        case profile        = "profiles"
+    }
+}
