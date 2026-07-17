@@ -320,4 +320,194 @@ final class WAPData {
         let url = try client.storage.from("avatars").getPublicURL(path: path)
         return url.absoluteString
     }
+
+    // MARK: - Messaging
+
+    private struct ParticipantRow: Codable {
+        let conversationId: String
+        let status: String
+        let conversation: ConversationRow
+
+        enum CodingKeys: String, CodingKey {
+            case conversationId = "conversation_id"
+            case status
+            case conversation = "conversations"
+        }
+    }
+
+    private struct ConversationRow: Codable {
+        let id: String
+        let isGroup: Bool
+        let name: String?
+
+        enum CodingKeys: String, CodingKey {
+            case id
+            case isGroup = "is_group"
+            case name
+        }
+    }
+
+    func fetchConversations() async throws -> [WAPConversation] {
+        guard let uid = WAPAuth.currentUserID else { return [] }
+
+        let rows: [ParticipantRow] = try await client
+            .from("conversation_participants")
+            .select("conversation_id, status, conversations(id, is_group, name)")
+            .eq("user_id", value: uid)
+            .execute()
+            .value
+
+        var result: [WAPConversation] = []
+        for row in rows {
+            let recent: [WAPMessage] = try await client
+                .from("messages")
+                .select()
+                .eq("conversation_id", value: row.conversationId)
+                .order("created_at", ascending: false)
+                .limit(1)
+                .execute()
+                .value
+
+            var otherProfile: WAPProfile?
+            if !row.conversation.isGroup {
+                let others: [ParticipantProfileRow] = try await client
+                    .from("conversation_participants")
+                    .select("user_id, profiles(*)")
+                    .eq("conversation_id", value: row.conversationId)
+                    .neq("user_id", value: uid)
+                    .limit(1)
+                    .execute()
+                    .value
+                otherProfile = others.first?.profile
+            }
+
+            result.append(WAPConversation(
+                id: row.conversationId,
+                isGroup: row.conversation.isGroup,
+                name: row.conversation.name,
+                lastMessage: recent.first?.content,
+                lastMessageAt: recent.first?.createdAt,
+                myStatus: row.status,
+                otherProfile: otherProfile
+            ))
+        }
+        return result
+    }
+
+    private struct ParticipantProfileRow: Codable {
+        let userId: String
+        let profile: WAPProfile?
+
+        enum CodingKeys: String, CodingKey {
+            case userId = "user_id"
+            case profile = "profiles"
+        }
+    }
+
+    func fetchMessages(conversationId: String) async throws -> [WAPMessage] {
+        try await client
+            .from("messages")
+            .select("*, profiles(*)")
+            .eq("conversation_id", value: conversationId)
+            .order("created_at", ascending: true)
+            .execute()
+            .value
+    }
+
+    func sendMessage(conversationId: String, content: String) async throws {
+        guard let uid = WAPAuth.currentUserID else { return }
+        struct NewMessage: Encodable {
+            let conversation_id: String
+            let sender_id: String
+            let content: String
+        }
+        try await client
+            .from("messages")
+            .insert(NewMessage(conversation_id: conversationId, sender_id: uid, content: content))
+            .execute()
+    }
+
+    func startConversation(recipientIds: [String], name: String?, isGroup: Bool, firstMessage: String) async throws -> WAPConversation {
+        guard let uid = WAPAuth.currentUserID else {
+            throw NSError(domain: "WAPData", code: 0, userInfo: [NSLocalizedDescriptionKey: "Not signed in"])
+        }
+
+        struct NewConversation: Encodable {
+            let is_group: Bool
+            let name: String?
+            let created_by: String
+        }
+        let created: ConversationRow = try await client
+            .from("conversations")
+            .insert(NewConversation(is_group: isGroup, name: name, created_by: uid))
+            .select()
+            .single()
+            .execute()
+            .value
+
+        struct NewParticipant: Encodable {
+            let conversation_id: String
+            let user_id: String
+            let status: String
+        }
+
+        var alreadyFriends: Set<String> = []
+        if !isGroup {
+            let friendRows: [FriendshipRow] = try await client
+                .from("friendships")
+                .select("friend_id")
+                .eq("user_id", value: uid)
+                .in("friend_id", values: recipientIds)
+                .execute()
+                .value
+            alreadyFriends = Set(friendRows.map { $0.friendId })
+        }
+
+        var participants = [NewParticipant(conversation_id: created.id, user_id: uid, status: "accepted")]
+        for recipientId in recipientIds {
+            let status = isGroup ? "accepted" : (alreadyFriends.contains(recipientId) ? "accepted" : "pending")
+            participants.append(NewParticipant(conversation_id: created.id, user_id: recipientId, status: status))
+        }
+        try await client
+            .from("conversation_participants")
+            .insert(participants)
+            .execute()
+
+        try await sendMessage(conversationId: created.id, content: firstMessage)
+
+        return WAPConversation(
+            id: created.id,
+            isGroup: created.isGroup,
+            name: created.name,
+            lastMessage: firstMessage,
+            lastMessageAt: nil,
+            myStatus: "accepted",
+            otherProfile: nil
+        )
+    }
+
+    private struct FriendshipRow: Codable {
+        let friendId: String
+        enum CodingKeys: String, CodingKey { case friendId = "friend_id" }
+    }
+
+    func respondToConversationRequest(conversationId: String, accept: Bool) async throws {
+        guard let uid = WAPAuth.currentUserID else { return }
+        try await client
+            .from("conversation_participants")
+            .update(["status": accept ? "accepted" : "rejected"])
+            .eq("conversation_id", value: conversationId)
+            .eq("user_id", value: uid)
+            .execute()
+    }
+
+    func fetchGroupMembers(conversationId: String) async throws -> [WAPProfile] {
+        let rows: [ParticipantProfileRow] = try await client
+            .from("conversation_participants")
+            .select("user_id, profiles(*)")
+            .eq("conversation_id", value: conversationId)
+            .execute()
+            .value
+        return rows.compactMap { $0.profile }
+    }
 }
