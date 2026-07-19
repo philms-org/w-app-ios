@@ -58,11 +58,20 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func reload() {
         Task { [weak self] in
             guard let self else { return }
+            var status = "accepted"
+            do {
+                status = try await WAPData.shared.fetchConversationStatus(conversationId: id)
+            } catch {
+                // Non-fatal: fall back to "accepted" so the message thread still loads;
+                // the messages fetch below has its own error alert.
+                print("ChatVC: failed to fetch conversation status, defaulting to \"accepted\": \(error.localizedDescription)")
+            }
             do {
                 let messages = try await WAPData.shared.fetchMessages(conversationId: id)
                 await MainActor.run { [weak self] in
                     guard let self else { return }
                     self.messagesArray = messages
+                    self.myStatus = status
                     if let first = messages.first(where: { $0.senderId != WAPAuth.currentUserID }) {
                         self.nameLabel.text = first.profile?.displayName ?? ""
                     }

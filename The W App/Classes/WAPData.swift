@@ -414,6 +414,22 @@ final class WAPData {
             .value
     }
 
+    func fetchConversationStatus(conversationId: String) async throws -> String {
+        guard let uid = WAPAuth.currentUserID else { return "accepted" }
+        struct StatusRow: Codable {
+            let status: String
+        }
+        let row: StatusRow = try await client
+            .from("conversation_participants")
+            .select("status")
+            .eq("conversation_id", value: conversationId)
+            .eq("user_id", value: uid)
+            .single()
+            .execute()
+            .value
+        return row.status
+    }
+
     func sendMessage(conversationId: String, content: String) async throws {
         guard let uid = WAPAuth.currentUserID else { return }
         struct NewMessage: Encodable {
