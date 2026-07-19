@@ -4828,6 +4828,9 @@
                                                                         <state key="normal" title="Reject">
                                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
+                                                                        <connections>
+                                                                            <action selector="reject:" destination="iSC-k0-IWr" eventType="touchUpInside" id="rJt-2k-Rej"/>
+                                                                        </connections>
                                                                     </button>
                                                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="2EI-Dv-Bo9">
                                                                         <rect key="frame" x="69" y="15" width="20" height="20"/>

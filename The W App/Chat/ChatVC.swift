@@ -33,6 +33,9 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var gender = String()
     var blocked = String()
 
+    var messagesArray: [WAPMessage] = []
+    var myStatus = "accepted"
+
     var keyboardHeight = CGFloat()
 
     override func viewDidLoad() {
@@ -43,17 +46,84 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         acceptView.isHidden = true
         nameLabel.text = ""
         detailsLabel.text = ""
-        indicator.stopAnimating()
+        genderView.isHidden = true
+        indicator.startAnimating()
 
         NotificationCenter.default.addObserver(self, selector: #selector(KeyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(KeyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+
+        reload()
     }
 
-    // MARK: - UITableViewDataSource / Delegate stubs
+    func reload() {
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let messages = try await WAPData.shared.fetchMessages(conversationId: id)
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    self.messagesArray = messages
+                    if let first = messages.first(where: { $0.senderId != WAPAuth.currentUserID }) {
+                        self.nameLabel.text = first.profile?.displayName ?? ""
+                    }
+                    self.tableView.reloadData()
+                    self.indicator.stopAnimating()
+                    self.updateRequestUI()
+                }
+            } catch {
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    self.indicator.stopAnimating()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
+            }
+        }
+    }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 0 }
+    func updateRequestUI() {
+        let isPendingRecipient = myStatus == "pending"
+        acceptView.isHidden = !isPendingRecipient
+        messageView.isHidden = isPendingRecipient
+    }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell { UITableViewCell() }
+    private func formattedTime(_ isoString: String) -> String {
+        let isoFormatter = ISO8601DateFormatter()
+        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        var date = isoFormatter.date(from: isoString)
+        if date == nil {
+            isoFormatter.formatOptions = [.withInternetDateTime]
+            date = isoFormatter.date(from: isoString)
+        }
+        guard let date else { return "" }
+        let displayFormatter = DateFormatter()
+        displayFormatter.dateFormat = "h:mm a"
+        return displayFormatter.string(from: date)
+    }
+
+    // MARK: - UITableViewDataSource / Delegate
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { messagesArray.count }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let message = messagesArray[indexPath.row]
+        let isMine = message.senderId == WAPAuth.currentUserID
+        let customCell = CustomCell(string1: message.id, string2: message.content, string3: formattedTime(message.createdAt))
+        if isMine {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatRightCell", for: indexPath) as? ChatRightCell else {
+                assertionFailure("ChatVC storyboard cell identifier drifted from \"ChatRightCell\"")
+                return UITableViewCell()
+            }
+            cell.updateCell(customCell: customCell)
+            return cell
+        } else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatLeftCell", for: indexPath) as? ChatLeftCell else {
+                assertionFailure("ChatVC storyboard cell identifier drifted from \"ChatLeftCell\"")
+                return UITableViewCell()
+            }
+            cell.updateCell(customCell: customCell, gender: gender)
+            return cell
+        }
+    }
 
     // MARK: - IBActions
 
@@ -65,9 +135,67 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBAction func viewImage(_ sender: UIButton) { }
 
-    @IBAction func send(_ sender: UIButton) { }
+    @IBAction func send(_ sender: UIButton) {
+        let text = messageTextView.getText()
+        guard !text.isEmpty else { return }
+        sendButton.isHidden = true
+        sendIndicator.startAnimating()
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                try await WAPData.shared.sendMessage(conversationId: id, content: text)
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    self.messageTextView.text = ""
+                    self.sendButton.isHidden = false
+                    self.sendIndicator.stopAnimating()
+                    self.reload()
+                }
+            } catch {
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    self.sendButton.isHidden = false
+                    self.sendIndicator.stopAnimating()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
+            }
+        }
+    }
 
-    @IBAction func accept(_ sender: UIButton) { }
+    @IBAction func accept(_ sender: UIButton) {
+        respond(accept: true)
+    }
+
+    @IBAction func reject(_ sender: UIButton) {
+        respond(accept: false)
+    }
+
+    func respond(accept: Bool) {
+        let indicatorView = accept ? acceptIndicator : rejectIndicator
+        indicatorView?.startAnimating()
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                try await WAPData.shared.respondToConversationRequest(conversationId: id, accept: accept)
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    indicatorView?.stopAnimating()
+                    self.myStatus = accept ? "accepted" : "rejected"
+                    if accept {
+                        self.updateRequestUI()
+                    } else {
+                        self.close?()
+                    }
+                }
+            } catch {
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    indicatorView?.stopAnimating()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
+            }
+        }
+    }
 
     // MARK: - Keyboard
 
