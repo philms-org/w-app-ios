@@ -23,25 +23,76 @@ class GroupChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     var titleString = String()
     var isAdmin = Bool()
     var isMute = Bool()
+    var messagesArray: [WAPMessage] = []
 
     var keyboardHeight = CGFloat()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setKeyboard(tableView: tableView)
-        messageView.isHidden = true
-        nameLabel.text = ""
-        indicator.stopAnimating()
+        messageView.isHidden = false
+        nameLabel.text = titleString
+        indicator.startAnimating()
 
         NotificationCenter.default.addObserver(self, selector: #selector(KeyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(KeyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+
+        reload()
     }
 
-    // MARK: - UITableViewDataSource / Delegate stubs
+    func reload() {
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let messages = try await WAPData.shared.fetchMessages(conversationId: id)
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    self.messagesArray = messages
+                    self.tableView.reloadData()
+                    self.indicator.stopAnimating()
+                }
+            } catch {
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    self.indicator.stopAnimating()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
+            }
+        }
+    }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 0 }
+    private func formattedTime(_ isoString: String) -> String {
+        let isoFormatter = ISO8601DateFormatter()
+        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        var date = isoFormatter.date(from: isoString)
+        if date == nil {
+            isoFormatter.formatOptions = [.withInternetDateTime]
+            date = isoFormatter.date(from: isoString)
+        }
+        guard let date else { return "" }
+        let displayFormatter = DateFormatter()
+        displayFormatter.dateFormat = "h:mm a"
+        return displayFormatter.string(from: date)
+    }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell { UITableViewCell() }
+    // MARK: - UITableViewDataSource / Delegate
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { messagesArray.count }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let message = messagesArray[indexPath.row]
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "GroupChatCell", for: indexPath) as? GroupChatCell else {
+            assertionFailure("GroupChatVC storyboard cell identifier drifted from \"GroupChatCell\"")
+            return UITableViewCell()
+        }
+        let customCell = CustomCell(string1: message.id,
+                                     string2: message.profile?.displayName ?? "",
+                                     string3: message.content,
+                                     string4: formattedTime(message.createdAt),
+                                     string5: "")
+        cell.updateCell(customCell: customCell)
+        return cell
+    }
 
     // MARK: - IBActions
 
@@ -49,11 +100,43 @@ class GroupChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         close?()
     }
 
-    @IBAction func menu(_ sender: UIButton) { }
+    @IBAction func menu(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let vc = storyboard.instantiateViewController(withIdentifier: "GroupMembersVC") as? GroupMembersVC {
+            vc.groupID = id
+            vc.isAdmin = isAdmin
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
 
     @IBAction func viewImage(_ sender: UIButton) { }
 
-    @IBAction func send(_ sender: UIButton) { }
+    @IBAction func send(_ sender: UIButton) {
+        let text = messageTextView.getText()
+        guard !text.isEmpty else { return }
+        sendButton.isHidden = true
+        sendIndicator.startAnimating()
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                try await WAPData.shared.sendMessage(conversationId: id, content: text)
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    self.messageTextView.text = ""
+                    self.sendButton.isHidden = false
+                    self.sendIndicator.stopAnimating()
+                    self.reload()
+                }
+            } catch {
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    self.sendButton.isHidden = false
+                    self.sendIndicator.stopAnimating()
+                    AlertClass().showErrorAlert(delegate: self, message: error.localizedDescription)
+                }
+            }
+        }
+    }
 
     // MARK: - Keyboard
 
