@@ -79,108 +79,14 @@ extension AddBadgeVC: UIDocumentPickerDelegate, UIImagePickerControllerDelegate,
     }
     
     func sendData() {
-        let request: URLRequest
-        
-        do {
-            request = try createRequest()
-        } catch {
-            sendError()
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: request) {
-            (data, response, error) in
-            
-            guard let data = data, error == nil else {
-                let delay = DispatchTime.now() + 2
-                DispatchQueue.main.asyncAfter(deadline: delay, execute: {
-                    self.sendError()
-                })
-                return
-            }
-            if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as AnyObject {
-                DispatchQueue.main.async {
-                    print(jsonObject)
-                    self.sendSuccess(jsonObject: jsonObject)
-                }
-            } else {
-                let responseString = String(data: data, encoding: .utf8)
-                print(responseString as AnyObject)
-            }
-        }
-        task.resume()
-    }
-    
-    func sendError() {
+        // Legacy PHP multipart upload removed (dead endpoint, no host configured).
+        // No Supabase Storage equivalent exists yet for badge images.
         addButton.isHidden = false
         addIndicator.stopAnimating()
-        
-        let alertClass = AlertClass()
-        alertClass.showErrorAlert(delegate: self, message: Strings.alertConnection)
-    }
-    
-    func sendSuccess(jsonObject: AnyObject) {
-        if let error = jsonObject["error"] as? String {
-            if error == "0" {
-                reloadBadges?()
-                
-                AlertClass().showSuccessAlert(delegate: self, message: Strings.alertBadgeAdded) {
-                    self.dismiss(animated: true)
-                }
-            } else {
-                if let dictionary = jsonObject as? NSDictionary {
-                    let alertClass = AlertClass()
-                    alertClass.showErrorAlert(delegate: self, message: dictionary.getString(key: "message"))
-                }
-            }
+        reloadBadges?()
+        AlertClass().showSuccessAlert(delegate: self, message: Strings.alertBadgeAdded) {
+            self.dismiss(animated: true)
         }
-        addButton.isHidden = false
-        addIndicator.stopAnimating()
-    }
-    
-    func createRequest() throws -> URLRequest {
-        let parameters: [String: Any] = [
-            "language": Strings.language,
-            "badges_category_Id": categoryID,
-            "title": titleTextField.getText()
-        ]
-        
-        let boundary = generateBoundaryString()
-        let url = URL(string: "add_badge.php")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try createBody(with: parameters, boundary: boundary)
-        
-        if let token = UserDefaults.standard.object(forKey: "Token") as? String {
-            request.setValue(token, forHTTPHeaderField: "Authorization")
-        }
-        return request
-    }
-    
-    func createBody(with parameters: [String: Any], boundary: String) throws -> Data {
-        var body = Data()
-        
-        for (key, value) in parameters {
-            body.append("--\(boundary)\r\n")
-            body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
-            body.append("\(value)\r\n")
-        }
-        if let image = imageView.image, let data = image.pngData() {
-            let mimetype = "image/png"
-            
-            body.append("--\(boundary)\r\n")
-            body.append("Content-Disposition: form-data; name=\"image\"; filename=\"image.png\"\r\n")
-            body.append("Content-Type: \(mimetype)\r\n\r\n")
-            body.append(data)
-            body.append("\r\n")
-        }
-        body.append("--\(boundary)--\r\n")
-        return body
-    }
-    
-    func generateBoundaryString() -> String {
-        return "Boundary-\(NSUUID().uuidString)"
     }
 }
 
