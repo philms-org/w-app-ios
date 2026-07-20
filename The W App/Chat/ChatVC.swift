@@ -95,20 +95,6 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         messageView.isHidden = isPendingRecipient
     }
 
-    private func formattedTime(_ isoString: String) -> String {
-        let isoFormatter = ISO8601DateFormatter()
-        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        var date = isoFormatter.date(from: isoString)
-        if date == nil {
-            isoFormatter.formatOptions = [.withInternetDateTime]
-            date = isoFormatter.date(from: isoString)
-        }
-        guard let date else { return "" }
-        let displayFormatter = DateFormatter()
-        displayFormatter.dateFormat = "h:mm a"
-        return displayFormatter.string(from: date)
-    }
-
     // MARK: - UITableViewDataSource / Delegate
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { messagesArray.count }
@@ -116,7 +102,7 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = messagesArray[indexPath.row]
         let isMine = message.senderId == WAPAuth.currentUserID
-        let customCell = CustomCell(string1: message.id, string2: message.content, string3: formattedTime(message.createdAt))
+        let customCell = CustomCell(string1: message.id, string2: message.content, string3: message.createdAt.asMessageTimeDisplay())
         if isMine {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatRightCell", for: indexPath) as? ChatRightCell else {
                 assertionFailure("ChatVC storyboard cell identifier drifted from \"ChatRightCell\"")

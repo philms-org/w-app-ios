@@ -6,6 +6,8 @@ class GroupMembersVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var indicator: UIActivityIndicatorView!
 
+    var close: (() -> ())?
+
     var groupID = String()
     var isAdmin = Bool()
     var membersArray: [WAPProfile] = []
@@ -65,6 +67,10 @@ class GroupMembersVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? { nil }
 
     @IBAction func back(_ sender: UIButton) {
-        dismiss(animated: true)
+        if let close {
+            close()
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
     }
 }

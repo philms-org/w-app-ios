@@ -61,37 +61,36 @@ class GroupChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         }
     }
 
-    private func formattedTime(_ isoString: String) -> String {
-        let isoFormatter = ISO8601DateFormatter()
-        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        var date = isoFormatter.date(from: isoString)
-        if date == nil {
-            isoFormatter.formatOptions = [.withInternetDateTime]
-            date = isoFormatter.date(from: isoString)
-        }
-        guard let date else { return "" }
-        let displayFormatter = DateFormatter()
-        displayFormatter.dateFormat = "h:mm a"
-        return displayFormatter.string(from: date)
-    }
-
     // MARK: - UITableViewDataSource / Delegate
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { messagesArray.count }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = messagesArray[indexPath.row]
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "GroupChatCell", for: indexPath) as? GroupChatCell else {
-            assertionFailure("GroupChatVC storyboard cell identifier drifted from \"GroupChatCell\"")
-            return UITableViewCell()
+        let isMine = message.senderId == WAPAuth.currentUserID
+        if isMine {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatRightCell", for: indexPath) as? ChatRightCell else {
+                assertionFailure("GroupChatVC storyboard cell identifier drifted from \"ChatRightCell\"")
+                return UITableViewCell()
+            }
+            let customCell = CustomCell(string1: message.id,
+                                         string2: message.content,
+                                         string3: message.createdAt.asMessageTimeDisplay())
+            cell.updateCell(customCell: customCell)
+            return cell
+        } else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "GroupChatCell", for: indexPath) as? GroupChatCell else {
+                assertionFailure("GroupChatVC storyboard cell identifier drifted from \"GroupChatCell\"")
+                return UITableViewCell()
+            }
+            let customCell = CustomCell(string1: message.id,
+                                         string2: message.profile?.displayName ?? "",
+                                         string3: message.content,
+                                         string4: message.createdAt.asMessageTimeDisplay(),
+                                         string5: "")
+            cell.updateCell(customCell: customCell)
+            return cell
         }
-        let customCell = CustomCell(string1: message.id,
-                                     string2: message.profile?.displayName ?? "",
-                                     string3: message.content,
-                                     string4: formattedTime(message.createdAt),
-                                     string5: "")
-        cell.updateCell(customCell: customCell)
-        return cell
     }
 
     // MARK: - IBActions
@@ -105,7 +104,15 @@ class GroupChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         if let vc = storyboard.instantiateViewController(withIdentifier: "GroupMembersVC") as? GroupMembersVC {
             vc.groupID = id
             vc.isAdmin = isAdmin
-            navigationController?.pushViewController(vc, animated: true)
+            if navigationController != nil {
+                navigationController?.pushViewController(vc, animated: true)
+            } else {
+                vc.close = { [weak self] in
+                    self?.dismiss(animated: true)
+                }
+                vc.modalPresentationStyle = .currentContext
+                present(vc, animated: true)
+            }
         }
     }
 
