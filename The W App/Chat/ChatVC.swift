@@ -123,7 +123,11 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     // MARK: - IBActions
 
     @IBAction func back(_ sender: UIButton) {
-        close?()
+        if let close {
+            close()
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
     }
 
     @IBAction func menu(_ sender: UIButton) { }
@@ -178,8 +182,10 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     self.myStatus = accept ? "accepted" : "rejected"
                     if accept {
                         self.updateRequestUI()
+                    } else if let close = self.close {
+                        close()
                     } else {
-                        self.close?()
+                        self.navigationController?.popViewController(animated: true)
                     }
                 }
             } catch {

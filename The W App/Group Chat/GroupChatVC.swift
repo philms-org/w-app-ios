@@ -96,7 +96,11 @@ class GroupChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     // MARK: - IBActions
 
     @IBAction func back(_ sender: UIButton) {
-        close?()
+        if let close {
+            close()
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
     }
 
     @IBAction func menu(_ sender: UIButton) {
