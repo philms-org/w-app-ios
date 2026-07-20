@@ -526,4 +526,15 @@ final class WAPData {
             .value
         return rows.compactMap { $0.profile }
     }
+
+    func fetchAllProfiles() async throws -> [WAPProfile] {
+        guard let uid = WAPAuth.currentUserID else { return [] }
+        return try await client
+            .from("profiles")
+            .select()
+            .neq("id", value: uid)
+            .limit(200)
+            .execute()
+            .value
+    }
 }
