@@ -8,7 +8,7 @@ class HomeLocationCell: UITableViewCell {
     @IBOutlet weak var detailsLabel: UILabel!
     
     func updateCell(customCell: CustomCell) {
-        locationImageView.image = customCell.imageView.image
+        locationImageView.image = customCell.imageView?.image
         locationLabel.text = customCell.string2
         detailsLabel.text = customCell.string3
     }

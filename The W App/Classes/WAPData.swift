@@ -118,6 +118,73 @@ final class WAPData {
             .execute()
     }
 
+    // MARK: - Home tab (banner / most-visited / last-visited)
+
+    func fetchBanners() async throws -> [WAPBanner] {
+        try await client
+            .from("banners")
+            .select()
+            .eq("is_active", value: true)
+            .order("display_order")
+            .execute()
+            .value
+    }
+
+    // No GROUP BY over REST without a database function, so this fetches recent
+    // check-ins (bounded to 500) and counts per-location client-side. Fine for
+    // this week's testing volume; would need a real aggregate view at scale.
+    // Mirrors WAPData equivalent on Android (SupabaseData.fetchMostVisited).
+    func fetchMostVisited(limit: Int = 10) async throws -> [WAPVenue] {
+        struct CheckinLocationRow: Decodable {
+            let locationId: String
+            let locations: WAPVenue
+            enum CodingKeys: String, CodingKey {
+                case locationId = "location_id"
+                case locations
+            }
+        }
+        let rows: [CheckinLocationRow] = try await client
+            .from("location_checkins")
+            .select("location_id, locations(*)")
+            .order("checked_in_at", ascending: false)
+            .limit(500)
+            .execute()
+            .value
+
+        var counts: [String: Int] = [:]
+        var byId: [String: WAPVenue] = [:]
+        for row in rows {
+            counts[row.locationId, default: 0] += 1
+            byId[row.locationId] = row.locations
+        }
+        let sortedIds = counts.sorted { $0.value > $1.value }.prefix(limit).map { $0.key }
+        return sortedIds.compactMap { byId[$0] }
+    }
+
+    func fetchLastVisited(limit: Int = 10) async throws -> [WAPVenue] {
+        guard let uid = WAPAuth.currentUserID else { return [] }
+        struct CheckinLocationRow: Decodable {
+            let locations: WAPVenue
+        }
+        let rows: [CheckinLocationRow] = try await client
+            .from("location_checkins")
+            .select("checked_in_at, locations(*)")
+            .eq("user_id", value: uid)
+            .order("checked_in_at", ascending: false)
+            .limit(Int32(limit))
+            .execute()
+            .value
+
+        var seen = Set<String>()
+        var result: [WAPVenue] = []
+        for row in rows {
+            guard !seen.contains(row.locations.id) else { continue }
+            seen.insert(row.locations.id)
+            result.append(row.locations)
+        }
+        return result
+    }
+
     // MARK: - Feed
 
     func fetchFeed(locationId: String) async throws -> [WAPFeedItem] {

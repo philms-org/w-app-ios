@@ -30,7 +30,19 @@ final class WAPTabBarVC: UITabBarController {
     private func setupTabs() {
         let sb = UIStoryboard(name: "Main", bundle: nil)
 
-        // Tab 1 — Locations (pin icon)
+        // Tab 1 — Home feed (banner/events/new/most-visited/last-visited). Built
+        // and Supabase-migrated but was never wired into the tab bar -- adding it
+        // here is the actual fix for "the feed doesn't exist", not a new build.
+        let homeVC = sb.instantiateViewController(withIdentifier: "HomeVC") as! HomeVC
+        let homeNav = UINavigationController(rootViewController: homeVC)
+        homeNav.setNavigationBarHidden(true, animated: false)
+        homeNav.tabBarItem = UITabBarItem(
+            title: nil,
+            image: UIImage(systemName: "house"),
+            tag: 0
+        )
+
+        // Tab 2 — Locations (pin icon)
         let locationsVC = sb.instantiateViewController(withIdentifier: "LocationsVC") as! LocationsVC
         let locationsNav = UINavigationController(rootViewController: locationsVC)
         locationsNav.setNavigationBarHidden(true, animated: false)
@@ -40,7 +52,9 @@ final class WAPTabBarVC: UITabBarController {
             tag: 1
         )
 
-        // Tab 2 — Feed / W logo (center)
+        // Tab 3 — Feed / W logo (center) — this is actually the check-in/venue
+        // detail screen (NewMyLocationVC), not the Home feed above; name kept
+        // as-is to avoid touching unrelated navigation logic.
         let feed = sb.instantiateViewController(withIdentifier: "NewMyLocationVC") as! NewMyLocationVC
         feedVC = feed
         let feedNav = UINavigationController(rootViewController: feed)
@@ -51,7 +65,7 @@ final class WAPTabBarVC: UITabBarController {
             tag: 2
         )
 
-        // Tab 3 — Messages (envelope icon)
+        // Tab 4 — Messages (envelope icon)
         let messagesVC = sb.instantiateViewController(withIdentifier: "MessagesVC") as! MessagesVC
         let messagesNav = UINavigationController(rootViewController: messagesVC)
         messagesNav.setNavigationBarHidden(true, animated: false)
@@ -69,8 +83,8 @@ final class WAPTabBarVC: UITabBarController {
         messagesVC.delegate = bridge
         feed.delegate = bridge
 
-        viewControllers = [locationsNav, feedNav, messagesNav]
-        selectedIndex = 1
+        viewControllers = [homeNav, locationsNav, feedNav, messagesNav]
+        selectedIndex = 2
     }
 
     private func makeBridge(locationsVC: LocationsVC) -> MainVC {

@@ -81,6 +81,20 @@ struct WAPVenue: Codable, Identifiable {
     }
 }
 
+struct WAPBanner: Codable, Identifiable {
+    let id: String
+    var imageURL: String
+    var locationId: String?
+    var link: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case imageURL  = "image_url"
+        case locationId = "location_id"
+        case link
+    }
+}
+
 struct WAPFeedItem: Codable, Identifiable {
     let id: String
     let locationId: String
