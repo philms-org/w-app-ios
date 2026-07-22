@@ -25,9 +25,9 @@ struct WAPRegistrationProfile: Encodable {
     let gender: String?
     let date_of_birth: String?
     let avatar_url: String?
-    let affiliation: String?
-    let industry: String?
-    let role: String?
+    let affiliation: [String]?
+    let industry: [String]?
+    let role: [String]?
 }
 
 extension WAPSupabase {

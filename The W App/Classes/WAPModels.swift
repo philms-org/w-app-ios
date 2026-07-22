@@ -6,9 +6,9 @@ struct WAPProfile: Codable, Identifiable {
     var email: String?
     var phone: String?
     var avatarURL: String?
-    var affiliation: String?
-    var industry: String?
-    var role: String?
+    var affiliation: [String]?
+    var industry: [String]?
+    var role: [String]?
     var city: String?
     var faveDrink: String?
     var fridayNight: String?

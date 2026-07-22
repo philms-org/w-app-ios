@@ -83,9 +83,9 @@ extension FcbRegisterVC: UIImagePickerControllerDelegate, UINavigationController
             gender: nil,
             date_of_birth: nil,
             avatar_url: avatarURL,
-            affiliation: affiliation,
-            industry: industry,
-            role: role
+            affiliation: affiliation.map { [$0] },
+            industry: industry.map { [$0] },
+            role: role.map { [$0] }
         ))
     }
 
