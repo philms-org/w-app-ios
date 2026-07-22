@@ -176,11 +176,8 @@ class LoginVC: UIViewController, UITextFieldDelegate, ASAuthorizationControllerD
     }
 
     func openMain() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let viewController = storyboard.instantiateViewController(withIdentifier: "MainVC") as? MainVC {
-            viewController.isLogin = true
-            viewController.modalPresentationStyle = .currentContext
-            present(viewController, animated: true, completion: nil)
-        }
+        let viewController = WAPTabBarVC()
+        viewController.modalPresentationStyle = .fullScreen
+        present(viewController, animated: true, completion: nil)
     }
 }
