@@ -88,12 +88,6 @@ class FourthSetupVC: UIViewController, UITextFieldDelegate, UITableViewDelegate,
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let viewController = storyboard.instantiateViewController(withIdentifier: "FifthSetupVC") as? FifthSetupVC {
             viewController.city = city
-            viewController.nationality = nationality
-            viewController.height = height
-            viewController.relationship = relationship
-            viewController.datingID = datingID
-            viewController.socialisingID = socialisingID
-            viewController.networkingID = networkingID
             viewController.drink = drink
             viewController.activity = activity
             viewController.profession = profession
