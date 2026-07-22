@@ -171,7 +171,7 @@ final class WAPData {
             .select("checked_in_at, locations(*)")
             .eq("user_id", value: uid)
             .order("checked_in_at", ascending: false)
-            .limit(Int32(limit))
+            .limit(limit)
             .execute()
             .value
 
