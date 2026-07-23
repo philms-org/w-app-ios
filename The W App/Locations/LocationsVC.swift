@@ -4,7 +4,7 @@ import GoogleMaps
 import CoreLocation
 import GoogleMapsUtils
 
-class LocationsVC: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate, GMSMapViewDelegate, UITableViewDelegate, UITableViewDataSource {
+class LocationsVC: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate, GMSMapViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource {
 
     @IBOutlet weak var processingView: UIViewDesignable!
     @IBOutlet weak var mapView: GMSMapView!
@@ -137,6 +137,16 @@ class LocationsVC: UIViewController, UITextFieldDelegate, CLLocationManagerDeleg
             viewController.id = venue.id
             delegate.present(viewController, animated: true, completion: nil)
         }
+    }
+
+    // MARK: - Category chips (collectionView is hidden; no backing data yet)
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 0
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        return collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath)
     }
 
     // MARK: - IBActions

@@ -30,6 +30,8 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
     var locationID = String()
     private let attendeesButton = WPillButton()
     private let rewardsButton = WPillButton()
+    private let addLocationCard = UIView()
+    private let quickAccessStack = UIStackView()
     var inLocation = Bool()
     var isMaster = Bool()
     var isOwner = Bool()
@@ -61,6 +63,7 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
         
         setupAttendeesButton()
         setupRewardsButton()
+        setupNoLocationExtras()
 
         if locationID.contains("Event") {
             let customCell = CustomCell(string1: locationID, string2: locationName)
@@ -122,7 +125,125 @@ class NewMyLocationVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
         let nav = UINavigationController(rootViewController: vc)
         present(nav, animated: true)
     }
-    
+
+    // MARK: - No-location empty state (design: top "add location" card + quick access row)
+
+    private func setupNoLocationExtras() {
+        setupAddLocationCard()
+        setupQuickAccessStack()
+    }
+
+    private func setupAddLocationCard() {
+        addLocationCard.backgroundColor = Colors.back_gray
+        addLocationCard.layer.cornerRadius = 14
+        addLocationCard.layer.borderWidth = 1.5
+        addLocationCard.layer.borderColor = Colors.blue.cgColor
+        addLocationCard.translatesAutoresizingMaskIntoConstraints = false
+        noLocationView.addSubview(addLocationCard)
+
+        let mapIcon = UIImageView(image: UIImage(systemName: "map.fill"))
+        mapIcon.tintColor = Colors.blue
+        mapIcon.contentMode = .scaleAspectFit
+        mapIcon.translatesAutoresizingMaskIntoConstraints = false
+
+        let titleLabel = UILabel()
+        titleLabel.text = "We don't recognize where you are"
+        titleLabel.textColor = .white
+        titleLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        titleLabel.numberOfLines = 0
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        let subtitleLabel = UILabel()
+        subtitleLabel.text = "Add this location"
+        subtitleLabel.textColor = .lightGray
+        subtitleLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        let addButton = UIButton(type: .system)
+        addButton.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
+        addButton.tintColor = Colors.blue
+        addButton.addTarget(self, action: #selector(addLocationTapped), for: .touchUpInside)
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+
+        [mapIcon, titleLabel, subtitleLabel, addButton].forEach { addLocationCard.addSubview($0) }
+
+        NSLayoutConstraint.activate([
+            addLocationCard.topAnchor.constraint(equalTo: noLocationView.safeAreaLayoutGuide.topAnchor, constant: 16),
+            addLocationCard.leadingAnchor.constraint(equalTo: noLocationView.leadingAnchor, constant: 16),
+            addLocationCard.trailingAnchor.constraint(equalTo: noLocationView.trailingAnchor, constant: -16),
+            addLocationCard.heightAnchor.constraint(equalToConstant: 68),
+
+            mapIcon.leadingAnchor.constraint(equalTo: addLocationCard.leadingAnchor, constant: 14),
+            mapIcon.centerYAnchor.constraint(equalTo: addLocationCard.centerYAnchor),
+            mapIcon.widthAnchor.constraint(equalToConstant: 32),
+            mapIcon.heightAnchor.constraint(equalToConstant: 32),
+
+            addButton.trailingAnchor.constraint(equalTo: addLocationCard.trailingAnchor, constant: -14),
+            addButton.centerYAnchor.constraint(equalTo: addLocationCard.centerYAnchor),
+            addButton.widthAnchor.constraint(equalToConstant: 32),
+            addButton.heightAnchor.constraint(equalToConstant: 32),
+
+            titleLabel.leadingAnchor.constraint(equalTo: mapIcon.trailingAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(equalTo: addButton.leadingAnchor, constant: -12),
+            titleLabel.topAnchor.constraint(equalTo: addLocationCard.topAnchor, constant: 12),
+
+            subtitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            subtitleLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+        ])
+    }
+
+    private func setupQuickAccessStack() {
+        quickAccessStack.axis = .horizontal
+        quickAccessStack.distribution = .equalSpacing
+        quickAccessStack.alignment = .center
+        quickAccessStack.translatesAutoresizingMaskIntoConstraints = false
+        noLocationView.addSubview(quickAccessStack)
+
+        let historyButton = makeQuickAccessButton(systemName: "clock.fill", action: #selector(quickHistoryTapped))
+        let rewardsButton = makeQuickAccessButton(systemName: "trophy.fill", action: #selector(quickRewardsTapped))
+        let profileButton = makeQuickAccessButton(systemName: "person.fill", action: #selector(quickProfileTapped))
+
+        [historyButton, rewardsButton, profileButton].forEach { quickAccessStack.addArrangedSubview($0) }
+
+        NSLayoutConstraint.activate([
+            quickAccessStack.topAnchor.constraint(equalTo: addLocationCard.bottomAnchor, constant: 16),
+            quickAccessStack.centerXAnchor.constraint(equalTo: noLocationView.centerXAnchor),
+            quickAccessStack.widthAnchor.constraint(equalToConstant: 220),
+        ])
+    }
+
+    private func makeQuickAccessButton(systemName: String, action: Selector) -> UIButton {
+        let button = UIButton(type: .system)
+        button.backgroundColor = Colors.back_gray
+        button.layer.cornerRadius = 28
+        button.tintColor = .white
+        button.setImage(UIImage(systemName: systemName), for: .normal)
+        button.addTarget(self, action: action, for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            button.widthAnchor.constraint(equalToConstant: 56),
+            button.heightAnchor.constraint(equalToConstant: 56),
+        ])
+        return button
+    }
+
+    @objc private func addLocationTapped() {
+        tabBarController?.selectedIndex = 1
+    }
+
+    @objc private func quickHistoryTapped() {
+        navigationController?.pushViewController(WAPHistoryVC(), animated: true)
+    }
+
+    @objc private func quickRewardsTapped() {
+        navigationController?.pushViewController(WAPRewardsVC(), animated: true)
+    }
+
+    @objc private func quickProfileTapped() {
+        tabBarController?.selectedIndex = 4
+    }
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         view.endEditing(true)
         return false

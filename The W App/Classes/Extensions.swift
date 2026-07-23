@@ -283,6 +283,14 @@ extension String {
         displayFormatter.dateFormat = "h:mm a"
         return displayFormatter.string(from: date)
     }
+
+    func asDate() -> Date? {
+        let isoFormatter = ISO8601DateFormatter()
+        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let date = isoFormatter.date(from: self) { return date }
+        isoFormatter.formatOptions = [.withInternetDateTime]
+        return isoFormatter.date(from: self)
+    }
 }
 
 extension UITextField {

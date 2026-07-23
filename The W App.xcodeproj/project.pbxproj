@@ -90,6 +90,7 @@
 		CB7F7FFB281CD69D005D456C /* MyLocationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7F7FFA281CD69D005D456C /* MyLocationVC.swift */; };
 		CB7F7FFD281CD6AC005D456C /* MessagesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7F7FFC281CD6AC005D456C /* MessagesVC.swift */; };
 		CB7F7FFF281CD6BD005D456C /* MyProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7F7FFE281CD6BD005D456C /* MyProfileVC.swift */; };
+		244F8F9617065F039E4DC110 /* WAPProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745C52F7FD58747A5C52C5F3 /* WAPProfileVC.swift */; };
 		CB9531D4281DBBF500751F22 /* FirstStartVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9531D3281DBBF500751F22 /* FirstStartVC.swift */; };
 		CB9531D7281DC1E000751F22 /* ChatVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9531D6281DC1E000751F22 /* ChatVC.swift */; };
 		CB977B9F286F4CD400C3BFF5 /* LexiconVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB977B9E286F4CD400C3BFF5 /* LexiconVC.swift */; };
@@ -115,6 +116,10 @@
 		CBC6E6C0281CEE6000EF5760 /* LocationPersonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC6E6BF281CEE6000EF5760 /* LocationPersonCell.swift */; };
 		CBD896D12841D583005DC2E2 /* MapStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD896D02841D583005DC2E2 /* MapStyle.swift */; };
 		CBE2F73C2BF0D892007D37F1 /* QRCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE2F73B2BF0D892007D37F1 /* QRCodeVC.swift */; };
+		62A0C786A9F6137C0346A891 /* WAPContactVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD020A19AAF411CE34B3F794 /* WAPContactVC.swift */; };
+		D493C5E3572747B9081177D2 /* WAPHistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AD5C3C02D6B0B5A5ACF970 /* WAPHistoryVC.swift */; };
+		7384AB38412083C8B3F02770 /* WAPHistoryDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CF90FA16C2FA2C671B04C5 /* WAPHistoryDetailVC.swift */; };
+		3F5F74D7AE1F7532DD209B2D /* WAPRewardsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B594D2BC7A8D58CE875FAE /* WAPRewardsVC.swift */; };
 		CBE2F73E2BF0D8B4007D37F1 /* MyLinksVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE2F73D2BF0D8B4007D37F1 /* MyLinksVC.swift */; };
 		CBE2F7402BF0D8C9007D37F1 /* UserLinksVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE2F73F2BF0D8C9007D37F1 /* UserLinksVC.swift */; };
 		CBE2F7422BF0D8D8007D37F1 /* LinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE2F7412BF0D8D8007D37F1 /* LinkCell.swift */; };
@@ -223,6 +228,7 @@
 		CB7F7FFA281CD69D005D456C /* MyLocationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLocationVC.swift; sourceTree = "<group>"; };
 		CB7F7FFC281CD6AC005D456C /* MessagesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesVC.swift; sourceTree = "<group>"; };
 		CB7F7FFE281CD6BD005D456C /* MyProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileVC.swift; sourceTree = "<group>"; };
+		745C52F7FD58747A5C52C5F3 /* WAPProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WAPProfileVC.swift; sourceTree = "<group>"; };
 		CB8C3F61283D304F00B2A3D1 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CB9531D3281DBBF500751F22 /* FirstStartVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstStartVC.swift; sourceTree = "<group>"; };
 		CB9531D6281DC1E000751F22 /* ChatVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatVC.swift; sourceTree = "<group>"; };
@@ -249,6 +255,10 @@
 		CBC6E6BF281CEE6000EF5760 /* LocationPersonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPersonCell.swift; sourceTree = "<group>"; };
 		CBD896D02841D583005DC2E2 /* MapStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapStyle.swift; sourceTree = "<group>"; };
 		CBE2F73B2BF0D892007D37F1 /* QRCodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeVC.swift; sourceTree = "<group>"; };
+		DD020A19AAF411CE34B3F794 /* WAPContactVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WAPContactVC.swift; sourceTree = "<group>"; };
+		B1AD5C3C02D6B0B5A5ACF970 /* WAPHistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WAPHistoryVC.swift; sourceTree = "<group>"; };
+		E4CF90FA16C2FA2C671B04C5 /* WAPHistoryDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WAPHistoryDetailVC.swift; sourceTree = "<group>"; };
+		46B594D2BC7A8D58CE875FAE /* WAPRewardsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WAPRewardsVC.swift; sourceTree = "<group>"; };
 		CBE2F73D2BF0D8B4007D37F1 /* MyLinksVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLinksVC.swift; sourceTree = "<group>"; };
 		CBE2F73F2BF0D8C9007D37F1 /* UserLinksVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLinksVC.swift; sourceTree = "<group>"; };
 		CBE2F7412BF0D8D8007D37F1 /* LinkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkCell.swift; sourceTree = "<group>"; };
@@ -446,6 +456,8 @@
 				CB7F7FF6281CD673005D456C /* Messages */,
 				CB7F7FF5281CD66A005D456C /* My Profile */,
 				CBE2F73A2BF0D885007D37F1 /* QR Code */,
+				5E1B67C8CF3DEA36EBCB65EC /* History */,
+				0EC41EB81E7FBB71E3E610D0 /* Rewards */,
 				CB3B6549285629E600F29FA1 /* Profile Setup */,
 				CB404F1E283D717100AB5A39 /* Notifications */,
 				CBF1844E283BF74600E329AC /* Settings */,
@@ -525,12 +537,30 @@
 			isa = PBXGroup;
 			children = (
 				CB7F7FFE281CD6BD005D456C /* MyProfileVC.swift */,
+				745C52F7FD58747A5C52C5F3 /* WAPProfileVC.swift */,
 				CBC43C6E2D60FF8C00ED8C51 /* MyProfilePicker.swift */,
 				CB495A01283FE1BE00E694BA /* EditProfileVC.swift */,
 				CB495A03283FE2B000E694BA /* EditProfilePicker.swift */,
 				CBE798282D68C20E00807810 /* GenerateUserVC.swift */,
 			);
 			path = "My Profile";
+			sourceTree = "<group>";
+		};
+		5E1B67C8CF3DEA36EBCB65EC /* History */ = {
+			isa = PBXGroup;
+			children = (
+				B1AD5C3C02D6B0B5A5ACF970 /* WAPHistoryVC.swift */,
+				E4CF90FA16C2FA2C671B04C5 /* WAPHistoryDetailVC.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		0EC41EB81E7FBB71E3E610D0 /* Rewards */ = {
+			isa = PBXGroup;
+			children = (
+				46B594D2BC7A8D58CE875FAE /* WAPRewardsVC.swift */,
+			);
+			path = Rewards;
 			sourceTree = "<group>";
 		};
 		CB7F7FF6281CD673005D456C /* Messages */ = {
@@ -635,6 +665,7 @@
 			isa = PBXGroup;
 			children = (
 				CBE2F73B2BF0D892007D37F1 /* QRCodeVC.swift */,
+				DD020A19AAF411CE34B3F794 /* WAPContactVC.swift */,
 				CBE2F73D2BF0D8B4007D37F1 /* MyLinksVC.swift */,
 				CBE2F7412BF0D8D8007D37F1 /* LinkCell.swift */,
 				CBE2F73F2BF0D8C9007D37F1 /* UserLinksVC.swift */,
@@ -912,6 +943,7 @@
 				CBC6403B2D67CA76009E21B9 /* EditEventVC.swift in Sources */,
 				CB977B9F286F4CD400C3BFF5 /* LexiconVC.swift in Sources */,
 				CB7F7FFF281CD6BD005D456C /* MyProfileVC.swift in Sources */,
+				244F8F9617065F039E4DC110 /* WAPProfileVC.swift in Sources */,
 				CB3AA4882D6D278300164F17 /* AddBadgeVC.swift in Sources */,
 				CBE4BFEE2D667D4B0050B941 /* EditGroupPicker.swift in Sources */,
 				CBB200B02A5AC2A100406808 /* FilterVC.swift in Sources */,
@@ -932,6 +964,10 @@
 				CBA05EAE283C25C200F403AB /* AboutVC.swift in Sources */,
 				CBC6E6C0281CEE6000EF5760 /* LocationPersonCell.swift in Sources */,
 				CBE2F73C2BF0D892007D37F1 /* QRCodeVC.swift in Sources */,
+				62A0C786A9F6137C0346A891 /* WAPContactVC.swift in Sources */,
+				D493C5E3572747B9081177D2 /* WAPHistoryVC.swift in Sources */,
+				7384AB38412083C8B3F02770 /* WAPHistoryDetailVC.swift in Sources */,
+				3F5F74D7AE1F7532DD209B2D /* WAPRewardsVC.swift in Sources */,
 				CB044600283D3A4400ED2C37 /* FcbRegisterVC.swift in Sources */,
 				6FEF1C8B4A028EE0108A1C63 /* WAPSupabase.swift in Sources */,
 				FB02191986A54C9FAA8BB5A9 /* WAPSecrets.swift in Sources */,

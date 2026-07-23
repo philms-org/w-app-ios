@@ -75,6 +75,16 @@ final class WAPTabBarVC: UITabBarController {
             tag: 3
         )
 
+        // Tab 5 — Profile (own profile, programmatic UI — no storyboard, no bridge)
+        let profileVC = WAPProfileVC()
+        let profileNav = UINavigationController(rootViewController: profileVC)
+        profileNav.setNavigationBarHidden(true, animated: false)
+        profileNav.tabBarItem = UITabBarItem(
+            title: nil,
+            image: UIImage(systemName: "person.circle"),
+            tag: 4
+        )
+
         // Wire cross-VC delegates: LocationsVC needs to call wingIn on the
         // feed when user taps a venue. Use headless MainVC bridge while
         // full Supabase migration of these VCs is in progress.
@@ -83,7 +93,7 @@ final class WAPTabBarVC: UITabBarController {
         messagesVC.delegate = bridge
         feed.delegate = bridge
 
-        viewControllers = [homeNav, locationsNav, feedNav, messagesNav]
+        viewControllers = [homeNav, locationsNav, feedNav, messagesNav, profileNav]
         selectedIndex = 2
     }
 

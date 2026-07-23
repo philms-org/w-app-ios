@@ -8,6 +8,12 @@ class FifthSetupVC: UIViewController, UITextFieldDelegate {
     var activity:   String?
     var profession: String?
 
+    // When true, this screen was opened from an already-onboarded profile
+    // (not first-time registration) — save/skip should dismiss back to the
+    // caller instead of pushing a brand-new WAPTabBarVC on top.
+    var isEditingExistingProfile = false
+    var reloadProfile: (() -> Void)?
+
     // MARK: - Fields + eye buttons
     private let cityField       = UITextField()
     private let drinkField      = UITextField()
@@ -213,7 +219,13 @@ class FifthSetupVC: UIViewController, UITextFieldDelegate {
         send()
     }
 
-    @objc private func skip() { openMain() }
+    @objc private func skip() {
+        if isEditingExistingProfile {
+            dismiss(animated: true)
+        } else {
+            openMain()
+        }
+    }
 
     func send() {
         guard let uid = WAPAuth.currentUserID else {
@@ -246,7 +258,12 @@ class FifthSetupVC: UIViewController, UITextFieldDelegate {
                 self.saveButton.isHidden = false
                 self.saveIndicator.stopAnimating()
                 UserDefaults.standard.set(true, forKey: "Setup")
-                self.openMain()
+                if self.isEditingExistingProfile {
+                    self.reloadProfile?()
+                    self.dismiss(animated: true)
+                } else {
+                    self.openMain()
+                }
             }
         }
     }
