@@ -3,3 +3,4 @@ The W App/Classes/WAPSecrets.swift
 .DS_Store
 xcuserdata/
 DerivedData/
+.worktrees/
